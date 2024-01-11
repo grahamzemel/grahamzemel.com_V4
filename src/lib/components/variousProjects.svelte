@@ -110,7 +110,7 @@
   });
 </script>
 
-<div class="projects-container overflow-y-auto max-h-[500px]">
+<div class="projects-container md:overflow-hidden sm:overflow-y-auto sm:max-h-[500px]">
   <div
     class="project-list flex flex-col md:flex-row overflow-x-auto no-scrollbar md:gap-8 cursor-grab"
     bind:this={list}

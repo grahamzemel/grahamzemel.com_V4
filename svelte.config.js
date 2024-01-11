@@ -20,9 +20,10 @@ const config = {
     adapter: adapter(),
     csp: {
       directives: {
-        "default-src": ["*"],
+        "default-src": ["*", "unsafe-inline", "unsafe-eval"],
         "img-src": ["*"],
-        },
+
+      },
 		},
     
   },
