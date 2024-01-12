@@ -65,8 +65,8 @@
       `,
       image: "/tgaonmediumss.png",
       tags: ["Python", "Telegram"],
-      repoLink: "https://twitter.com/TGAonMedium",
-      demoLink: "https://github.com/grahamzemel/MediumTwitterBot",
+      repoLink: "https://github.com/grahamzemel/MediumTwitterBot",
+      demoLink: "https://twitter.com/TGAonMedium",
     },
     {
       title: "Graham Zemel (.com)",
