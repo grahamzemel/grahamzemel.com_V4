@@ -14,7 +14,7 @@
     if (!isHovering) {
       list.scrollLeft += scrollSpeed;
       // Check if near the end of the first set and reset if needed
-      if (list.scrollLeft >= list.scrollWidth / 2) {
+      if (list.scrollLeft >= list.scrollWidth - list.clientWidth) {
         list.scrollLeft = 0;
       }
     }
