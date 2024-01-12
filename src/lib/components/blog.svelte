@@ -132,15 +132,15 @@
   </div>
   <div class="lg:hidden md:hidden block flex justify-between text-center p-4">
     <div>
-      <div class="text-4xl font-bold">30</div>
+      <div class="text-3xl font-bold">30+</div>
       <div class="text-lg text-gray-500">Writers</div>
     </div>
     <div>
-      <div class="text-4xl font-bold">2,000,000</div>
+      <div class="text-3xl font-bold">2,000,000+</div>
       <div class="text-lg text-gray-500">Readers</div>
     </div>
     <div>
-      <div class="text-4xl font-bold">250</div>
+      <div class="text-3xl font-bold">250+</div>
       <div class="text-lg text-gray-500">Posts</div>
     </div>
   </div>

@@ -22,6 +22,8 @@ const config = {
       directives: {
         "default-src": ["*", "unsafe-inline", "unsafe-eval"],
         "img-src": ["*"],
+        "worker-src": ["blob:"],
+        "script-src": ["*", "unsafe-inline", "unsafe-eval", "blob:"],
 
       },
 		},
