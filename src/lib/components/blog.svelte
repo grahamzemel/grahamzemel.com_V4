@@ -50,7 +50,7 @@
             title: shortenText(item.title, 0, 60),
             link: item.link,
             thumbnail: item.thumbnail,
-            date: shortenText(item.pubDate, 0, 10),
+            date: item.pubDate.slice(0, 10),
             creator: item.author,
             tags: categories,
           };

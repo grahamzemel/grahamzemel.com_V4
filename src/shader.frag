@@ -86,14 +86,8 @@ vec3 a = vec3(0.1, 0.1, 0.12); // Dark grey base
 vec3 b = vec3(0.1, 0.1, 0.1); // Subtle color variations
 vec3 c = vec3(1.0, 1.0, 1.0);    // Uniform color frequency
 vec3 d = vec3(0.0, 0.0, 0.0);    // Neutral phase
-
-
-
     return a + b * cos(6.28318 * (c * t + d));
 }
-
-
-
 
 void main() {
     // copy the vTexCoord
@@ -112,11 +106,10 @@ void main() {
     v = v / scale;
 
     vec3 uv = vec3(u, v, 1.0);
-  
+
     //uv = fract(uv * 1.4) - 0.2;
     vec3 uv0 = vec3(u, v, 1.0);
   
-    // Perhaps not the best method but it works :)
     mat3 rotx = rotX(iAngle); // calculate rotation matrix around x-axis!
     mat3 roty = rotY(iAngle); // calculate rotation matrix around y-axis!
     mat3 rotz = rotZ(iAngle); // calculate rotation matrix around z-axis!
@@ -145,7 +138,7 @@ void main() {
     vec3 col = palette(color);//vec3(color, color, color);
     //vec3 col =  palette(color  - iTime*.04);
       
-  // gl_FragColor is a built in shader variable, and your .frag file must contain it
-  // We are setting the vec3 color into a new vec4, with a transparency of 1 (no opacity)
-	gl_FragColor = vec4(col, 1.0);
+    // gl_FragColor is a built in shader variable, and your .frag file must contain it
+    // We are setting the vec3 color into a new vec4, with a transparency of 1 (no opacity)
+    gl_FragColor = vec4(col, 1.0);
 }

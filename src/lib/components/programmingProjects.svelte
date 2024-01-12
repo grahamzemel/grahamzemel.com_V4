@@ -161,12 +161,12 @@
 
   .projects-container::before {
   left: 0;
-  background: linear-gradient(to right, rgba(15, 20, 26, 1), transparent);
+  background: linear-gradient(to right, rgba(18, 18, 23, 1), transparent);
 }
 
 .projects-container::after {
   right: 0;
-  background: linear-gradient(to left, rgba(15, 20, 26, 1), transparent);
+  background: linear-gradient(to left, rgba(18, 18, 23, 1), transparent);
 }
 
 @media (max-width: 640px) {
