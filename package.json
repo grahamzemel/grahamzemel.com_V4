@@ -10,7 +10,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --plugin-search-dir . --check .",
-    "format": "prettier --plugin-search-dir . --write ."
+    "format": "prettier --plugin-search-dir . --write .",
+    "cors-proxy": "node src/cors-proxy.cjs"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.0.0",
@@ -32,7 +33,9 @@
   "dependencies": {
     "@vercel/analytics": "^1.0.1",
     "handle": "^1.0.0",
+    "http-proxy": "^1.18.1",
     "link-preview-js": "^3.0.5",
+    "proxy-from-env": "^1.1.0",
     "sveltekit-embed": "^0.0.12"
   }
 }

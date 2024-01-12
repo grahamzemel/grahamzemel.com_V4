@@ -14,7 +14,7 @@
     if (!isHovering) {
       list.scrollLeft += scrollSpeed;
       // Check if near the end of the first set and reset if needed
-      if (list.scrollLeft >= list.scrollWidth / 2) {
+      if (list.scrollLeft >= list.scrollWidth - list.clientWidth) {
         list.scrollLeft = 0;
       }
     }
@@ -23,6 +23,8 @@
   const toggleHover = (hover: boolean) => {
     isHovering = hover;
   };
+
+  
 
   const projects: ProjectProps[] = [
     {
@@ -116,7 +118,7 @@
   });
 </script>
 
-<div class="projects-container lg:overflow-hidden md:overflow-hidden sm:overflow-y-auto sm:max-h-[500px]">
+<div class="projects-container md:overflow-hidden sm:overflow-y-auto max-h-[500px]">
   <div
     class="project-list flex flex-col md:flex-row overflow-x-auto no-scrollbar md:gap-8 cursor-grab"
     bind:this={list}

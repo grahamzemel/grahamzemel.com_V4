@@ -12,18 +12,9 @@
   let metadata = {};
 
   onMount(async function () {
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-  const targetUrl = 'https://thegrayarea.tech';
-  try {
-    const response = await fetch(proxyUrl + targetUrl);
-    if (!response.ok) {
-      // Handle non-2xx HTTP responses
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    metadata = await getLinkPreview(proxyUrl + targetUrl);
-  } catch (error) {
-    console.error('Fetching metadata failed:', error);
-  }
+    metadata.title = "The Gray Area";
+    metadata.description = "For all kinds of developers, hackers, and tech-savvy readers | Now welcoming new writers!";
+    metadata.images = ["./grayarea.jpg"];
     // console.log(metadata);
 
     fetch(
@@ -47,7 +38,7 @@
         }
         function shortenText(text, startingPoint, maxLength) {
           return text.length > maxLength
-            ? text.slice(startingPoint, maxLength)
+            ? text.slice(startingPoint, maxLength) + "..."
             : text;
         }
         posts.forEach((item) => {
