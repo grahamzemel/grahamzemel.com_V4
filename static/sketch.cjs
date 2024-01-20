@@ -79,8 +79,8 @@ function draw() {
   image(shaderBg, 0, 0, width, height);
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
+// function windowResized() {
+//   resizeCanvas(windowWidth, windowHeight);
+// }
 
 let imView = false;
