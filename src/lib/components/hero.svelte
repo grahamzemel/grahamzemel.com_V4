@@ -4,7 +4,7 @@
   </div>
 
   <p class="hero-subtitle custom-fade-in anim-delay-900">
-    Full Stack Developer and Ethical Hacker 
+    Full Stack Developer
   </p>
 </section>
 
