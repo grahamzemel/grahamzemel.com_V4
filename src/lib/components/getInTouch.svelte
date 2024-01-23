@@ -32,7 +32,7 @@
     want!
   </h2>
   <h3 class="mt-2 text-gray-400">
-    Timezone: <b>GMT+5</b>, New York/USA
+    Timezone: <b>GMT-5</b>, New York/USA
     <!-- <a
       href="https://www.worldtimebuddy.com/?pl=1&lid=2147714,1850147,1880252,292223,681290,14,5128581,207,5368361&h=681290&hf=0"
       target="_blank"
