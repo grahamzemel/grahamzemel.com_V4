@@ -20,7 +20,7 @@
     name="description"
     content="Hello! I'm a full-stack developer, ethical hacker, and student from the United States."
   />
-  <meta name="author" content="David Pescariu" />
+  <meta name="author" content="Graham Zemel" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="Graham Zemel" />
