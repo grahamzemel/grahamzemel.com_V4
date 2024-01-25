@@ -30,8 +30,7 @@
       description: `
       The winning project for the healthcare track in the MetroHacks 2022 hackathon. A 24 hour project based on furthering healthcare accessibility made with Svelte, Tailwind, Typescript, and a custom co:here AI chat bot.
       `,
-      image:
-        "/aesculapiusss.png",
+      image: "/aesculapiusss.png",
       tags: ["Web", "Hackathon"],
       repoLink: "https://github.com/grahamzemel/Aesculapius-FrontEnd",
       demoLink: "https://aesculapius.tech",
@@ -41,8 +40,7 @@
       description: `
         A simple template project built with Svelte and Bulma on the front-end, and Python on the back-end. It's a great starting point for any web project. 
       `,
-      image:
-        "/templateprojss.png",
+      image: "/templateprojss.png",
       tags: ["Web", "Internet"],
       repoLink: "https://github.com/grahamzemel/TemplateProj",
       demoLink: null,
@@ -62,8 +60,7 @@
       description: `
         A collection of my notes from my discrete mathematics class. It's a great resource for anyone looking to learn the basics of discrete math.
       `,
-      image:
-        "/fractalsss.png",
+      image: "/fractalsss.png",
       tags: ["Python"],
       repoLink: "https://github.com/grahamzemel/DiscreteMath",
       demoLink: null,
@@ -102,11 +99,9 @@
     document.removeEventListener("mouseup", onMouseUp);
   };
 
-
   onMount(() => {
     list.addEventListener("mousedown", onMouseDown);
     requestAnimationFrame(autoScroll); // Start the auto-scroll
-
   });
 </script>
 
@@ -152,19 +147,19 @@
   }
 
   .projects-container::before {
-  left: 0;
-  background: linear-gradient(to right, rgba(18, 18, 23, 1), transparent);
-}
-
-.projects-container::after {
-  right: 0;
-  background: linear-gradient(to left, rgba(18, 18, 23, 1), transparent);
-}
-
-@media (max-width: 640px) {
-  .projects-container::before,
-  .projects-container::after {
-    background: none;
+    left: 0;
+    background: linear-gradient(to right, rgba(18, 18, 23, 1), transparent);
   }
-}
+
+  .projects-container::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(18, 18, 23, 1), transparent);
+  }
+
+  @media (max-width: 640px) {
+    .projects-container::before,
+    .projects-container::after {
+      background: none;
+    }
+  }
 </style>

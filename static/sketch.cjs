@@ -15,12 +15,10 @@ function preload() {
 }
 
 function setup() {
-
   createCanvas(windowWidth, windowHeight);
   noStroke();
   time_ = random(0, TWO_PI); // randomizes the starting rotation
   shaderBg = createGraphics(windowWidth, windowHeight, WEBGL);
-
 }
 let baseRotation; // Variable to store the base rotation state
 let manualRotationOffset = 0; // Offset for manual rotation
@@ -35,18 +33,18 @@ function mousePressed() {
   isMousePressed = true;
   prevMouseX = mouseX;
   prevMouseY = mouseY;
-  cursor('pointer');
+  cursor("pointer");
   baseRotation = time_;
 }
 
 function mouseReleased() {
   isMousePressed = false;
-  cursor('default');
+  cursor("default");
 }
 
 function draw() {
   background(28, 40, 54);
-  shaderBg.style('display', 'block');
+  shaderBg.style("display", "block");
   shaderBg.shader(theShader);
 
   if (isMousePressed) {

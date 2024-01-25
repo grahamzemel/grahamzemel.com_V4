@@ -33,19 +33,19 @@
   <!-- Projects -->
 
   <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
-    Programming Projects
+    Programming Projects &rarr;
   </h2>
 
   <ProgrammingProjects />
 
   <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
-    Cybersecurity Projects
+    Cybersecurity Projects &rarr;
   </h2>
 
   <CybersecurityProjects />
 
   <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
-    Misc Projects
+    Misc Projects &rarr;
   </h2>
 
   <VariousProjects />

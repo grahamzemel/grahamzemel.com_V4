@@ -1,7 +1,5 @@
 <section class="mt-32 md:mt-64">
-  <div class="hero-title custom-fade-in anim-delay-500">
-    Graham Zemel
-  </div>
+  <div class="hero-title custom-fade-in anim-delay-500">Graham Zemel</div>
 
   <p class="hero-subtitle custom-fade-in anim-delay-900">
     Full Stack Developer

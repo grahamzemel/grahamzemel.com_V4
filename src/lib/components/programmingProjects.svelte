@@ -24,8 +24,6 @@
     isHovering = hover;
   };
 
-  
-
   const projects: ProjectProps[] = [
     {
       title: "QuantumChat",
@@ -160,19 +158,19 @@
   }
 
   .projects-container::before {
-  left: 0;
-  background: linear-gradient(to right, rgba(18, 18, 23, 1), transparent);
-}
-
-.projects-container::after {
-  right: 0;
-  background: linear-gradient(to left, rgba(18, 18, 23, 1), transparent);
-}
-
-@media (max-width: 640px) {
-  .projects-container::before,
-  .projects-container::after {
-    background: none;
+    left: 0;
+    background: linear-gradient(to right, rgba(18, 18, 23, 1), transparent);
   }
-}
+
+  .projects-container::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(18, 18, 23, 1), transparent);
+  }
+
+  @media (max-width: 640px) {
+    .projects-container::before,
+    .projects-container::after {
+      background: none;
+    }
+  }
 </style>

@@ -24,10 +24,8 @@ const config = {
         "img-src": ["*"],
         "worker-src": ["blob:"],
         "script-src": ["*", "unsafe-inline", "unsafe-eval", "blob:"],
-
       },
-		},
-    
+    },
   },
 };
 

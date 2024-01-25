@@ -30,8 +30,7 @@
       description: `
       A hacking tool built for the bug hunters, Web Heck Scanner is a compilation of 3 popular hacking tools and 5 components that hands you bugs on a silver platter.
       `,
-      image:
-        "/webheckscannerss.png",
+      image: "/webheckscannerss.png",
       tags: ["Shell", "Internet", "Bash"],
       repoLink: "https://github.com/grahamzemel/WebHeckScanner",
       demoLink: null,
@@ -41,8 +40,7 @@
       description: `
       This telegram bot that I coded from scratch automates hacking processes for bug hunting and general cybersecurity purposes. 
       `,
-      image:
-        "/heckerbotss.jpg",
+      image: "/heckerbotss.jpg",
       tags: ["Automation", "Telegram"],
       repoLink: null,
       demoLink: "https://t.me/heckerbot2022bot",
@@ -62,8 +60,7 @@
       description: `
       This was a simple Python script for parsing data from hacked sites. Check out some hacking write-ups for vulnerabilities like IDORs, XSS, Broken Access Control, and more on The Gray Area!
       `,
-      image:
-        "/idorss.png",
+      image: "/idorss.png",
       tags: ["Python", "Automation"],
       repoLink: "https://github.com/grahamzemel/idorAutomation",
       demoLink: null,
@@ -105,7 +102,6 @@
   onMount(() => {
     list.addEventListener("mousedown", onMouseDown);
     requestAnimationFrame(autoScroll); // Start the auto-scroll
-
   });
 </script>
 
@@ -151,19 +147,19 @@
   }
 
   .projects-container::before {
-  left: 0;
-  background: linear-gradient(to right, rgba(18, 18, 23, 1), transparent);
-}
-
-.projects-container::after {
-  right: 0;
-  background: linear-gradient(to left, rgba(18, 18, 23, 1), transparent);
-}
-
-@media (max-width: 640px) {
-  .projects-container::before,
-  .projects-container::after {
-    background: none;
+    left: 0;
+    background: linear-gradient(to right, rgba(18, 18, 23, 1), transparent);
   }
-}
+
+  .projects-container::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(18, 18, 23, 1), transparent);
+  }
+
+  @media (max-width: 640px) {
+    .projects-container::before,
+    .projects-container::after {
+      background: none;
+    }
+  }
 </style>

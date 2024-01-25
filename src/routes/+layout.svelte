@@ -3,7 +3,7 @@
 
   import { dev } from "$app/environment";
   import { inject } from "@vercel/analytics";
-  
+
   // Vercel Analytics
   inject({ mode: dev ? "development" : "production" });
 </script>
@@ -39,10 +39,7 @@
     property="twitter:description"
     content="Hello! I'm a full-stack developer, ethical hacker, and student from the United States."
   />
-  <meta
-    property="twitter:image"
-    content="https://grahamzemel.com/og-img.png"
-  />
+  <meta property="twitter:image" content="https://grahamzemel.com/og-img.png" />
 </svelte:head>
 
 <style global lang="postcss">

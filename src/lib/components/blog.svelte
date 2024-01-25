@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import Visibility from "$lib/components/visibility.svelte";
-  import { getLinkPreview } from 'link-preview-js';
+  import { getLinkPreview } from "link-preview-js";
 
   let isVisible = false;
   let hasChanged = false;
@@ -13,7 +13,8 @@
 
   onMount(async function () {
     metadata.title = "The Gray Area";
-    metadata.description = "For all kinds of developers, hackers, and tech-savvy readers | Now welcoming new writers!";
+    metadata.description =
+      "For all kinds of developers, hackers, and tech-savvy readers | Now welcoming new writers!";
     metadata.images = ["./grayarea.jpg"];
     // console.log(metadata);
 
@@ -112,16 +113,40 @@
     much more.
   </h2>
   <br />
+  <div class="block flex space-x-64 justify-center text-center p-4 ml-[1rem]">
+    <div>
+      <div class="text-5xl font-bold">30+</div>
+      <div class="text-2xl text-gray-500">Writers</div>
+    </div>
+    <div>
+      <div class="text-5xl font-bold">2,000,000+</div>
+      <div class="text-2xl text-gray-500">Readers</div>
+    </div>
+    <div>
+      <div class="text-5xl font-bold">250+</div>
+      <div class="text-2xl text-gray-500">Posts</div>
+    </div>
+  </div>
+  <br />
   <div class="card" style="border-radius: 0.9rem;">
-    <a href="https://thegrayarea.tech" target="_blank" rel="noopener noreferrer">
+    <a
+      href="https://thegrayarea.tech"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {#if metadata.images}
-        <img style="border-top-right-radius: 0.9rem; border-top-left-radius: 0.9rem;" src={metadata.images[0]} alt={metadata.title} />
+        <img
+          style="border-top-right-radius: 0.9rem; border-top-left-radius: 0.9rem;"
+          src={metadata.images[0]}
+          alt={metadata.title}
+        />
       {/if}
       <h2>{metadata.title}</h2>
       <p>{metadata.description}</p>
     </a>
   </div>
   <br /><br />
+
   <div
     id="blog"
     class="blog flex justify-center items-center lg:block md:block hidden"
@@ -144,7 +169,6 @@
       <div class="text-lg text-gray-500">Posts</div>
     </div>
   </div>
-
 </section>
 
 <style lang="postcss">
@@ -173,29 +197,29 @@
     padding-top: 2rem;
     margin: 0 auto;
     color: inherit;
-}
-.card img {
-  max-height: 300px; /* Adjust the maximum height as needed */
+  }
+  .card img {
+    max-height: 300px; /* Adjust the maximum height as needed */
     height: auto; /* Maintain the aspect ratio */
     width: 100%; /* Maintain the full width of the card */
-}
-.card .text {
+  }
+  .card .text {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-.card h2 {
+  }
+  .card h2 {
     margin: 0;
     padding: 1rem;
     background: rgba(100, 100, 100, 0.7);
     color: white;
     font-size: 1.2rem;
-}
-.card p {
+  }
+  .card p {
     margin: 0;
     padding: 1rem;
     background: white;
     color: #333;
     font-size: 1rem;
-}
+  }
 </style>
