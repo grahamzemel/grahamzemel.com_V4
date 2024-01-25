@@ -115,7 +115,7 @@
   <div class="card" style="border-radius: 0.9rem;">
     <a href="https://thegrayarea.tech" target="_blank" rel="noopener noreferrer">
       {#if metadata.images}
-        <img src={metadata.images[0]} alt={metadata.title} />
+        <img style="border-top-right-radius: 0.9rem; border-top-left-radius: 0.9rem;" src={metadata.images[0]} alt={metadata.title} />
       {/if}
       <h2>{metadata.title}</h2>
       <p>{metadata.description}</p>
@@ -187,7 +187,7 @@
 .card h2 {
     margin: 0;
     padding: 1rem;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(100, 100, 100, 0.7);
     color: white;
     font-size: 1.2rem;
 }
