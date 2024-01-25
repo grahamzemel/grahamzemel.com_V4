@@ -8,7 +8,7 @@
   import ProjectCard from "./projectCard.svelte";
 
   let isHovering = false;
-  const scrollSpeed = 1; // Adjust the speed as needed
+  const scrollSpeed = 0; // Adjust the speed as needed
 
   const autoScroll = () => {
     if (!isHovering) {
