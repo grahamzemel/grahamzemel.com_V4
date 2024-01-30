@@ -3,6 +3,7 @@
   import ProgrammingProjects from "./programmingProjects.svelte";
   import CybersecurityProjects from "./cybersecProjects.svelte";
   import VariousProjects from "./variousProjects.svelte";
+  import RecentProjects from "./recentProjects.svelte";
 
   let isVisible = false;
   let hasChanged = false;
@@ -28,9 +29,13 @@
     : 'opacity-0'}"
 >
   <h1 class="font-serif font-bold sm:text-6xl text-4xl">My Work</h1>
-  <!-- Professional Experience -->
 
   <!-- Projects -->
+  <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
+    Recent Projects &rarr;
+  </h2>
+
+  <RecentProjects />
 
   <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
     Programming Projects &rarr;

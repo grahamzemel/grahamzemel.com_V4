@@ -26,6 +26,16 @@
 
   const projects: ProjectProps[] = [
     {
+      title: "Graham Zemel (.com)",
+      description: `
+       This site! Version 4.0 of my personal website, built with SvelteKit and TailwindCSS.
+      `,
+      image: "/grahamzemel.com.png",
+      tags: ["Internet"],
+      repoLink: "https://github.com/prisma-ro/licenses-generator",
+      demoLink: "https://grahamzemel.com",
+    },
+    {
       title: "QuantumChat",
       description: `
       This project is a quantum chat room that uses quantum key distribution to encrypt any traffic sent between users.
@@ -65,16 +75,6 @@
       tags: ["Python", "Telegram"],
       repoLink: "https://github.com/grahamzemel/MediumTwitterBot",
       demoLink: "https://twitter.com/TGAonMedium",
-    },
-    {
-      title: "Graham Zemel (.com)",
-      description: `
-       This site! Version 4.0 of my personal website, built with SvelteKit and TailwindCSS.
-      `,
-      image: "/favicon.svg",
-      tags: ["Internet"],
-      repoLink: "https://github.com/prisma-ro/licenses-generator",
-      demoLink: "https://grahamzemel.com",
     },
   ];
 
