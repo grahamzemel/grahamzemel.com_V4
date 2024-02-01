@@ -113,7 +113,7 @@
     much more.
   </h2>
   <br />
-  <div class="sm:hidden block flex space-x-64 justify-center text-center p-4 ml-[1rem]">
+  <div class="block flex space-x-64 justify-center text-center p-4 ml-[1rem]" id="statsBig">
     <div>
       <div class="text-5xl font-bold">30+</div>
       <div class="text-2xl text-gray-500">Writers</div>
@@ -172,6 +172,11 @@
 </section>
 
 <style lang="postcss">
+  @media (max-width: 640px) {
+    #statsBig {
+      display: none;
+    }
+  }
   .custom-transition {
     transition-property: opacity;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
