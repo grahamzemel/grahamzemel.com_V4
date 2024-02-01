@@ -113,7 +113,7 @@
     much more.
   </h2>
   <br />
-  <div class="block flex space-x-64 justify-center text-center p-4 ml-[1rem]">
+  <div class="sm:hidden block flex space-x-64 justify-center text-center p-4 ml-[1rem]">
     <div>
       <div class="text-5xl font-bold">30+</div>
       <div class="text-2xl text-gray-500">Writers</div>
