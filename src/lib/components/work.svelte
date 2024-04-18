@@ -31,11 +31,11 @@
   <h1 class="font-serif font-bold sm:text-6xl text-4xl">My Work</h1>
 
   <!-- Projects -->
-  <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
+  <!-- <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
     Recent Projects &rarr;
   </h2>
 
-  <RecentProjects />
+  <RecentProjects /> -->
 
   <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
     Programming Projects &rarr;

@@ -2,7 +2,10 @@
   <div class="hero-title custom-fade-in anim-delay-500">Graham Zemel</div>
 
   <p class="hero-subtitle custom-fade-in anim-delay-900">
-    Full Stack Developer
+    Full Stack Developer | Artificial Intelligence | Ethical Hacking
+  </p>
+  <p class="hero-subbertitle custom-fade-in anim-delay-900">
+    <a href="https://grahamzemel.com">grahamzemel.com</a>
   </p>
 </section>
 
@@ -19,9 +22,13 @@
     @apply mt-8 font-light sm:text-2xl text-xl;
   }
 
-  a {
-    @apply font-normal;
+  .hero-subbertitle {
+    @apply mt-8 font-light sm:text-lg text-lg;
   }
+
+  /* a {
+    @apply font-normal;
+  } */
   a:hover {
     @apply transition-colors text-transparent bg-clip-text bg-gradient-to-r from-accent-100 to-accent-500;
   }
@@ -44,6 +51,7 @@
   .anim-delay-900 {
     animation-delay: 900ms;
   }
+
 
   @keyframes fade-in-animation {
     0% {
