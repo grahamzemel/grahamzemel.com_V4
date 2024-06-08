@@ -3,6 +3,7 @@
     | "Quantum"
     | "AI"
     | "Web"
+    | "Game"
     | "Extension"
     | "Internet"
     | "Python"
@@ -33,6 +34,8 @@
         return "bg-orange-50 text-orange-600";
       case "Web":
         return "bg-lime-50 text-lime-600";
+      case "Game":
+        return "bg-pink-50 text-pink-600";
       case "Extension":
         return "bg-cyan-50 text-cyan-600";
       case "Internet":

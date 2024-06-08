@@ -32,8 +32,18 @@
       `,
       image: "/grahamzemel.com.png",
       tags: ["Internet"],
-      repoLink: "https://github.com/prisma-ro/licenses-generator",
+      repoLink: "https://github.com/grahamzemel/grahamzemel.com",
       demoLink: "https://grahamzemel.com",
+    },
+    {
+      title: "Game Bank",
+      description: `
+       A fun project I built with a friend that allows users to play a variety of popular games online with friends or by themselves. Currently in development.
+      `,
+      image: "/gamebank.png",
+      tags: ["Game", "Web"],
+      repoLink: "https://github.com/grahamzemel/gamebank",
+      demoLink: "https://gamebank.netlify.app",
     },
     {
       title: "QuantumChat",
