@@ -1,21 +1,36 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import Visibility from "$lib/components/visibility.svelte";
-  import { getLinkPreview } from "link-preview-js";
+
+  type RssItem = {
+    categories: string[];
+    title: string;
+    link: string;
+    thumbnail: string;
+    pubDate: string;
+    author: string;
+  };
+
+  type Metadata = {
+    title: string;
+    description: string;
+    images: string[];
+  };
 
   let isVisible = false;
   let hasChanged = false;
   let hasObserverSupport = true;
 
   let output = "";
-  let postOutput;
-  let metadata = {};
+  let postOutput = "";
+  let metadata: Metadata = {
+    title: "The Gray Area",
+    description:
+      "For all kinds of developers, hackers, and tech-savvy readers | Now welcoming new writers!",
+    images: ["./grayarea.jpg"],
+  };
 
   onMount(async function () {
-    metadata.title = "The Gray Area";
-    metadata.description =
-      "For all kinds of developers, hackers, and tech-savvy readers | Now welcoming new writers!";
-    metadata.images = ["./grayarea.jpg"];
     // console.log(metadata);
 
     fetch(
@@ -26,26 +41,30 @@
         console.log(error);
       })
       .then((data) => {
-        const res = data.items; //This is an array with the content. No feed, no info about author etc..
+        const res = data.items as RssItem[]; //This is an array with the content. No feed, no info about author etc..
         const posts = res
-          .filter((item) => item.categories.length > 0)
+          .filter((item: RssItem) => item.categories.length > 0)
           .slice(0, 3); // That's the main trick* !
         // Functions to create a short text out of whole blog's content
-        function toText(node) {
+        function toText(node: string) {
           let tag = document.createElement("div");
           tag.innerHTML = node;
           node = tag.innerText;
           return node;
         }
-        function shortenText(text, startingPoint, maxLength) {
+        function shortenText(
+          text: string,
+          startingPoint: number,
+          maxLength: number
+        ) {
           return text.length > maxLength
             ? text.slice(startingPoint, maxLength) + "..."
             : text;
         }
-        posts.forEach((item) => {
+        posts.forEach((item: RssItem) => {
           let categories = item.categories;
           categories = categories
-            .map((categories) => " " + categories.toUpperCase())
+            .map((categories: string) => " " + categories.toUpperCase())
             .slice(0, 3);
           const post = {
             title: shortenText(item.title, 0, 60),
@@ -73,13 +92,7 @@
                </div>
          </li>`;
         });
-        postOutput = document.querySelector(".blog__slider");
-        if (output) {
-          postOutput.innerHTML = output;
-          // console.log("output")
-        } else {
-          postOutput.innerHTML = `<p class="blog__intro">Please wait, obtaining posts from <a href="https://medium.com/the-gray-area" aria-label="The Gray Area on Medium">The Gray Area</a></p>`;
-        }
+        postOutput = output;
       })
       .catch((error) => {
         console.error(error);
@@ -87,7 +100,7 @@
   });
 </script>
 
-<div class="sm:mt-[30vh] mt-[20vh]" aria-hidden="true">
+<div class="sm:mt-[18vh] mt-[12vh]" aria-hidden="true">
   <Visibility
     bind:hasObserverSupport
     visibilityUpdate={(state) => {
@@ -152,7 +165,18 @@
     class="blog flex justify-center items-center lg:block md:block hidden"
   >
     <ul class="blog__slider grid grid-cols-3 w-50% lg:w-33%">
-      {postOutput}
+      {#if postOutput}
+        {@html postOutput}
+      {:else}
+        <p class="blog__intro">
+          Please wait, obtaining posts from
+          <a
+            href="https://medium.com/the-gray-area"
+            aria-label="The Gray Area on Medium"
+            >The Gray Area</a
+          >
+        </p>
+      {/if}
     </ul>
   </div>
   <div class="lg:hidden md:hidden block flex justify-between text-center p-4">

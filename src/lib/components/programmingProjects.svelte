@@ -26,6 +26,36 @@
 
   const projects: ProjectProps[] = [
     {
+      title: "FratDoor",
+      description: `
+       A door-check system that replaces paper lists with a structured event check-in flow.
+      `,
+      image: "/fratdoor.png",
+      tags: ["Web", "Internet", "IFC"],
+      repoLink: null,
+      demoLink: "https://fratdoor.com",
+    },
+    {
+      title: "IFC EventHub",
+      description: `
+       Centralized event registration and safety workflow hub for IFC on the Hill chapters.
+      `,
+      image: "/ifc-eventhub.png",
+      tags: ["Web", "Internet", "IFC"],
+      repoLink: null,
+      demoLink: "https://ifceventhub.netlify.app/",
+    },
+    {
+      title: "Student Living Advocacy Group",
+      description: `
+       Reporting hub for off-campus housing experiences on the Hill in Boulder.
+      `,
+      image: "/slag.png",
+      tags: ["Web", "Internet", "IFC"],
+      repoLink: null,
+      demoLink: "https://hillneighborhoodslag.netlify.app/",
+    },
+    {
       title: "Graham Zemel (.com)",
       description: `
        This site! Version 4.0 of my personal website, built with SvelteKit and TailwindCSS.
@@ -62,7 +92,7 @@
       `,
       image: "/textcloakerss.png",
       tags: ["AI", "Web", "Internet"],
-      repoLink: "https://github.com/grahamzemel/TextCloaker",
+      repoLink: null,
       demoLink: "https://text-cloaker.com",
     },
     {

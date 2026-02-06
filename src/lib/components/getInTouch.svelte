@@ -7,7 +7,7 @@
   let hasObserverSupport = true;
 </script>
 
-<div class="mt-[18vh]" aria-hidden="true">
+<div class="mt-[12vh]" aria-hidden="true">
   <Visibility
     bind:hasObserverSupport
     visibilityUpdate={(state) => {
@@ -69,6 +69,18 @@
 
     <BookMeetingButton />
   </div>
+
+  <p class="mt-6 text-gray-400">
+    LinkedIn:
+    <a
+      class="text-accent-300 hover:text-accent-200 transition-colors"
+      href="https://www.linkedin.com/in/grahamzemel/"
+      target="_blank"
+      rel="noopener noreferer"
+    >
+      grahamzemel
+    </a>
+  </p>
 </section>
 
 <style lang="postcss">

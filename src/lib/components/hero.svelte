@@ -4,6 +4,10 @@
   <p class="hero-subtitle custom-fade-in anim-delay-900">
     Full Stack Developer | Artificial Intelligence | Ethical Hacking
   </p>
+  <p class="hero-role custom-fade-in anim-delay-900">
+    Director of Technology, <a href="https://ifconthehill.org">IFC on the Hill</a>
+    (CU Boulder)
+  </p>
   <p class="hero-subbertitle custom-fade-in anim-delay-900">
     <a href="https://grahamzemel.com">grahamzemel.com</a>
   </p>
@@ -24,6 +28,10 @@
 
   .hero-subbertitle {
     @apply mt-8 font-light sm:text-lg text-lg;
+  }
+
+  .hero-role {
+    @apply mt-4 font-light sm:text-xl text-lg;
   }
 
   /* a {

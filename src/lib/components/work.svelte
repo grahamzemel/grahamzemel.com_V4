@@ -1,16 +1,13 @@
 <script>
   import Visibility from "$lib/components/visibility.svelte";
-  import ProgrammingProjects from "./programmingProjects.svelte";
-  import CybersecurityProjects from "./cybersecProjects.svelte";
-  import VariousProjects from "./variousProjects.svelte";
-  import RecentProjects from "./recentProjects.svelte";
+  import ProjectsGrid from "./projectsGrid.svelte";
 
   let isVisible = false;
   let hasChanged = false;
   let hasObserverSupport = true;
 </script>
 
-<div class="sm:mt-[30vh] mt-[20vh]" aria-hidden="true">
+<div class="sm:mt-[18vh] mt-[12vh]" aria-hidden="true">
   <Visibility
     bind:hasObserverSupport
     visibilityUpdate={(state) => {
@@ -28,32 +25,8 @@
     ? 'opacity-100'
     : 'opacity-0'}"
 >
-  <h1 class="font-serif font-bold sm:text-6xl text-4xl">My Work</h1>
-
-  <!-- Projects -->
-  <!-- <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
-    Recent Projects &rarr;
-  </h2>
-
-  <RecentProjects /> -->
-
-  <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
-    Programming Projects &rarr;
-  </h2>
-
-  <ProgrammingProjects />
-
-  <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
-    Cybersecurity Projects &rarr;
-  </h2>
-
-  <CybersecurityProjects />
-
-  <h2 class="mt-24 font-serif font-bold sm:text-3xl text-2xl">
-    Misc Projects &rarr;
-  </h2>
-
-  <VariousProjects />
+  <h1 class="font-serif font-bold sm:text-6xl text-4xl">Projects</h1>
+  <ProjectsGrid />
 </section>
 
 <style lang="postcss">

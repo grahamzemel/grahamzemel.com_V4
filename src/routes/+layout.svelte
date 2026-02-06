@@ -18,7 +18,7 @@
   <meta name="title" content="Graham Zemel" />
   <meta
     name="description"
-    content="Hello! I'm a full-stack developer, ethical hacker, and student from the United States."
+    content="Hello! I'm a full-stack developer, ethical hacker, and Director of Technology for IFC on the Hill at CU Boulder."
   />
   <meta name="author" content="Graham Zemel" />
 
@@ -26,7 +26,7 @@
   <meta property="og:title" content="Graham Zemel" />
   <meta
     property="og:description"
-    content="Hello! I'm a full-stack developer, ethical hacker, and student from the United States."
+    content="Hello! I'm a full-stack developer, ethical hacker, and Director of Technology for IFC on the Hill at CU Boulder."
   />
   <meta property="og:url" content="https://grahamzemel.com/" />
   <meta property="og:image" content="https://grahamzemel.com/og-img.png" />
@@ -37,7 +37,7 @@
   <meta property="twitter:title" content="Graham Zemel" />
   <meta
     property="twitter:description"
-    content="Hello! I'm a full-stack developer, ethical hacker, and student from the United States."
+    content="Hello! I'm a full-stack developer, ethical hacker, and Director of Technology for IFC on the Hill at CU Boulder."
   />
   <meta property="twitter:image" content="https://grahamzemel.com/og-img.png" />
 </svelte:head>

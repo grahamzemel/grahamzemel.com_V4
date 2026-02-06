@@ -4,7 +4,9 @@
     | "AI"
     | "Web"
     | "Game"
+    | "App"
     | "Extension"
+    | "Website"
     | "Internet"
     | "Python"
     | "Telegram"
@@ -13,7 +15,8 @@
     | "Bash"
     | "Automation"
     | "Hackathon"
-    | "Crypto";
+    | "Crypto"
+    | "IFC";
 </script>
 
 <script lang="ts">
@@ -25,6 +28,7 @@
   export let demoLink: string | null;
   export let repoLink: string | null;
   export let tags: Tag[];
+  export let wide = false;
 
   const getClassesForTag = (tag: Tag) => {
     switch (tag) {
@@ -36,8 +40,12 @@
         return "bg-lime-50 text-lime-600";
       case "Game":
         return "bg-pink-50 text-pink-600";
+      case "App":
+        return "bg-emerald-50 text-emerald-600";
       case "Extension":
         return "bg-cyan-50 text-cyan-600";
+      case "Website":
+        return "bg-sky-50 text-sky-600";
       case "Internet":
         return "bg-teal-50 text-teal-600";
       case "Python":
@@ -56,6 +64,8 @@
         return "bg-pink-50 text-pink-600";
       case "Crypto":
         return "bg-blue-50 text-blue-600";
+      case "IFC":
+        return "bg-amber-50 text-amber-600";
       default:
         return "bg-blue-50 text-blue-600";
     }
@@ -63,9 +73,11 @@
 </script>
 
 <article
-  class="flex mx-2 md:mx-0 my-10 rounded-lg bg-[#070a0d] bg-opacity-60 shadow"
+  class="flex my-10 rounded-lg bg-[#070a0d] bg-opacity-60 shadow {wide
+    ? 'w-full mx-0'
+    : 'mx-2 md:mx-0'}"
 >
-  <div class="flex flex-col md:w-[22rem]">
+  <div class={wide ? "flex flex-col w-full" : "flex flex-col md:w-[22rem]"}>
     <img
       src={image}
       class="aspect-video object-cover rounded-t-lg pointer-events-none"

@@ -2,6 +2,8 @@
   import BackgroundBlob from "$lib/components/backgroundBlob.svelte";
   import Hero from "$lib/components/hero.svelte";
   import Socials from "$lib/components/socials.svelte";
+  import AboutSection from "$lib/components/aboutSection.svelte";
+  import FeaturedProjects from "$lib/components/featuredProjects.svelte";
   import Blog from "$lib/components/blog.svelte";
   import Work from "$lib/components/work.svelte";
   import Footer from "$lib/components/footer.svelte";
@@ -17,6 +19,8 @@
     <Hero />
     <Socials />
 
+    <AboutSection />
+    <FeaturedProjects />
     <Blog />
     <Work />
     <GetInTouch />
