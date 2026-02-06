@@ -7,7 +7,7 @@
   let hasObserverSupport = true;
 </script>
 
-<div class="mt-[12vh]" aria-hidden="true">
+<div class="mt-[8vh]" aria-hidden="true">
   <Visibility
     bind:hasObserverSupport
     visibilityUpdate={(state) => {
@@ -22,7 +22,7 @@
 
 <section
   id="get-in-touch"
-  class="custom-transition {!hasObserverSupport || isVisible
+  class="section-band custom-transition {!hasObserverSupport || isVisible
     ? 'opacity-100'
     : 'opacity-0'}"
 >

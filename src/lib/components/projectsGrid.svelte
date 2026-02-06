@@ -8,6 +8,7 @@
       tags: ["Web", "Internet", "IFC"],
       repoLink: null,
       demoLink: "https://fratdoor.com",
+      featured: true,
     },
     {
       title: "Text Cloaker",
@@ -17,6 +18,7 @@
       tags: ["AI", "Web", "Internet"],
       repoLink: null,
       demoLink: "https://text-cloaker.com",
+      featured: true,
     },
     {
       title: "IFC EventHub",
@@ -201,6 +203,7 @@
 
   let query = "";
   let activeTag: string | null = null;
+  let sortMode = "featured";
 
   const getDomain = (url: string) => {
     try {
@@ -272,6 +275,22 @@
       : true;
     return matchesTag && matchesQuery;
   });
+
+  $: sortedProjects = [...filteredProjects].sort((a, b) => {
+    if (sortMode === "featured") {
+      return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+    }
+    if (sortMode === "az") {
+      return a.title.localeCompare(b.title);
+    }
+    if (sortMode === "za") {
+      return b.title.localeCompare(a.title);
+    }
+    if (sortMode === "tags") {
+      return b.tags.length - a.tags.length;
+    }
+    return 0;
+  });
 </script>
 
   <div class="project-filter">
@@ -283,9 +302,18 @@
         bind:value={query}
       />
       <div class="filter-stats">
-        <span class="filter-count">{filteredProjects.length}</span>
+        <span class="filter-count">{sortedProjects.length}</span>
         <span class="filter-label">projects</span>
       </div>
+      <label class="filter-select">
+        <span>Sort</span>
+        <select bind:value={sortMode}>
+          <option value="featured">Featured first</option>
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+          <option value="tags">Most tags</option>
+        </select>
+      </label>
       <button class="filter-reset" type="button" on:click={() => (query = "")}>
         Clear Search
       </button>
@@ -297,13 +325,14 @@
         Clear Tag
       </button>
     </div>
-    <div class="tag-row">
+  <div class="tag-row">
     <button
       class="tag-chip {activeTag === null ? 'tag-chip--active' : ''}"
       type="button"
       on:click={() => (activeTag = null)}
     >
       All
+      <span class="tag-count">{projectsWithWebsite.length}</span>
     </button>
     {#each sortedTags as tag}
       <button
@@ -312,17 +341,23 @@
         on:click={() => (activeTag = activeTag === tag ? null : tag)}
       >
         {tag}
+        <span class="tag-count">{tagCounts[tag]}</span>
       </button>
     {/each}
   </div>
 </div>
 
-{#if filteredProjects.length === 0}
+{#if sortedProjects.length === 0}
   <p class="mt-8 text-gray-400">No projects match this filter.</p>
 {:else}
   <div class="projects-grid mt-8">
-    {#each filteredProjects as project}
-      <article class="project-card">
+    {#each sortedProjects as project, index}
+      <article
+        class="project-card {index < 3 ? 'project-card--emphasis' : ''}"
+      >
+        {#if project.featured}
+          <div class="featured-badge">Featured</div>
+        {/if}
         <div class="project-media">
           <img src={project.image} alt={project.title} loading="lazy" />
         </div>
@@ -375,10 +410,12 @@
 
   .filter-input {
     @apply w-full rounded-xl border border-slate-800 bg-[#0b0f14] px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500;
+    height: 3.25rem;
   }
 
   .filter-stats {
-    @apply inline-flex items-baseline gap-2 rounded-xl border border-slate-800 bg-[#0b0f14] px-4 py-3 text-sm text-gray-300;
+    @apply inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-[#0b0f14] px-4 py-3 text-sm text-gray-300;
+    height: 3.25rem;
   }
 
   .filter-count {
@@ -391,10 +428,20 @@
 
   .filter-reset {
     @apply rounded-xl border border-slate-800 bg-[#0b0f14] px-4 py-3 text-xs uppercase tracking-widest text-gray-400 transition-colors;
+    height: 3.25rem;
   }
 
   .filter-reset:hover {
     @apply border-accent-300 text-accent-200;
+  }
+
+  @media (min-width: 1024px) {
+    .project-filter {
+      position: static;
+      padding: 0;
+      backdrop-filter: none;
+      background: transparent;
+    }
   }
 
   .tag-row {
@@ -402,7 +449,7 @@
   }
 
   .tag-chip {
-    @apply rounded-full border border-slate-800 bg-[#0b0f14] px-3 py-1 text-xs text-gray-300 transition-colors;
+    @apply rounded-full border border-slate-800 bg-[#0b0f14] px-3 py-1 text-xs text-gray-300 transition-colors inline-flex items-center gap-2;
   }
 
   .tag-chip:hover {
@@ -413,13 +460,38 @@
     @apply border-accent-300 bg-[#12233a] text-accent-200;
   }
 
+  .tag-count {
+    @apply rounded-full bg-[#152437] px-2 py-0.5 text-[10px] text-gray-400;
+  }
+
+  .filter-select {
+    @apply inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-[#0b0f14] px-4 py-2 text-xs uppercase tracking-widest text-gray-400;
+    height: 3.25rem;
+  }
+
+  .filter-select select {
+    @apply bg-transparent text-sm text-gray-200 outline-none;
+  }
+
   .projects-grid {
     @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6;
   }
 
   .project-card {
-    @apply rounded-xl bg-[#070a0d] bg-opacity-60 shadow overflow-hidden flex flex-col;
+    @apply rounded-xl bg-[#070a0d] bg-opacity-60 shadow overflow-hidden flex flex-col relative border border-slate-800/80;
     aspect-ratio: 1 / 1;
+  }
+
+  .project-card--emphasis {
+    @apply border border-accent-400/20 shadow-lg;
+  }
+
+  .project-card {
+    @apply border border-slate-800/80;
+  }
+
+  .featured-badge {
+    @apply absolute top-4 right-4 rounded-full bg-[#12233a] px-4 py-2 text-[11px] uppercase tracking-widest text-accent-200;
   }
 
   .project-media {
@@ -456,10 +528,14 @@
   }
 
   .project-links {
-    @apply flex flex-wrap gap-3 text-sm text-accent-300;
+    @apply flex flex-wrap gap-3 text-base text-accent-300;
   }
 
   .project-link {
-    @apply hover:text-accent-200 transition-colors font-semibold;
+    @apply inline-flex items-center rounded-full border border-[#2b6cb0]/40 bg-[#0e1c2f] px-3 py-1 text-sm font-semibold text-blue-200/90 transition-colors;
+  }
+
+  .project-link:hover {
+    @apply border-[#5aa7ff]/70 text-blue-100;
   }
 </style>

@@ -172,7 +172,7 @@
   };
 </script>
 
-<div class="sm:mt-[30vh] mt-[20vh]" aria-hidden="true">
+<div class="sm:mt-[16vh] mt-[10vh]" aria-hidden="true">
   <Visibility
     bind:hasObserverSupport
     visibilityUpdate={(state) => {
@@ -186,7 +186,7 @@
 </div>
 
 <section
-  class="custom-transition {!hasObserverSupport || isVisible
+  class="section-band custom-transition {!hasObserverSupport || isVisible
     ? 'opacity-100'
     : 'opacity-0'}"
 >
@@ -418,11 +418,13 @@
   }
 
   .cta-button {
-    @apply w-full max-w-sm mx-auto rounded-full border border-[#2b6cb0]/50 bg-gradient-to-r from-[#123154] via-[#0f2747] to-[#10263f] py-3 px-5 shadow-lg transition-colors inline-flex items-center justify-center gap-3;
+    @apply w-full max-w-sm mx-auto rounded-full border border-[#2b6cb0]/60 bg-gradient-to-r from-[#1b4a7a] via-[#163a61] to-[#132f4f] py-3 px-5 shadow-xl transition-colors inline-flex items-center justify-center gap-3;
+    box-shadow: 0 10px 30px rgba(20, 46, 86, 0.35), inset 0 0 0 1px rgba(122, 175, 255, 0.2);
   }
 
   .cta-button:hover {
-    @apply border-[#5aa7ff]/70 from-[#1a3c6b] via-[#15345d] to-[#13324f];
+    @apply border-[#7db3ff]/80 from-[#225a96] via-[#1d4c7b] to-[#193f63];
+    box-shadow: 0 14px 40px rgba(25, 60, 110, 0.45), inset 0 0 0 1px rgba(140, 190, 255, 0.35);
   }
 
   .cta-label {

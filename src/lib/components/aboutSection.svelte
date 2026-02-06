@@ -41,7 +41,7 @@
 </div>
 
 <section
-  class="custom-transition {!hasObserverSupport || isVisible
+  class="section-band custom-transition {!hasObserverSupport || isVisible
     ? 'opacity-100'
     : 'opacity-0'}"
 >
@@ -227,7 +227,7 @@
     </article>
   </div>
 
-  <div class="writing-section mt-12">
+  <div class="writing-section mt-6">
     <div class="writing-header">
       <h3 class="text-2xl font-semibold">Papers & Writing</h3>
       <p class="mt-2 text-gray-300">
