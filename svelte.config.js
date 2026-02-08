@@ -15,7 +15,7 @@ const config = {
 
   kit: {
     // Vercel adapter with explicit runtime to avoid build-time Node version mismatches.
-    adapter: adapter({ runtime: "nodejs18.x" }),
+    adapter: adapter({ runtime: "edge" }),
     csp: {
       directives: {
         "default-src": ["*", "unsafe-inline", "unsafe-eval"],
