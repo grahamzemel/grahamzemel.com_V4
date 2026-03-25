@@ -686,7 +686,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ?? (component_cache2 = (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default);
-    imports2 = ["_app/immutable/nodes/1.dfc36020.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.0d96f42b.js", "_app/immutable/chunks/singletons.3dbea006.js"];
+    imports2 = ["_app/immutable/nodes/1.0b694f2c.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.9ce819b5.js", "_app/immutable/chunks/singletons.a2923fce.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -758,7 +758,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ?? (component_cache3 = (await Promise.resolve().then(() => (init_layout_svelte2(), layout_svelte_exports2))).default);
-    imports3 = ["_app/immutable/nodes/2.ae604e1e.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.0d96f42b.js", "_app/immutable/chunks/singletons.3dbea006.js", "_app/immutable/chunks/api.1b4253c7.js"];
+    imports3 = ["_app/immutable/nodes/2.ad8bd146.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.9ce819b5.js", "_app/immutable/chunks/singletons.a2923fce.js", "_app/immutable/chunks/api.1b4253c7.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -2558,7 +2558,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "zmyz7j"
+  version_hash: "1drf6e"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -6069,7 +6069,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set([".well-known/appspecific/com.chrome.devtools.json", "aesculapiusss.png", "bashbunnyss.png", "cryptoss.png", "favicon.ico", "favicon.svg", "fractalsss.png", "fratdoor.png", "gamebank.png", "gpuprices.png", "grahamzemel.com.png", "grayarea.jpg", "heckerbotss.jpg", "icons/icon-192.svg", "icons/icon-512.svg", "idorss.png", "ifc-eventhub.png", "laptopprices.png", "macbookprices.png", "manifest.json", "og-img.png", "powerschoolss.png", "quantumss.png", "shader.frag", "shader.vert", "sketch.cjs", "slag.png", "sw.js", "templateprojss.png", "textcloakerss.png", "tgaonmediumss.png", "thegrayareass.png", "vaultcollection.png", "webheckscannerss.png"]),
     mimeTypes: { ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".cjs": "application/node", ".js": "application/javascript" },
     _: {
-      client: { "start": "_app/immutable/entry/start.c1c55ca1.js", "app": "_app/immutable/entry/app.2de28398.js", "imports": ["_app/immutable/entry/start.c1c55ca1.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/singletons.3dbea006.js", "_app/immutable/entry/app.2de28398.js", "_app/immutable/chunks/index.ba56c314.js"], "stylesheets": [], "fonts": [] },
+      client: { "start": "_app/immutable/entry/start.9253e194.js", "app": "_app/immutable/entry/app.184d98c3.js", "imports": ["_app/immutable/entry/start.9253e194.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/singletons.a2923fce.js", "_app/immutable/entry/app.184d98c3.js", "_app/immutable/chunks/index.ba56c314.js"], "stylesheets": [], "fonts": [] },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
