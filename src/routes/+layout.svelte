@@ -40,14 +40,17 @@
     const tapWindowMs = 900;
 
     const handler = (e) => {
+      console.log("[admin-key]", JSON.stringify({ key: e.key, code: e.code, type: e.type, length: e.key?.length }));
       // Use e.key for printable chars; skip modifiers, arrows, etc.
       if (!e.key || e.key.length !== 1) return;
       if (e.ctrlKey || e.altKey || e.metaKey) return;
       buffer += e.key;
+      console.log("[admin-buffer]", JSON.stringify(buffer));
       if (buffer.length > SECRET.length) {
         buffer = buffer.slice(-SECRET.length);
       }
       if (buffer === SECRET) {
+        console.log("[admin] MATCH — authenticating");
         buffer = "";
         authenticateWithKey(SECRET);
       }
