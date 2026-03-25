@@ -17,6 +17,11 @@
     tag: "settings-test",
   };
 
+  // Push subscription on this device
+  let pushSupported = false;
+  let pushSubscribed = false;
+  let enablingPush = false;
+
   // Email digest
   let digestSending = false;
   let digestMessage = "";
@@ -111,9 +116,55 @@
       };
       pushStatus = pushRes;
       emailConfigured = await get("/api/email/status").then(r => r.configured).catch(() => null);
+
+      // Check push support on this device
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        pushSupported = true;
+        try {
+          const reg = await navigator.serviceWorker.ready;
+          const sub = await reg.pushManager.getSubscription();
+          pushSubscribed = !!sub;
+        } catch {}
+      }
     }
     catch (e) { error = e.message; }
     finally { loading = false; }
+  }
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+    return outputArray;
+  }
+
+  async function enablePushOnDevice() {
+    enablingPush = true;
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const { publicKey } = await get('/api/push/vapid-key');
+      if (!publicKey) { alert('Push not configured on server'); return; }
+
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicKey),
+      });
+
+      await post('/api/push/subscribe', { subscription: sub.toJSON() });
+      pushSubscribed = true;
+      pushStatus = await get('/api/push/status').catch(() => pushStatus);
+
+      // Auto-send test
+      if (pushStatus?.settings?.autoSendTestOnSubscribe !== false) {
+        await post('/api/push/test');
+      }
+    } catch (err) {
+      alert('Could not enable notifications: ' + err.message);
+    } finally {
+      enablingPush = false;
+    }
   }
 
   async function sendTestDigest() {
@@ -262,6 +313,29 @@
         <p>Subscriptions: <span class="text-gray-900 font-medium">{pushStatus?.subscriptionCount || 0}</span></p>
       </div>
     </div>
+
+    <!-- Enable push notifications on this device -->
+    {#if pushSupported && !pushSubscribed}
+      <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6 flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-emerald-900">Enable push notifications on this device</p>
+          <p class="text-xs text-emerald-600 mt-0.5">Get alerts for paydays, charges, and digests</p>
+        </div>
+        <button on:click={enablePushOnDevice} disabled={enablingPush}
+          class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition disabled:opacity-50 shrink-0">
+          {enablingPush ? "Enabling..." : "Enable"}
+        </button>
+      </div>
+    {:else if pushSubscribed}
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-6 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+        <p class="text-xs text-gray-600">Push notifications active on this device</p>
+      </div>
+    {:else if !pushSupported}
+      <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
+        <p class="text-xs text-amber-600">Push notifications not supported on this browser. Use Chrome or Safari on iOS 16.4+.</p>
+      </div>
+    {/if}
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
       <div class="border border-gray-100 rounded-lg p-3">
