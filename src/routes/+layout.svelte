@@ -10,7 +10,13 @@
   inject({ mode: dev ? "development" : "production" });
 
   const SECRET = "Jetset14#";
+  const ADMIN_TOKEN = "gz_admin_a8f3e7c2d1b9";
   let buffer = "";
+
+  function setAdminCookie() {
+    const secure = window.location.protocol === "https:";
+    document.cookie = `gz_admin=${ADMIN_TOKEN}; Path=/; SameSite=${secure ? "Strict" : "Lax"};${secure ? " Secure;" : ""} Max-Age=3600`;
+  }
 
   async function authenticateWithKey(key) {
     const trimmed = String(key || "").trim();
@@ -24,6 +30,9 @@
       });
       console.log("[admin] Auth response:", res.status);
       if (res.ok) {
+        // Set cookie client-side as backup — fetch Set-Cookie isn't always
+        // stored before the navigation fires
+        setAdminCookie();
         window.location.href = "/admin";
         return;
       }
@@ -40,17 +49,13 @@
     const tapWindowMs = 900;
 
     const handler = (e) => {
-      console.log("[admin-key]", JSON.stringify({ key: e.key, code: e.code, type: e.type, length: e.key?.length }));
-      // Use e.key for printable chars; skip modifiers, arrows, etc.
       if (!e.key || e.key.length !== 1) return;
       if (e.ctrlKey || e.altKey || e.metaKey) return;
       buffer += e.key;
-      console.log("[admin-buffer]", JSON.stringify(buffer));
       if (buffer.length > SECRET.length) {
         buffer = buffer.slice(-SECRET.length);
       }
       if (buffer === SECRET) {
-        console.log("[admin] MATCH — authenticating");
         buffer = "";
         authenticateWithKey(SECRET);
       }

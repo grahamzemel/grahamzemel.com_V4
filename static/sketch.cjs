@@ -9,11 +9,21 @@ function isMobile() {
     window.matchMedia("(pointer: coarse)").matches;
 }
 
+function isHomepage() {
+  return window.location.pathname === "/";
+}
+
 function preload() {
+  if (!isHomepage()) return;
   theShader = loadShader("/shader.vert", "/shader.frag");
 }
 
 function setup() {
+  if (!isHomepage()) {
+    noCanvas();
+    noLoop();
+    return;
+  }
   createCanvas(windowWidth, windowHeight);
   noStroke();
   time_ = random(0, TWO_PI);
