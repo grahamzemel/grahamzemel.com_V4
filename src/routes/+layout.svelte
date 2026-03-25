@@ -83,10 +83,11 @@
       }
     };
 
-    document.addEventListener("keyup", handler);
+    // Use capture phase on document to fire BEFORE p5.js can intercept
+    document.addEventListener("keydown", handler, true);
     window.addEventListener("touchend", tapHandler, { passive: false });
     return () => {
-      document.removeEventListener("keyup", handler);
+      document.removeEventListener("keydown", handler, true);
       window.removeEventListener("touchend", tapHandler);
     };
   });
