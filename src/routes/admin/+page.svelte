@@ -285,39 +285,6 @@
   </div>
 {:else if summary}
 
-  <!-- AI Insights (desktop only — mobile version is at bottom) -->
-  <div class="hidden md:block">
-    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-8">
-      <div class="flex justify-between items-center mb-4">
-        <p class="text-[10px] text-gray-400 uppercase tracking-wider">AI Insights</p>
-        <button
-          on:click={() => loadInsights(true)}
-          disabled={insightsLoading}
-          class="text-[11px] text-emerald-600 hover:text-emerald-700 disabled:opacity-50 transition"
-        >
-          {insightsLoading ? "Analyzing..." : "Re-generate"}
-        </button>
-      </div>
-      {#if insightsLoading && !insights}
-        <div class="flex items-center gap-2 text-gray-400 text-sm">
-          <div class="w-3 h-3 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-          Analyzing your finances...
-        </div>
-      {:else if insights}
-        {#if insightsLoading}
-          <div class="flex items-center gap-2 text-gray-400 text-xs mb-3">
-            <div class="w-2.5 h-2.5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-            Refreshing...
-          </div>
-        {/if}
-        <div class="space-y-3 text-sm text-gray-600 leading-relaxed">
-          {@html renderInsightMarkdown(insights)}
-        </div>
-      {:else}
-        <p class="text-sm text-gray-400">Loading insights...</p>
-      {/if}
-    </div>
-  </div>
 
   <!-- Adjustments Section -->
   <div class="mb-10">
@@ -548,8 +515,8 @@
     {/if}
   </div>
 
-  <!-- AI Insights (mobile only — desktop version is at top) -->
-  <div class="md:hidden">
+  <!-- AI Insights -->
+  <div>
     <div class="bg-white rounded-xl border border-gray-200 p-5">
       <div class="flex justify-between items-center mb-4">
         <p class="text-[10px] text-gray-400 uppercase tracking-wider">AI Insights</p>
