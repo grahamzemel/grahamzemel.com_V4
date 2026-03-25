@@ -210,7 +210,7 @@
 
     function flushList() {
       if (!listItems.length) return;
-      blocks.push(`<ul class="list-disc space-y-2 pl-5">${listItems.map((item) => `<li>${item}</li>`).join("")}</ul>`);
+      blocks.push(`<ul class="list-disc space-y-1.5 pl-5">${listItems.map((item) => `<li>${item}</li>`).join("")}</ul>`);
       listItems = [];
     }
 
@@ -231,7 +231,7 @@
       const boldHeadingMatch = line.match(/^\*\*(.+)\*\*$/);
       if (boldHeadingMatch) {
         flushList();
-        blocks.push(`<h3 class="text-sm font-semibold text-gray-900">${renderInsightInline(boldHeadingMatch[1])}</h3>`);
+        blocks.push(`<h3 class="text-xs font-semibold text-gray-900 uppercase tracking-wider mt-4 first:mt-0 border-b border-gray-100 pb-1">${renderInsightInline(boldHeadingMatch[1])}</h3>`);
         continue;
       }
 
