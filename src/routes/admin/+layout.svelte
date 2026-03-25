@@ -1,13 +1,19 @@
 <script>
   import { page } from "$app/stores";
+  import { onMount } from "svelte";
+  import { browser } from "$app/environment";
+  import { post, get } from "$lib/api.js";
 
   const navItems = [
-    { href: "/admin", label: "Dashboard", icon: "📊" },
-    { href: "/admin/income", label: "Income Sources", icon: "💰" },
-    { href: "/admin/stripe", label: "Stripe", icon: "💳" },
-    { href: "/admin/cashflow", label: "Cash Flow", icon: "📈" },
-    { href: "/admin/settings", label: "Settings", icon: "⚙️" },
+    { href: "/admin", label: "Overview" },
+    { href: "/admin/income", label: "Income" },
+    { href: "/admin/stripe", label: "Startups" },
+    { href: "/admin/cashflow", label: "Cash Flow" },
+    { href: "/admin/settings", label: "Settings" },
   ];
+
+  let pushSupported = false;
+  let pushSubscribed = false;
 
   async function logout() {
     await fetch("/api/admin-auth", { method: "DELETE" });
@@ -15,43 +21,122 @@
   }
 
   $: currentPath = $page.url.pathname;
+
+  onMount(async () => {
+    if (!browser) return;
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      try {
+        const reg = await navigator.serviceWorker.register('/sw.js');
+        console.log('[SW] Registered', reg.scope);
+        pushSupported = 'PushManager' in window;
+
+        // Check if already subscribed
+        if (pushSupported) {
+          const sub = await reg.pushManager.getSubscription();
+          pushSubscribed = !!sub;
+        }
+      } catch (err) {
+        console.error('[SW] Registration failed:', err);
+      }
+    }
+  });
+
+  async function enablePush() {
+    try {
+      const reg = await navigator.serviceWorker.ready;
+
+      // Get VAPID key from backend
+      const { publicKey } = await get('/api/push/vapid-key');
+      if (!publicKey) { alert('Push not configured on server'); return; }
+
+      // Convert VAPID key
+      const vapidKey = urlBase64ToUint8Array(publicKey);
+
+      // Subscribe
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: vapidKey,
+      });
+
+      // Send subscription to backend
+      await post('/api/push/subscribe', { subscription: sub.toJSON() });
+      pushSubscribed = true;
+
+      // Send test notification
+      await post('/api/push/test');
+    } catch (err) {
+      console.error('[Push] Error:', err);
+      alert('Could not enable notifications: ' + err.message);
+    }
+  }
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+    return outputArray;
+  }
 </script>
 
-<div class="min-h-screen flex bg-[#121217] text-white">
-  <!-- Sidebar -->
-  <aside class="w-64 border-r border-gray-800 flex flex-col p-4 shrink-0">
-    <div class="mb-8">
-      <h1 class="text-lg font-bold text-[#33FFC1]">Income Engine</h1>
-      <p class="text-xs text-gray-500 mt-1">Graham Zemel</p>
-    </div>
+<svelte:head>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Income Engine" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
+</svelte:head>
 
-    <nav class="flex-1 flex flex-col gap-1">
-      {#each navItems as item}
-        <a
-          href={item.href}
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors
-            {currentPath === item.href
-              ? 'bg-[#33FFC1]/10 text-[#33FFC1]'
-              : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}"
+<!-- Override the global dark body for the admin area — fixed position covers everything -->
+<div class="fixed inset-0 bg-[#fafafa] text-gray-900 overflow-y-auto z-50">
+  <!-- Top nav -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto px-6 flex items-center justify-between h-14">
+      <div class="flex items-center gap-8">
+        <a href="/admin" class="text-sm font-semibold text-gray-900 tracking-tight">Income Engine</a>
+        <nav class="flex gap-1">
+          {#each navItems as item}
+            <a
+              href={item.href}
+              class="px-3 py-1.5 rounded-md text-sm transition-colors
+                {currentPath === item.href
+                  ? 'bg-gray-100 text-gray-900 font-medium'
+                  : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}"
+            >
+              {item.label}
+            </a>
+          {/each}
+        </nav>
+      </div>
+      <div class="flex items-center gap-3">
+        {#if pushSupported && !pushSubscribed}
+          <button
+            on:click={enablePush}
+            class="text-xs text-emerald-600 hover:text-emerald-700 transition"
+            title="Enable push notifications"
+          >
+            Enable notifications
+          </button>
+        {/if}
+        {#if pushSubscribed}
+          <span class="text-[10px] text-emerald-500" title="Push notifications active">notifications on</span>
+        {/if}
+        <button
+          on:click={logout}
+          class="text-xs text-gray-400 hover:text-gray-600 transition"
         >
-          <span class="text-base">{item.icon}</span>
-          {item.label}
-        </a>
-      {/each}
-    </nav>
-
-    <button
-      on:click={logout}
-      class="mt-auto text-sm text-gray-500 hover:text-gray-300 transition px-3 py-2 text-left"
-    >
-      Logout
-    </button>
-  </aside>
+          Sign out
+        </button>
+      </div>
+    </div>
+  </header>
 
   <!-- Main content -->
-  <main class="flex-1 overflow-y-auto">
-    <div class="max-w-6xl mx-auto p-8">
-      <slot />
-    </div>
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    <slot />
   </main>
 </div>

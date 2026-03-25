@@ -20,7 +20,7 @@ const config = {
       directives: {
         "default-src": ["*", "unsafe-inline", "unsafe-eval"],
         "img-src": ["*"],
-        "worker-src": ["blob:"],
+        "worker-src": ["self", "blob:"],
         "script-src": ["*", "unsafe-inline", "unsafe-eval", "blob:"],
       },
     },

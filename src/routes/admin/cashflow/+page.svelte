@@ -2,82 +2,132 @@
   import { onMount } from "svelte";
   import { get } from "$lib/api.js";
 
-  let payments = [];
-  let totalExpected = 0;
+  let data = null;
+  let modifiers = [];
   let days = 90;
   let loading = true;
   let error = null;
+  let filter = "all";
+  let hoverPoint = null;
 
-  onMount(() => loadCashflow());
+  onMount(() => load());
 
-  async function loadCashflow() {
-    loading = true;
+  async function load() {
+    loading = true; error = null;
     try {
-      const res = await get(`/api/projections/cashflow?days=${days}`);
-      payments = res.payments;
-      totalExpected = res.totalExpected;
-    } catch (e) {
-      error = e.message;
-    } finally {
-      loading = false;
+      const [d, m] = await Promise.all([
+        get(`/api/projections/cashflow?days=${days}`),
+        get("/api/modifiers"),
+      ]);
+      data = d;
+      modifiers = m.modifiers || [];
     }
+    catch (e) { error = e.message; }
+    finally { loading = false; }
   }
 
-  // Group payments by month
-  $: grouped = payments.reduce((acc, p) => {
-    const month = p.date.slice(0, 7);
-    if (!acc[month]) acc[month] = { payments: [], total: 0 };
-    acc[month].payments.push(p);
-    acc[month].total += p.amount;
-    return acc;
-  }, {});
+  $: filtered = (data?.payments || []).filter(p => {
+    if (filter === "all") return true;
+    if (filter === "jobs") return p.type === "hourly" || p.type === "salary" || p.type === "freelance";
+    if (filter === "stripe") return p.type?.startsWith("stripe_") || p.type === "business";
+    if (filter === "confirmed") return !p.isEstimate;
+    if (filter === "estimated") return p.isEstimate;
+    if (filter === "modified") return p.isModified;
+    return true;
+  });
 
-  $: months = Object.entries(grouped).sort((a, b) => a[0].localeCompare(b[0]));
+  $: grouped = (() => {
+    const w = {};
+    for (const p of filtered) {
+      const d = new Date(p.date + "T12:00:00");
+      const ws = new Date(d); ws.setDate(d.getDate() - d.getDay());
+      const key = ws.toISOString().slice(0, 10);
+      if (!w[key]) w[key] = { payments: [], total: 0 };
+      w[key].payments.push(p);
+      w[key].total += p.amount;
+    }
+    return Object.entries(w).sort((a, b) => a[0].localeCompare(b[0]));
+  })();
 
-  // Next payment
-  $: nextPayment = payments[0] || null;
+  $: next = filtered[0] || null;
+  $: modifiedCount = (data?.payments || []).filter(p => p.isModified).length;
 
-  function formatCurrency(amount) {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount || 0);
-  }
+  // Cumulative income chart
+  const CHART_W = 600;
+  const CHART_H = 140;
+  const PAD = { top: 10, right: 10, bottom: 20, left: 10 };
 
-  function formatDate(dateStr) {
-    return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
-      weekday: "short", month: "short", day: "numeric",
+  $: cumulativeChart = (() => {
+    if (!filtered.length) return null;
+    const w = CHART_W - PAD.left - PAD.right;
+    const h = CHART_H - PAD.top - PAD.bottom;
+
+    let running = 0;
+    const points = filtered.map((p, i) => {
+      running += p.amount;
+      return {
+        x: PAD.left + (filtered.length > 1 ? (i / (filtered.length - 1)) * w : w / 2),
+        y: 0, // set below
+        total: running,
+        ...p,
+      };
     });
+
+    const maxTotal = Math.max(...points.map(p => p.total), 1);
+    for (const p of points) {
+      p.y = PAD.top + h - (p.total / maxTotal) * h;
+    }
+
+    const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+    const areaPath = linePath + ` L ${points[points.length - 1].x} ${CHART_H - PAD.bottom} L ${points[0].x} ${CHART_H - PAD.bottom} Z`;
+
+    return { points, linePath, areaPath, maxTotal };
+  })();
+
+  function fmtE(n) { return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n || 0); }
+  function fmt(n) { return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n || 0); }
+  function fmtD(s) {
+    const d = new Date(s + "T12:00:00");
+    const diff = Math.ceil((d - new Date()) / 86400000);
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Tomorrow";
+    return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  }
+  function fmtW(s) {
+    const d = new Date(s + "T12:00:00");
+    const e = new Date(d); e.setDate(d.getDate() + 6);
+    const o = { month: "short", day: "numeric" };
+    return `${d.toLocaleDateString("en-US", o)} – ${e.toLocaleDateString("en-US", o)}`;
+  }
+  function fmtRange(start, end) {
+    if (!start || !end) return "";
+    const s = new Date(start + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const e = new Date(end + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    return `${s} – ${e}`;
   }
 
-  function formatMonth(monthStr) {
-    const [y, m] = monthStr.split("-");
-    return new Date(parseInt(y), parseInt(m) - 1).toLocaleDateString("en-US", {
-      month: "long", year: "numeric",
-    });
+  // Find modifier for a payment
+  function findModifier(p) {
+    if (!p.isModified || !p.periodStart) return null;
+    return modifiers.find(m => m.startDate <= p.periodEnd && m.endDate >= p.periodStart);
   }
 
-  const typeColors = {
-    hourly: "border-blue-500 bg-blue-900/20",
-    business: "border-purple-500 bg-purple-900/20",
-    salary: "border-green-500 bg-green-900/20",
-    freelance: "border-orange-500 bg-orange-900/20",
-    other: "border-gray-500 bg-gray-900/20",
-  };
+  const dots = { hourly: "bg-blue-500", salary: "bg-emerald-500", business: "bg-violet-500", freelance: "bg-orange-500", stripe_payout: "bg-violet-500", stripe_pending: "bg-amber-500", stripe_subscription_renewal: "bg-indigo-400", other: "bg-gray-400" };
+  const dotColors = { hourly: "#3b82f6", salary: "#10b981", business: "#8b5cf6", stripe_payout: "#8b5cf6", stripe_pending: "#f59e0b", stripe_subscription_renewal: "#6366f1" };
 </script>
 
-<svelte:head>
-  <title>Cash Flow | Income Engine</title>
-</svelte:head>
+<svelte:head><title>Cash Flow | Income Engine</title></svelte:head>
 
 <div class="flex justify-between items-center mb-6">
-  <h2 class="text-2xl font-bold">Cash Flow Timeline</h2>
-  <div class="flex gap-2">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-900">Cash Flow</h1>
+    <p class="text-sm text-gray-400 mt-1">When your money arrives</p>
+  </div>
+  <div class="flex gap-1.5">
     {#each [30, 60, 90, 180] as d}
-      <button
-        on:click={() => { days = d; loadCashflow(); }}
-        class="px-3 py-1.5 rounded-lg text-xs font-medium transition
-          {days === d
-            ? 'bg-[#33FFC1]/10 text-[#33FFC1] border border-[#33FFC1]/30'
-            : 'bg-gray-900 text-gray-400 border border-gray-800 hover:text-white'}"
-      >
+      <button on:click={() => { days = d; load(); }}
+        class="px-3 py-1.5 rounded-md text-xs font-medium transition
+          {days === d ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-500 hover:text-gray-900'}">
         {d}d
       </button>
     {/each}
@@ -85,57 +135,172 @@
 </div>
 
 {#if loading}
-  <p class="text-gray-400">Loading cash flow...</p>
+  <p class="text-gray-400 text-sm">Loading...</p>
 {:else if error}
-  <div class="bg-red-900/30 border border-red-700 text-red-300 px-4 py-3 rounded-lg">{error}</div>
-{:else}
-  <!-- Hero: next payment -->
-  {#if nextPayment}
-    <div class="bg-gradient-to-r from-[#33FFC1]/10 to-transparent border border-[#33FFC1]/20 rounded-xl p-5 mb-6">
-      <p class="text-xs text-[#33FFC1] uppercase tracking-wider mb-1">Next Payment</p>
-      <div class="flex justify-between items-center">
-        <div>
-          <p class="text-lg font-semibold">{nextPayment.source}</p>
-          <p class="text-sm text-gray-400">{formatDate(nextPayment.date)}</p>
-        </div>
-        <p class="text-2xl font-bold text-[#33FFC1]">+{formatCurrency(nextPayment.amount)}</p>
+  <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">{error}</div>
+{:else if data}
+
+  <!-- Stats -->
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <p class="text-[10px] text-gray-400 mb-1">Total ({days}d)</p>
+      <p class="text-lg font-semibold text-gray-900">{fmt(data.totalExpected)}</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <p class="text-[10px] text-gray-400 mb-1">Confirmed</p>
+      <p class="text-lg font-semibold text-emerald-600">{fmt(data.breakdown?.confirmed)}</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <p class="text-[10px] text-gray-400 mb-1">Estimated</p>
+      <p class="text-lg font-semibold text-amber-600">{fmt(data.breakdown?.estimated)}</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <p class="text-[10px] text-gray-400 mb-1">Payments</p>
+      <p class="text-lg font-semibold text-gray-900">{data.payments?.length || 0}</p>
+    </div>
+    {#if modifiedCount > 0}
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+        <p class="text-[10px] text-amber-600 mb-1">Modified</p>
+        <p class="text-lg font-semibold text-amber-600">{modifiedCount}</p>
       </div>
+    {/if}
+  </div>
+
+  <!-- Cumulative income chart -->
+  {#if cumulativeChart}
+    <div class="bg-white border border-gray-200 rounded-xl p-5 mb-6">
+      <div class="flex justify-between items-center mb-3">
+        <p class="text-[10px] text-gray-400 uppercase tracking-wider">Cumulative Income</p>
+        <div class="text-right">
+          {#if hoverPoint}
+            <p class="text-xs text-gray-400">{hoverPoint.source} &middot; {fmtD(hoverPoint.date)}</p>
+            <p class="text-sm font-semibold text-gray-900">{fmtE(hoverPoint.total)}</p>
+          {:else}
+            <p class="text-sm font-semibold text-gray-900">{fmtE(data.totalExpected)}</p>
+          {/if}
+        </div>
+      </div>
+      <svg viewBox="0 0 {CHART_W} {CHART_H}" class="w-full" style="height: 160px;"
+           on:mouseleave={() => hoverPoint = null}>
+        <!-- Grid -->
+        {#each [0.25, 0.5, 0.75] as pct}
+          <line x1={PAD.left} x2={CHART_W - PAD.right}
+                y1={PAD.top + (CHART_H - PAD.top - PAD.bottom) * pct}
+                y2={PAD.top + (CHART_H - PAD.top - PAD.bottom) * pct}
+                stroke="#f3f4f6" stroke-width="0.5" />
+        {/each}
+
+        <!-- Area -->
+        <path d={cumulativeChart.areaPath} fill="url(#cfGrad)" opacity="0.15" />
+
+        <!-- Line -->
+        <path d={cumulativeChart.linePath} fill="none" stroke="#10b981" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+
+        <!-- Dots -->
+        {#each cumulativeChart.points as p}
+          {@const isModified = p.isModified}
+          {@const isHovered = hoverPoint === p}
+          <circle
+            cx={p.x} cy={p.y}
+            r={isHovered ? 5 : isModified ? 4 : 3}
+            fill={isModified ? '#f59e0b' : (dotColors[p.type] || '#10b981')}
+            stroke="white" stroke-width="1.5"
+            class="transition-all"
+          />
+          {#if isModified}
+            <circle cx={p.x} cy={p.y} r="7" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.4" />
+          {/if}
+          <!-- Hit area -->
+          <rect
+            x={p.x - (CHART_W / cumulativeChart.points.length) / 2}
+            y={PAD.top}
+            width={CHART_W / cumulativeChart.points.length}
+            height={CHART_H - PAD.top - PAD.bottom}
+            fill="transparent"
+            on:mouseenter={() => hoverPoint = p}
+          />
+        {/each}
+
+        <!-- Hover line -->
+        {#if hoverPoint}
+          <line x1={hoverPoint.x} x2={hoverPoint.x} y1={PAD.top} y2={CHART_H - PAD.bottom}
+                stroke="#d1d5db" stroke-width="0.5" stroke-dasharray="3 3" />
+        {/if}
+
+        <defs>
+          <linearGradient id="cfGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#10b981" />
+            <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
   {/if}
 
-  <!-- Summary bar -->
-  <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-8 flex justify-between items-center">
-    <span class="text-sm text-gray-400">Total expected in next {days} days</span>
-    <span class="text-xl font-bold text-[#33FFC1]">{formatCurrency(totalExpected)}</span>
+  <!-- Filters -->
+  <div class="flex gap-1.5 mb-6">
+    {#each [
+      { key: "all", label: "All" },
+      { key: "jobs", label: "Jobs" },
+      { key: "stripe", label: "Startups" },
+      { key: "confirmed", label: "Confirmed" },
+      { key: "estimated", label: "Estimated" },
+      ...(modifiedCount > 0 ? [{ key: "modified", label: `Modified (${modifiedCount})` }] : []),
+    ] as f}
+      <button on:click={() => filter = f.key}
+        class="px-3 py-1.5 rounded-full text-xs font-medium transition
+          {filter === f.key ? 'bg-gray-100 text-gray-900' : 'text-gray-400 hover:text-gray-600'}">
+        {f.label}
+      </button>
+    {/each}
   </div>
 
-  <!-- Monthly groups -->
-  {#if payments.length === 0}
-    <div class="bg-gray-900 border border-gray-800 rounded-xl p-8 text-center">
-      <p class="text-gray-400">No payments projected. Add income sources to see your cash flow.</p>
+  <!-- Timeline -->
+  {#if filtered.length === 0}
+    <div class="bg-white border border-gray-200 rounded-xl p-10 text-center">
+      <p class="text-gray-400 text-sm">No payments match this filter.</p>
     </div>
   {:else}
-    {#each months as [month, data]}
-      <div class="mb-6">
-        <div class="flex justify-between items-center mb-3">
-          <h3 class="text-sm font-semibold text-gray-300">{formatMonth(month)}</h3>
-          <span class="text-sm font-medium text-[#33FFC1]">{formatCurrency(data.total)}</span>
+    {#each grouped as [weekStart, week]}
+      <div class="mb-5">
+        <div class="flex justify-between items-center mb-2 px-1">
+          <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">{fmtW(weekStart)}</p>
+          <p class="text-[11px] text-gray-400 font-medium">{fmtE(week.total)}</p>
         </div>
-        <div class="space-y-2">
-          {#each data.payments as payment}
-            <div class="border-l-2 {typeColors[payment.type] || typeColors.other} rounded-r-lg p-3 flex justify-between items-center">
-              <div>
-                <p class="text-sm font-medium">{payment.source}</p>
-                <p class="text-xs text-gray-500">
-                  {formatDate(payment.date)}
-                  {#if payment.periodStart}
-                    — Period: {payment.periodStart} to {payment.periodEnd}
-                  {/if}
-                </p>
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden divide-y divide-gray-50">
+          {#each week.payments as p}
+            {@const mod = findModifier(p)}
+            <div class="flex items-center gap-4 px-5 py-3 hover:bg-gray-50/50 transition group
+                        {p.isModified ? 'bg-amber-50/30' : ''}">
+              <div class="w-1.5 h-8 rounded-full {dots[p.type] || dots.other} shrink-0 {p.isEstimate ? 'opacity-40' : ''}"></div>
+              <div class="w-16 shrink-0">
+                <p class="text-xs text-gray-500">{fmtD(p.date)}</p>
               </div>
-              <div class="text-right">
-                <p class="text-sm font-medium text-green-400">+{formatCurrency(payment.amount)}</p>
-                <p class="text-xs text-gray-600">Running: {formatCurrency(payment.runningTotal)}</p>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                  <p class="text-sm text-gray-700 truncate">{p.source}</p>
+                  {#if p.isEstimate}<span class="text-[9px] px-1 py-0.5 rounded bg-amber-50 text-amber-500 font-medium shrink-0">est</span>{/if}
+                  {#if p.status && p.status !== 'paid'}
+                    <span class="text-[9px] px-1 py-0.5 rounded bg-blue-50 text-blue-500 font-medium shrink-0">{p.status}</span>
+                  {/if}
+                </div>
+                {#if p.isModified && mod}
+                  <div class="flex items-center gap-1.5 mt-0.5">
+                    <span class="text-[9px] px-1 py-0.5 rounded bg-amber-100 text-amber-600 font-medium">adjusted</span>
+                    <span class="text-[10px] text-amber-600">{mod.description}</span>
+                    <span class="text-[10px] text-gray-300">{fmtRange(mod.startDate, mod.endDate)}</span>
+                    <span class="text-[10px] text-gray-400 line-through">{fmtE(p.baseAmount)}</span>
+                  </div>
+                {:else if p.isModified}
+                  <p class="text-[10px] text-amber-500 mt-0.5">modified &middot; was {fmtE(p.baseAmount)}</p>
+                {/if}
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-sm font-medium
+                  {p.isModified ? 'text-amber-600' : p.isEstimate ? 'text-amber-600' : 'text-emerald-600'}">
+                  +{fmtE(p.amount)}
+                </p>
+                <p class="text-[10px] text-gray-300 opacity-0 group-hover:opacity-100 transition">{fmtE(p.runningTotal)}</p>
               </div>
             </div>
           {/each}
