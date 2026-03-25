@@ -378,7 +378,9 @@
     {#each [
       { label: "Monthly", value: fmt(summary.totalMonthlyIncome) },
       { label: "Annual", value: fmt(summary.totalAnnualIncome) },
-      { label: "YTD", value: fmt(summary.ytdEstimate) },
+      { label: "Startup %", value: summary.totalMonthlyIncome > 0
+        ? Math.round((summary.incomeBreakdown || []).filter(s => s.active !== false && s.type === 'business').reduce((sum, s) => sum + (s.estimatedMonthly || 0), 0) / summary.totalMonthlyIncome * 100) + '%'
+        : '0%' },
       { label: "Next 30d", value: cashflowLoading ? "..." : fmt(cashflow?.totalExpected), accent: true },
     ] as m}
       <div class="bg-white rounded-xl border border-gray-200 p-4">
