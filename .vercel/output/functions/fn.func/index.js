@@ -617,7 +617,7 @@ var init__ = __esm({
   ".svelte-kit/output/server/nodes/0.js"() {
     index = 0;
     component = async () => component_cache ?? (component_cache = (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default);
-    imports = ["_app/immutable/nodes/0.83cf80a6.js", "_app/immutable/chunks/index.ba56c314.js"];
+    imports = ["_app/immutable/nodes/0.c95a6cfb.js", "_app/immutable/chunks/index.ba56c314.js"];
     stylesheets = ["_app/immutable/assets/0.a81151c3.css"];
     fonts = [];
   }
@@ -686,7 +686,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ?? (component_cache2 = (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default);
-    imports2 = ["_app/immutable/nodes/1.84e0d8bf.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.eff9ed52.js", "_app/immutable/chunks/singletons.05dab987.js"];
+    imports2 = ["_app/immutable/nodes/1.667f312e.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.538bbd93.js", "_app/immutable/chunks/singletons.47bb45f7.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -758,7 +758,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ?? (component_cache3 = (await Promise.resolve().then(() => (init_layout_svelte2(), layout_svelte_exports2))).default);
-    imports3 = ["_app/immutable/nodes/2.99840c18.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.eff9ed52.js", "_app/immutable/chunks/singletons.05dab987.js", "_app/immutable/chunks/api.1b4253c7.js"];
+    imports3 = ["_app/immutable/nodes/2.0ab4c8bc.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.538bbd93.js", "_app/immutable/chunks/singletons.47bb45f7.js", "_app/immutable/chunks/api.1b4253c7.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -777,19 +777,19 @@ var init_page_svelte = __esm({
       return ``;
     });
     css$8 = {
-      code: '@media(min-width: 640px){}.hero-title.svelte-i4ssko{font-family:Source Serif Pro, ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;font-size:3.75rem;line-height:1;font-weight:700}@media(min-width: 640px){.hero-title.svelte-i4ssko{font-size:6rem;line-height:1}}.hero-subtitle.svelte-i4ssko{margin-top:2rem;font-size:1.25rem;line-height:1.75rem;font-weight:300}@media(min-width: 640px){.hero-subtitle.svelte-i4ssko{font-size:1.5rem;line-height:2rem}}.hero-subbertitle.svelte-i4ssko{margin-top:2rem;font-size:1.125rem;line-height:1.75rem;font-weight:300}@media(min-width: 640px){.hero-subbertitle.svelte-i4ssko{font-size:1.125rem;line-height:1.75rem}}.hero-role.svelte-i4ssko{margin-top:1rem;font-size:1.125rem;line-height:1.75rem;font-weight:300}@media(min-width: 640px){.hero-role.svelte-i4ssko{font-size:1.25rem;line-height:1.75rem}}a.svelte-i4ssko:hover{background-image:linear-gradient(to right, var(--tw-gradient-stops));--tw-gradient-from:#34F8FF var(--tw-gradient-from-position);--tw-gradient-from-position:  ;--tw-gradient-to:rgb(52 248 255 / 0)  var(--tw-gradient-from-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to);--tw-gradient-to:#110DFF var(--tw-gradient-to-position);--tw-gradient-to-position:  ;-webkit-background-clip:text;background-clip:text;color:transparent;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.custom-fade-in.svelte-i4ssko{animation:svelte-i4ssko-fade-in-animation 1000ms cubic-bezier(0.4, 0, 0.2, 1);animation-fill-mode:both}.anim-delay-500.svelte-i4ssko{animation-delay:500ms}.anim-delay-900.svelte-i4ssko{animation-delay:900ms}@keyframes svelte-i4ssko-fade-in-animation{0%{opacity:0}100%{opacity:100%}}',
+      code: '@media(min-width: 640px){}.hero-title.svelte-v6n4lr{font-family:Source Serif Pro, ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;font-size:3.75rem;line-height:1;font-weight:700}@media(min-width: 640px){.hero-title.svelte-v6n4lr{font-size:6rem;line-height:1}}.hero-title.svelte-v6n4lr{touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;user-select:none}.hero-subtitle.svelte-v6n4lr{margin-top:2rem;font-size:1.25rem;line-height:1.75rem;font-weight:300}@media(min-width: 640px){.hero-subtitle.svelte-v6n4lr{font-size:1.5rem;line-height:2rem}}.hero-subbertitle.svelte-v6n4lr{margin-top:2rem;font-size:1.125rem;line-height:1.75rem;font-weight:300}@media(min-width: 640px){.hero-subbertitle.svelte-v6n4lr{font-size:1.125rem;line-height:1.75rem}}.hero-role.svelte-v6n4lr{margin-top:1rem;font-size:1.125rem;line-height:1.75rem;font-weight:300}@media(min-width: 640px){.hero-role.svelte-v6n4lr{font-size:1.25rem;line-height:1.75rem}}a.svelte-v6n4lr:hover{background-image:linear-gradient(to right, var(--tw-gradient-stops));--tw-gradient-from:#34F8FF var(--tw-gradient-from-position);--tw-gradient-from-position:  ;--tw-gradient-to:rgb(52 248 255 / 0)  var(--tw-gradient-from-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to);--tw-gradient-to:#110DFF var(--tw-gradient-to-position);--tw-gradient-to-position:  ;-webkit-background-clip:text;background-clip:text;color:transparent;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.custom-fade-in.svelte-v6n4lr{animation:svelte-v6n4lr-fade-in-animation 1000ms cubic-bezier(0.4, 0, 0.2, 1);animation-fill-mode:both}.anim-delay-500.svelte-v6n4lr{animation-delay:500ms}.anim-delay-900.svelte-v6n4lr{animation-delay:900ms}@keyframes svelte-v6n4lr-fade-in-animation{0%{opacity:0}100%{opacity:100%}}',
       map: null
     };
     Hero = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       $$result.css.add(css$8);
-      return `<section class="mt-32 md:mt-64"><div class="hero-title custom-fade-in anim-delay-500 svelte-i4ssko" data-admin-mobile-trigger="name">Graham Zemel</div>
+      return `<section class="mt-32 md:mt-64"><div class="hero-title custom-fade-in anim-delay-500 svelte-v6n4lr" data-admin-mobile-trigger="name">Graham Zemel</div>
 
-  <p class="hero-subtitle custom-fade-in anim-delay-900 svelte-i4ssko">Full Stack Developer | Artificial Intelligence | Ethical Hacking
+  <p class="hero-subtitle custom-fade-in anim-delay-900 svelte-v6n4lr">Full Stack Developer | Artificial Intelligence | Ethical Hacking
   </p>
-  <p class="hero-role custom-fade-in anim-delay-900 svelte-i4ssko">Director of Technology, <a href="https://ifconthehill.org" class="svelte-i4ssko">IFC on the Hill</a>
+  <p class="hero-role custom-fade-in anim-delay-900 svelte-v6n4lr">Director of Technology, <a href="https://ifconthehill.org" class="svelte-v6n4lr">IFC on the Hill</a>
     (CU Boulder)
   </p>
-  <p class="hero-subbertitle custom-fade-in anim-delay-900 svelte-i4ssko"><a href="https://grahamzemel.com" class="svelte-i4ssko">grahamzemel.com</a></p>
+  <p class="hero-subbertitle custom-fade-in anim-delay-900 svelte-v6n4lr"><a href="https://grahamzemel.com" class="svelte-v6n4lr">grahamzemel.com</a></p>
 </section>`;
     });
     BookMeeting = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -1840,8 +1840,8 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ?? (component_cache4 = (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default);
-    imports4 = ["_app/immutable/nodes/3.b5fb8bd7.js", "_app/immutable/chunks/index.ba56c314.js"];
-    stylesheets4 = ["_app/immutable/assets/3.af1a366e.css"];
+    imports4 = ["_app/immutable/nodes/3.6b274dde.js", "_app/immutable/chunks/index.ba56c314.js"];
+    stylesheets4 = ["_app/immutable/assets/3.c5fda295.css"];
     fonts4 = [];
   }
 });
@@ -2557,7 +2557,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1kqf1sq"
+  version_hash: "ybk5ef"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -6068,7 +6068,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set([".well-known/appspecific/com.chrome.devtools.json", "aesculapiusss.png", "bashbunnyss.png", "cryptoss.png", "favicon.ico", "favicon.svg", "fractalsss.png", "fratdoor.png", "gamebank.png", "gpuprices.png", "grahamzemel.com.png", "grayarea.jpg", "heckerbotss.jpg", "icons/icon-192.svg", "icons/icon-512.svg", "idorss.png", "ifc-eventhub.png", "laptopprices.png", "macbookprices.png", "manifest.json", "og-img.png", "powerschoolss.png", "quantumss.png", "shader.frag", "shader.vert", "sketch.cjs", "slag.png", "sw.js", "templateprojss.png", "textcloakerss.png", "tgaonmediumss.png", "thegrayareass.png", "vaultcollection.png", "webheckscannerss.png"]),
     mimeTypes: { ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".cjs": "application/node", ".js": "application/javascript" },
     _: {
-      client: { "start": "_app/immutable/entry/start.84b3def7.js", "app": "_app/immutable/entry/app.47d38316.js", "imports": ["_app/immutable/entry/start.84b3def7.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/singletons.05dab987.js", "_app/immutable/entry/app.47d38316.js", "_app/immutable/chunks/index.ba56c314.js"], "stylesheets": [], "fonts": [] },
+      client: { "start": "_app/immutable/entry/start.5823713a.js", "app": "_app/immutable/entry/app.caa3e21b.js", "imports": ["_app/immutable/entry/start.5823713a.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/singletons.47bb45f7.js", "_app/immutable/entry/app.caa3e21b.js", "_app/immutable/chunks/index.ba56c314.js"], "stylesheets": [], "fonts": [] },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),

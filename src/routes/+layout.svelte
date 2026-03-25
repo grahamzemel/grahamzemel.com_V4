@@ -62,6 +62,8 @@
         window.matchMedia("(pointer: coarse)").matches;
       if (!isMobileLike) return;
 
+      e.preventDefault();
+
       const now = Date.now();
       tapCount = now - lastTapAt <= tapWindowMs ? tapCount + 1 : 1;
       lastTapAt = now;
@@ -77,10 +79,10 @@
     };
 
     window.addEventListener("keydown", handler);
-    window.addEventListener("pointerup", tapHandler);
+    window.addEventListener("touchend", tapHandler, { passive: false });
     return () => {
       window.removeEventListener("keydown", handler);
-      window.removeEventListener("pointerup", tapHandler);
+      window.removeEventListener("touchend", tapHandler);
     };
   });
 </script>

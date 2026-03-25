@@ -20,6 +20,9 @@
 
   .hero-title {
     @apply font-serif font-bold sm:text-8xl text-6xl;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
   }
 
   .hero-subtitle {
