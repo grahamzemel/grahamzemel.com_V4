@@ -2,50 +2,32 @@
 let theShader;
 let shaderBg;
 
-let img;
 let time_;
-let framerate;
-let isMousePressed = false;
-let anchorX, anchorY;
-let rotation = 0;
+
+function isMobile() {
+  return windowWidth < 768 ||
+    window.matchMedia("(pointer: coarse)").matches;
+}
 
 function preload() {
-  // load the shader
   theShader = loadShader("/shader.vert", "/shader.frag");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
-  time_ = random(0, TWO_PI); // randomizes the starting rotation
-  shaderBg = createGraphics(windowWidth, windowHeight, WEBGL);
-}
-let baseRotation; // Variable to store the base rotation state
-let manualRotationOffset = 0; // Offset for manual rotation
-let manualTime; // Time at which manual rotation started
-let storedTime; // Variable to store the iTime value when the mouse is pressed
+  time_ = random(0, TWO_PI);
 
-function setDocumentCursor(value) {
-  if (typeof document !== "undefined" && document.body) {
-    document.body.style.cursor = value;
+  if (isMobile()) {
+    // Render shader at reduced resolution, upscale to full canvas
+    let sw = Math.round(windowWidth * 0.6);
+    let sh = Math.round(windowHeight * 0.6);
+    shaderBg = createGraphics(sw, sh, WEBGL);
+    shaderBg.pixelDensity(1);
+    frameRate(24);
+  } else {
+    shaderBg = createGraphics(windowWidth, windowHeight, WEBGL);
   }
-}
-
-function mousePressed() {
-  // check if screen is above 640px wide, if not, don't allow rotation
-  if (windowWidth < 640) {
-    return;
-  }
-  isMousePressed = true;
-  prevMouseX = mouseX;
-  prevMouseY = mouseY;
-  setDocumentCursor("pointer");
-  baseRotation = time_;
-}
-
-function mouseReleased() {
-  isMousePressed = false;
-  setDocumentCursor("default");
 }
 
 function draw() {
@@ -53,38 +35,31 @@ function draw() {
   shaderBg.style("display", "block");
   shaderBg.shader(theShader);
 
-  if (isMousePressed) {
-    let deltaX = mouseX - prevMouseX;
-    let deltaY = mouseY - prevMouseY;
-
-    if (deltaX != 0 || deltaY != 0) {
-      let rotationChange = atan2(deltaY, deltaX) * 0.01; // Adjust sensitivity
-      manualRotationOffset += rotationChange;
-      theShader.setUniform("iAngle", baseRotation + manualRotationOffset);
-    }
-
-    prevMouseX = mouseX;
-    prevMouseY = mouseY;
-  } else {
-    // Continue automatic rotation
-    time_ += 20 / ((frameRate() || 60) * 140);
-    if (time_ > TWO_PI) {
-      time_ -= TWO_PI;
-    }
-    theShader.setUniform("iAngle", time_ + manualRotationOffset);
+  time_ += 20 / ((frameRate() || 60) * 140);
+  if (time_ > TWO_PI) {
+    time_ -= TWO_PI;
   }
+  theShader.setUniform("iAngle", time_);
 
   let pow = map(sin(time_), -1, 1, 6, 12);
-  theShader.setUniform("iTime", millis() / 1000.0); // Consistent iTime
+  theShader.setUniform("iTime", millis() / 1000.0);
   theShader.setUniform("iPower", pow);
-  theShader.setUniform("iResolution", [width, height]);
+  theShader.setUniform("iResolution", [shaderBg.width, shaderBg.height]);
 
-  shaderBg.rect(0, 0, width, height);
+  shaderBg.rect(0, 0, shaderBg.width, shaderBg.height);
   image(shaderBg, 0, 0, width, height);
 }
 
-// function windowResized() {
-//   resizeCanvas(windowWidth, windowHeight);
-// }
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  if (shaderBg) shaderBg.remove();
 
-let imView = false;
+  if (isMobile()) {
+    let sw = Math.round(windowWidth * 0.6);
+    let sh = Math.round(windowHeight * 0.6);
+    shaderBg = createGraphics(sw, sh, WEBGL);
+    shaderBg.pixelDensity(1);
+  } else {
+    shaderBg = createGraphics(windowWidth, windowHeight, WEBGL);
+  }
+}

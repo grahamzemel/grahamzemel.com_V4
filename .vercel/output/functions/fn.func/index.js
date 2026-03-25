@@ -686,7 +686,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ?? (component_cache2 = (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default);
-    imports2 = ["_app/immutable/nodes/1.0b694f2c.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.9ce819b5.js", "_app/immutable/chunks/singletons.a2923fce.js"];
+    imports2 = ["_app/immutable/nodes/1.84e0d8bf.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.eff9ed52.js", "_app/immutable/chunks/singletons.05dab987.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -758,7 +758,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ?? (component_cache3 = (await Promise.resolve().then(() => (init_layout_svelte2(), layout_svelte_exports2))).default);
-    imports3 = ["_app/immutable/nodes/2.ad8bd146.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.9ce819b5.js", "_app/immutable/chunks/singletons.a2923fce.js", "_app/immutable/chunks/api.1b4253c7.js"];
+    imports3 = ["_app/immutable/nodes/2.99840c18.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.eff9ed52.js", "_app/immutable/chunks/singletons.05dab987.js", "_app/immutable/chunks/api.1b4253c7.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -2484,8 +2484,7 @@ var options = {
     <meta name="title" content="Graham Zemel" />
     <meta name="description" content="Hi! I'm Graham Zemel, a full stack developer, startup founder, and cybersecurity enthusiast!" />
     <meta name="viewport" content="width=device-width" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"><\/script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js"><\/script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"><\/script>
     <script src="` + assets2 + '/sketch.cjs"><\/script>\n\n    ' + head + '\n  </head>\n\n  <body data-sveltekit-preload-data="hover" class="overflow-x-hidden">\n    <div style="display: contents">' + body + "</div>\n  </body>\n</html>\n",
     error: ({ status, message }) => '<!doctype html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<title>' + message + `</title>
 
@@ -2558,7 +2557,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1drf6e"
+  version_hash: "1kqf1sq"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -6069,7 +6068,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set([".well-known/appspecific/com.chrome.devtools.json", "aesculapiusss.png", "bashbunnyss.png", "cryptoss.png", "favicon.ico", "favicon.svg", "fractalsss.png", "fratdoor.png", "gamebank.png", "gpuprices.png", "grahamzemel.com.png", "grayarea.jpg", "heckerbotss.jpg", "icons/icon-192.svg", "icons/icon-512.svg", "idorss.png", "ifc-eventhub.png", "laptopprices.png", "macbookprices.png", "manifest.json", "og-img.png", "powerschoolss.png", "quantumss.png", "shader.frag", "shader.vert", "sketch.cjs", "slag.png", "sw.js", "templateprojss.png", "textcloakerss.png", "tgaonmediumss.png", "thegrayareass.png", "vaultcollection.png", "webheckscannerss.png"]),
     mimeTypes: { ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".cjs": "application/node", ".js": "application/javascript" },
     _: {
-      client: { "start": "_app/immutable/entry/start.9253e194.js", "app": "_app/immutable/entry/app.184d98c3.js", "imports": ["_app/immutable/entry/start.9253e194.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/singletons.a2923fce.js", "_app/immutable/entry/app.184d98c3.js", "_app/immutable/chunks/index.ba56c314.js"], "stylesheets": [], "fonts": [] },
+      client: { "start": "_app/immutable/entry/start.84b3def7.js", "app": "_app/immutable/entry/app.47d38316.js", "imports": ["_app/immutable/entry/start.84b3def7.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/singletons.05dab987.js", "_app/immutable/entry/app.47d38316.js", "_app/immutable/chunks/index.ba56c314.js"], "stylesheets": [], "fonts": [] },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
