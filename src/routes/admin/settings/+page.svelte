@@ -21,6 +21,7 @@
   let pushSupported = false;
   let pushSubscribed = false;
   let enablingPush = false;
+  let isIOSNotStandalone = false;
 
   // Email digest
   let digestSending = false;
@@ -118,7 +119,14 @@
       emailConfigured = await get("/api/email/status").then(r => r.configured).catch(() => null);
 
       // Check push support on this device
-      if ('serviceWorker' in navigator && 'PushManager' in window) {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+      if (isIOS && !isStandalone) {
+        // iOS Safari only supports push in standalone (Add to Home Screen) mode
+        isIOSNotStandalone = true;
+        pushSupported = false;
+      } else if ('serviceWorker' in navigator && 'PushManager' in window) {
         pushSupported = true;
         try {
           const reg = await navigator.serviceWorker.ready;
@@ -330,6 +338,11 @@
       <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-6 flex items-center gap-2">
         <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
         <p class="text-xs text-gray-600">Push notifications active on this device</p>
+      </div>
+    {:else if isIOSNotStandalone}
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <p class="text-sm font-medium text-blue-900 mb-1">Add to Home Screen to enable push</p>
+        <p class="text-xs text-blue-700">iOS Safari only supports push notifications for installed web apps. Tap the <strong>Share</strong> button (square with arrow), then <strong>"Add to Home Screen"</strong>. Open the app from there, and the Enable button will appear.</p>
       </div>
     {:else if !pushSupported}
       <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
