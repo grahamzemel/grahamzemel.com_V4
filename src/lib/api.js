@@ -2,7 +2,8 @@
  * API utility — authenticated fetch wrapper for the income engine backend.
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const DEV = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+const BASE_URL = DEV ? 'http://localhost:3000' : 'https://grahamzemelcom-596da5a7c96e.herokuapp.com';
 
 /**
  * Make an authenticated API request.

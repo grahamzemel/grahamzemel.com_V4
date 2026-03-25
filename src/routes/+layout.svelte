@@ -14,6 +14,7 @@
 
   onMount(() => {
     const handler = (e) => {
+      if (e.key.length !== 1) return; // ignore Shift, Control, Enter, etc.
       buffer += e.key;
       if (buffer.length > SECRET.length) {
         buffer = buffer.slice(-SECRET.length);
