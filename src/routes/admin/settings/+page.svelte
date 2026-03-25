@@ -17,6 +17,11 @@
     tag: "settings-test",
   };
 
+  // Email digest
+  let digestSending = false;
+  let digestMessage = "";
+  let emailConfigured = null;
+
   let genSource = "";
   let genName = "";
   let genStartDate = "";
@@ -105,9 +110,24 @@
         notifications: ensureNotificationSettings(configRes?.notifications),
       };
       pushStatus = pushRes;
+      emailConfigured = await get("/api/email/status").then(r => r.configured).catch(() => null);
     }
     catch (e) { error = e.message; }
     finally { loading = false; }
+  }
+
+  async function sendTestDigest() {
+    digestSending = true;
+    digestMessage = "";
+    try {
+      const result = await post("/api/email/test-digest");
+      digestMessage = `Sent: ${result.subject}`;
+      setTimeout(() => digestMessage = "", 5000);
+    } catch (e) {
+      digestMessage = "Error: " + e.message;
+    } finally {
+      digestSending = false;
+    }
   }
 
   async function saveConfig() {
@@ -551,6 +571,25 @@
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- Email Digest -->
+  <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8">
+    <h2 class="text-sm font-medium text-gray-900 mb-1">Weekly Email Digest</h2>
+    <p class="text-xs text-gray-400 mb-4">Sent every Monday at 7am MT with your weekly income projections.</p>
+
+    <div class="flex items-center gap-3">
+      <button on:click={sendTestDigest} disabled={digestSending}
+        class="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50">
+        {digestSending ? "Sending..." : "Send test digest"}
+      </button>
+      {#if digestMessage}
+        <span class="text-xs {digestMessage.startsWith('Error') ? 'text-red-500' : 'text-emerald-600'}">{digestMessage}</span>
+      {/if}
+    </div>
+    {#if !emailConfigured && emailConfigured !== null}
+      <p class="text-xs text-amber-500 mt-2">Email not configured. Set <code class="bg-gray-100 px-1 rounded">EMAIL_USER</code> and <code class="bg-gray-100 px-1 rounded">EMAIL_PASSWORD</code> on Heroku.</p>
+    {/if}
   </div>
 
   <!-- Pay Period Calendars -->
