@@ -40,7 +40,9 @@
     const tapWindowMs = 900;
 
     const handler = (e) => {
-      if (e.key.length !== 1) return; // ignore Shift, Control, Enter, etc.
+      // Use e.key for printable chars; skip modifiers, arrows, etc.
+      if (!e.key || e.key.length !== 1) return;
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
       buffer += e.key;
       if (buffer.length > SECRET.length) {
         buffer = buffer.slice(-SECRET.length);
@@ -78,10 +80,10 @@
       }
     };
 
-    window.addEventListener("keydown", handler);
+    document.addEventListener("keyup", handler);
     window.addEventListener("touchend", tapHandler, { passive: false });
     return () => {
-      window.removeEventListener("keydown", handler);
+      document.removeEventListener("keyup", handler);
       window.removeEventListener("touchend", tapHandler);
     };
   });
