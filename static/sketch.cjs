@@ -24,6 +24,10 @@ function setup() {
     let sh = Math.round(windowHeight * 0.6);
     shaderBg = createGraphics(sw, sh, WEBGL);
     shaderBg.pixelDensity(1);
+    // Hide the raw buffer off-screen (p5 needs display:block to render WebGL)
+    shaderBg.style("display", "block");
+    shaderBg.style("position", "fixed");
+    shaderBg.style("left", "-9999px");
     frameRate(24);
   } else {
     shaderBg = createGraphics(windowWidth, windowHeight, WEBGL);
@@ -32,6 +36,7 @@ function setup() {
 
 function draw() {
   background(28, 40, 54);
+  shaderBg.style("display", "block");
   shaderBg.shader(theShader);
 
   time_ += 20 / ((frameRate() || 60) * 140);
@@ -58,6 +63,9 @@ function windowResized() {
     let sh = Math.round(windowHeight * 0.6);
     shaderBg = createGraphics(sw, sh, WEBGL);
     shaderBg.pixelDensity(1);
+    shaderBg.style("display", "block");
+    shaderBg.style("position", "fixed");
+    shaderBg.style("left", "-9999px");
   } else {
     shaderBg = createGraphics(windowWidth, windowHeight, WEBGL);
   }
