@@ -32,7 +32,6 @@ function setup() {
 
 function draw() {
   background(28, 40, 54);
-  shaderBg.style("display", "block");
   shaderBg.shader(theShader);
 
   time_ += 20 / ((frameRate() || 60) * 140);
