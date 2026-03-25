@@ -45,6 +45,7 @@ function setup() {
 }
 
 function draw() {
+  if (!shaderBg || !theShader) return;
   background(28, 40, 54);
   shaderBg.style("display", "block");
   shaderBg.shader(theShader);
