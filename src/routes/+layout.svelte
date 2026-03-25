@@ -18,21 +18,27 @@
     document.cookie = `gz_admin=${ADMIN_TOKEN}; Path=/; SameSite=${secure ? "Strict" : "Lax"};${secure ? " Secure;" : ""} Max-Age=3600`;
   }
 
+  const DEV = typeof window !== "undefined" && window.location.hostname === "localhost";
+  const BACKEND_URL = DEV ? "http://localhost:3000" : "https://grahamzemelcom-596da5a7c96e.herokuapp.com";
+
   async function authenticateWithKey(key) {
     const trimmed = String(key || "").trim();
     if (!trimmed) return;
-    console.log("[admin] Authenticating...");
     try {
       const res = await fetch("/api/admin-auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ key: trimmed }),
       });
-      console.log("[admin] Auth response:", res.status);
       if (res.ok) {
-        // Set cookie client-side as backup — fetch Set-Cookie isn't always
-        // stored before the navigation fires
         setAdminCookie();
+        // Also set the cookie on the Heroku backend (cross-origin)
+        await fetch(`${BACKEND_URL}/api/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ key: trimmed }),
+        }).catch(() => {});
         window.location.href = "/admin";
         return;
       }

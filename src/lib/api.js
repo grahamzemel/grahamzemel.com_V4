@@ -22,6 +22,7 @@ export async function api(path, options = {}) {
   });
 
   if (res.status === 401) {
+    if (typeof window !== 'undefined') window.location.href = '/';
     throw new Error('Unauthorized');
   }
 
