@@ -21,13 +21,18 @@
       }
       if (buffer === SECRET) {
         buffer = "";
+        console.log("[admin] Secret matched, authenticating...");
         fetch("/api/admin-auth", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ key: SECRET }),
-        }).then((res) => {
-          if (res.ok) window.location.href = "/admin";
-        });
+        })
+          .then((res) => {
+            console.log("[admin] Auth response:", res.status);
+            if (res.ok) window.location.href = "/admin";
+            else console.error("[admin] Auth failed:", res.status);
+          })
+          .catch((err) => console.error("[admin] Auth error:", err));
       }
     };
     window.addEventListener("keydown", handler);
