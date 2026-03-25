@@ -5,7 +5,8 @@
   let summary = null;
   let cashflow = null;
   let modifiers = [];
-  let loading = true;
+  let summaryLoading = true;
+  let cashflowLoading = true;
   let error = null;
 
   // NLP input
@@ -22,21 +23,22 @@
   let insightsLoading = false;
   let insightsCached = false;
 
-  onMount(async () => {
-    try {
-      const [s, c, m] = await Promise.all([
-        get("/api/dashboard/summary"),
-        get("/api/projections/cashflow?days=30"),
-        get("/api/modifiers"),
-      ]);
-      summary = s;
-      cashflow = c;
-      modifiers = m.modifiers || [];
-    } catch (e) {
-      error = e.message;
-    } finally {
-      loading = false;
-    }
+  onMount(() => {
+    // Load each independently — render sections as they arrive
+    get("/api/dashboard/summary")
+      .then(s => { summary = s; })
+      .catch(e => { error = e.message; })
+      .finally(() => { summaryLoading = false; });
+
+    get("/api/projections/cashflow?days=30")
+      .then(c => { cashflow = c; })
+      .catch(() => {})
+      .finally(() => { cashflowLoading = false; });
+
+    get("/api/modifiers")
+      .then(m => { modifiers = m.modifiers || []; })
+      .catch(() => {});
+
     // Auto-generate insights on login (cached daily)
     loadInsights();
   });
@@ -252,10 +254,35 @@
 
 <svelte:head><title>Overview | Income Engine</title></svelte:head>
 
-{#if loading}
-  <p class="text-gray-400 text-sm mt-8">Loading...</p>
-{:else if error}
+{#if error}
   <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">{error}</div>
+{/if}
+
+{#if summaryLoading && !summary}
+  <!-- Skeleton while primary data loads -->
+  <div class="space-y-6 animate-pulse">
+    <div class="bg-white rounded-xl border border-gray-200 p-5">
+      <div class="h-3 w-20 bg-gray-200 rounded mb-4"></div>
+      <div class="h-4 w-full bg-gray-100 rounded mb-2"></div>
+      <div class="h-4 w-3/4 bg-gray-100 rounded"></div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {#each Array(4) as _}
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+          <div class="h-2.5 w-12 bg-gray-200 rounded mb-2"></div>
+          <div class="h-6 w-20 bg-gray-200 rounded"></div>
+        </div>
+      {/each}
+    </div>
+    <div class="bg-white rounded-xl border border-gray-200 p-5">
+      <div class="h-3 w-16 bg-gray-200 rounded mb-4"></div>
+      <div class="space-y-3">
+        {#each Array(3) as _}
+          <div class="h-4 w-full bg-gray-100 rounded"></div>
+        {/each}
+      </div>
+    </div>
+  </div>
 {:else if summary}
 
   <!-- AI Insights -->
@@ -351,7 +378,12 @@
   </div>
 
   <!-- Next payment hero -->
-  {#if next}
+  {#if cashflowLoading && !next}
+    <div class="mb-8 animate-pulse">
+      <div class="h-3 w-24 bg-gray-200 rounded mb-3"></div>
+      <div class="h-10 w-48 bg-gray-200 rounded"></div>
+    </div>
+  {:else if next}
     <div class="mb-8">
       <p class="text-xs text-gray-400 uppercase tracking-widest mb-2">Next payment</p>
       <div class="flex items-baseline gap-3 flex-wrap">
@@ -378,7 +410,7 @@
       { label: "Monthly", value: fmt(summary.totalMonthlyIncome) },
       { label: "Annual", value: fmt(summary.totalAnnualIncome) },
       { label: "YTD", value: fmt(summary.ytdEstimate) },
-      { label: "Next 30d", value: fmt(cashflow?.totalExpected), accent: true },
+      { label: "Next 30d", value: cashflowLoading ? "..." : fmt(cashflow?.totalExpected), accent: true },
     ] as m}
       <div class="bg-white rounded-xl border border-gray-200 p-4">
         <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-1">{m.label}</p>
