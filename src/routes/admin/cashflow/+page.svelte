@@ -142,7 +142,7 @@
       case "business":
         return "business payment";
       case "stripe_subscription_renewal":
-        return "subscription renewal";
+        return payment?.renewalCount ? `est. payout · ${payment.renewalCount} renewal${payment.renewalCount > 1 ? 's' : ''}` : "est. payout";
       case "stripe_payout":
         return payment?.status ? `stripe payout · ${payment.status}` : "stripe payout";
       case "stripe_pending":

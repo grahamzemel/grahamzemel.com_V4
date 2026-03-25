@@ -1,21 +1,26 @@
 /**
  * API utility — authenticated fetch wrapper for the income engine backend.
+ * Uses Authorization header (works cross-origin on mobile Safari)
+ * with cookie fallback (desktop same-origin).
  */
 
 const DEV = typeof window !== 'undefined' && window.location.hostname === 'localhost';
 const BASE_URL = DEV ? 'http://localhost:3000' : 'https://grahamzemelcom-596da5a7c96e.herokuapp.com';
 
-/**
- * Make an authenticated API request.
- * Sends the gz_admin cookie automatically via credentials: 'include'.
- */
+function getToken() {
+  if (typeof window === 'undefined') return '';
+  return localStorage.getItem('gz_admin_token') || '';
+}
+
 export async function api(path, options = {}) {
   const url = `${BASE_URL}${path}`;
+  const token = getToken();
   const res = await fetch(url, {
     ...options,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
