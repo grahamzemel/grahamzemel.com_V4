@@ -24,17 +24,22 @@ function setup() {
     noLoop();
     return;
   }
-  createCanvas(windowWidth, windowHeight);
+  let cnv = createCanvas(windowWidth, windowHeight);
+  // Pin canvas as a fixed background so it doesn't push page content
+  cnv.style("position", "fixed");
+  cnv.style("top", "0");
+  cnv.style("left", "0");
+  cnv.style("z-index", "-1");
+  cnv.style("pointer-events", "none");
+
   noStroke();
   time_ = random(0, TWO_PI);
 
   if (isMobile()) {
-    // Render shader at reduced resolution, upscale to full canvas
     let sw = Math.round(windowWidth * 0.6);
     let sh = Math.round(windowHeight * 0.6);
     shaderBg = createGraphics(sw, sh, WEBGL);
     shaderBg.pixelDensity(1);
-    // Hide the raw buffer off-screen (p5 needs display:block to render WebGL)
     shaderBg.style("display", "block");
     shaderBg.style("position", "fixed");
     shaderBg.style("left", "-9999px");

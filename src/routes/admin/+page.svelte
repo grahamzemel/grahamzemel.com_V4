@@ -254,6 +254,32 @@
   <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">{error}</div>
 {:else if summary}
 
+  <!-- AI Insights -->
+  <div class="bg-white rounded-xl border border-gray-200 p-5 mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <p class="text-[10px] text-gray-400 uppercase tracking-wider">AI Insights</p>
+      <button
+        on:click={loadInsights}
+        disabled={insightsLoading}
+        class="text-[11px] text-emerald-600 hover:text-emerald-700 disabled:opacity-50 transition"
+      >
+        {insightsLoading ? "Analyzing..." : insights ? "Refresh" : "Generate brief"}
+      </button>
+    </div>
+    {#if insightsLoading}
+      <div class="flex items-center gap-2 text-gray-400 text-sm">
+        <div class="w-3 h-3 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+        Analyzing your finances...
+      </div>
+    {:else if insights}
+      <div class="space-y-3 text-sm text-gray-600 leading-relaxed">
+        {@html renderInsightMarkdown(insights)}
+      </div>
+    {:else}
+      <p class="text-sm text-gray-400">Click "Generate brief" for a Claude-powered analysis of your income.</p>
+    {/if}
+  </div>
+
   <!-- Adjustments Section -->
   <div class="mb-10">
     <h2 class="text-xs text-gray-400 uppercase tracking-widest font-medium mb-3">Adjustments</h2>
@@ -475,32 +501,6 @@
           </div>
         {/each}
       </div>
-    {/if}
-  </div>
-
-  <!-- AI Insights -->
-  <div class="bg-white rounded-xl border border-gray-200 p-5 mt-8">
-    <div class="flex justify-between items-center mb-4">
-      <p class="text-[10px] text-gray-400 uppercase tracking-wider">AI Insights</p>
-      <button
-        on:click={loadInsights}
-        disabled={insightsLoading}
-        class="text-[11px] text-emerald-600 hover:text-emerald-700 disabled:opacity-50 transition"
-      >
-        {insightsLoading ? "Analyzing..." : insights ? "Refresh" : "Generate brief"}
-      </button>
-    </div>
-    {#if insightsLoading}
-      <div class="flex items-center gap-2 text-gray-400 text-sm">
-        <div class="w-3 h-3 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-        Analyzing your finances...
-      </div>
-    {:else if insights}
-      <div class="space-y-3 text-sm text-gray-600 leading-relaxed">
-        {@html renderInsightMarkdown(insights)}
-      </div>
-    {:else}
-      <p class="text-sm text-gray-400">Click "Generate brief" for a Claude-powered analysis of your income.</p>
     {/if}
   </div>
 
