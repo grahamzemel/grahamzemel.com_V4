@@ -20,6 +20,7 @@
   // AI insights
   let insights = null;
   let insightsLoading = false;
+  let insightsCached = false;
 
   onMount(async () => {
     try {
@@ -36,6 +37,8 @@
     } finally {
       loading = false;
     }
+    // Auto-generate insights on login (cached daily)
+    loadInsights();
   });
 
   async function refreshData() {
@@ -104,11 +107,12 @@
 
   function hideTooltip() { tooltipPayment = null; }
 
-  async function loadInsights() {
+  async function loadInsights(force = false) {
     insightsLoading = true;
     try {
-      const result = await get("/api/insights");
+      const result = await get(`/api/insights${force ? '?force=true' : ''}`);
       insights = result.configured ? result.insights : "Add ANTHROPIC_API_KEY to enable AI insights.";
+      insightsCached = result.cached || false;
     } catch (e) {
       insights = "Error: " + e.message;
     } finally {
@@ -259,24 +263,30 @@
     <div class="flex justify-between items-center mb-4">
       <p class="text-[10px] text-gray-400 uppercase tracking-wider">AI Insights</p>
       <button
-        on:click={loadInsights}
+        on:click={() => loadInsights(true)}
         disabled={insightsLoading}
         class="text-[11px] text-emerald-600 hover:text-emerald-700 disabled:opacity-50 transition"
       >
-        {insightsLoading ? "Analyzing..." : insights ? "Refresh" : "Generate brief"}
+        {insightsLoading ? "Analyzing..." : "Re-generate"}
       </button>
     </div>
-    {#if insightsLoading}
+    {#if insightsLoading && !insights}
       <div class="flex items-center gap-2 text-gray-400 text-sm">
         <div class="w-3 h-3 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
         Analyzing your finances...
       </div>
     {:else if insights}
+      {#if insightsLoading}
+        <div class="flex items-center gap-2 text-gray-400 text-xs mb-3">
+          <div class="w-2.5 h-2.5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+          Refreshing...
+        </div>
+      {/if}
       <div class="space-y-3 text-sm text-gray-600 leading-relaxed">
         {@html renderInsightMarkdown(insights)}
       </div>
     {:else}
-      <p class="text-sm text-gray-400">Click "Generate brief" for a Claude-powered analysis of your income.</p>
+      <p class="text-sm text-gray-400">Loading insights...</p>
     {/if}
   </div>
 
