@@ -232,11 +232,6 @@
     height: auto; /* Maintain the aspect ratio */
     width: 100%; /* Maintain the full width of the card */
   }
-  .card .text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
   .card h2 {
     margin: 0;
     padding: 1rem;

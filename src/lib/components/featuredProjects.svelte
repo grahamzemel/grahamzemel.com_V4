@@ -384,7 +384,7 @@
     @apply text-xs text-gray-400;
   }
 
-  .stack-icon--svg svg {
+  .stack-icon--svg :global(svg) {
     @apply h-7 w-7;
     color: #ffffff;
   }

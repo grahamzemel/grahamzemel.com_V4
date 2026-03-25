@@ -617,8 +617,8 @@ var init__ = __esm({
   ".svelte-kit/output/server/nodes/0.js"() {
     index = 0;
     component = async () => component_cache ?? (component_cache = (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default);
-    imports = ["_app/immutable/nodes/0.281aa37c.js", "_app/immutable/chunks/index.ba56c314.js"];
-    stylesheets = ["_app/immutable/assets/0.96d05fde.css"];
+    imports = ["_app/immutable/nodes/0.83cf80a6.js", "_app/immutable/chunks/index.ba56c314.js"];
+    stylesheets = ["_app/immutable/assets/0.a81151c3.css"];
     fonts = [];
   }
 });
@@ -686,7 +686,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ?? (component_cache2 = (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default);
-    imports2 = ["_app/immutable/nodes/1.7e2d8a67.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.a8242121.js", "_app/immutable/chunks/singletons.ec1defe9.js"];
+    imports2 = ["_app/immutable/nodes/1.dfc36020.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.0d96f42b.js", "_app/immutable/chunks/singletons.3dbea006.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -758,7 +758,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ?? (component_cache3 = (await Promise.resolve().then(() => (init_layout_svelte2(), layout_svelte_exports2))).default);
-    imports3 = ["_app/immutable/nodes/2.f5dd8bd3.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.a8242121.js", "_app/immutable/chunks/singletons.ec1defe9.js", "_app/immutable/chunks/api.1b4253c7.js"];
+    imports3 = ["_app/immutable/nodes/2.ae604e1e.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/stores.0d96f42b.js", "_app/immutable/chunks/singletons.3dbea006.js", "_app/immutable/chunks/api.1b4253c7.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -782,7 +782,7 @@ var init_page_svelte = __esm({
     };
     Hero = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       $$result.css.add(css$8);
-      return `<section class="mt-32 md:mt-64"><div class="hero-title custom-fade-in anim-delay-500 svelte-i4ssko">Graham Zemel</div>
+      return `<section class="mt-32 md:mt-64"><div class="hero-title custom-fade-in anim-delay-500 svelte-i4ssko" data-admin-mobile-trigger="name">Graham Zemel</div>
 
   <p class="hero-subtitle custom-fade-in anim-delay-900 svelte-i4ssko">Full Stack Developer | Artificial Intelligence | Ethical Hacking
   </p>
@@ -1062,7 +1062,7 @@ var init_page_svelte = __esm({
       return $$rendered;
     });
     css$4 = {
-      code: ".custom-transition.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:1500ms}.featured-grid.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{display:grid;grid-template-columns:repeat(1, minmax(0, 1fr));align-items:stretch;gap:2rem}@media(min-width: 1024px){.featured-grid.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{grid-template-columns:repeat(2, minmax(0, 1fr))}}.featured-card.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{display:flex;flex-direction:column;overflow:hidden;border-radius:0.75rem;background-color:rgb(7 10 13 / var(--tw-bg-opacity));--tw-bg-opacity:0.6;--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.featured-body.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{display:flex;flex-direction:column;padding:1.5rem}.tag-row.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{display:flex;flex-wrap:wrap;gap:0.5rem}.tag.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{display:inline-flex;align-items:center;gap:0.25rem;border-radius:9999px;padding-left:0.5rem;padding-right:0.5rem;padding-top:0.25rem;padding-bottom:0.25rem;font-size:0.75rem;line-height:1rem;font-weight:600}.section-block.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{border-top-width:1px;--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity));padding-top:1rem}.section-title.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{font-size:0.875rem;line-height:1.25rem;text-transform:uppercase;letter-spacing:0.1em;--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity))}.stack-grid.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{margin-top:1rem;display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:1rem}@media(min-width: 640px){.stack-grid.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{grid-template-columns:repeat(3, minmax(0, 1fr))}}@media(min-width: 1024px){.stack-grid.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{grid-template-columns:repeat(5, minmax(0, 1fr))}}.stack-item.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{display:flex;flex-direction:column;align-items:center;gap:0.5rem}.stack-icon.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{display:flex;height:3rem;width:3rem;align-items:center;justify-content:center;border-radius:1rem;border-width:1px;--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity));--tw-bg-opacity:1;background-color:rgb(11 15 20 / var(--tw-bg-opacity));--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.stack-icon.svelte-145oh4d img.svelte-145oh4d.svelte-145oh4d{height:1.75rem;width:1.75rem;-o-object-fit:contain;object-fit:contain;filter:brightness(0) invert(1)}.stack-label.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{font-size:0.75rem;line-height:1rem;--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity))}.feature-list.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{margin-top:0.75rem;margin-left:1.25rem;list-style-type:disc}.feature-list.svelte-145oh4d>.svelte-145oh4d:not([hidden])~.svelte-145oh4d:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.feature-list.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity))}.stats-row.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:1rem}.stat-card.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{border-radius:0.5rem;border-width:1px;--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity));--tw-bg-opacity:1;background-color:rgb(11 15 20 / var(--tw-bg-opacity));padding-left:1rem;padding-right:1rem;padding-top:0.75rem;padding-bottom:0.75rem}.stat-num.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{font-size:1.5rem;line-height:2rem;font-weight:700;--tw-text-opacity:1;color:rgb(51 119 255 / var(--tw-text-opacity))}.stat-label.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{font-size:0.75rem;line-height:1rem;text-transform:uppercase;letter-spacing:0.1em;--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity))}.link-highlight.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{--tw-text-opacity:1;color:rgb(51 119 255 / var(--tw-text-opacity));text-decoration-line:underline;text-decoration-color:rgb(51 119 255 / 0.6);text-underline-offset:4px}.link-highlight.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d:hover{--tw-text-opacity:1;color:rgb(51 255 124 / var(--tw-text-opacity));text-decoration-color:rgb(51 255 124 / 0.7);transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.cta-button.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{margin-left:auto;margin-right:auto;display:inline-flex;width:100%;max-width:24rem;align-items:center;justify-content:center;gap:0.75rem;border-radius:9999px;border-width:1px;border-color:rgb(43 108 176 / 0.6);background-image:linear-gradient(to right, var(--tw-gradient-stops));--tw-gradient-from:#1b4a7a var(--tw-gradient-from-position);--tw-gradient-from-position:  ;--tw-gradient-to:rgb(27 74 122 / 0)  var(--tw-gradient-from-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to);--tw-gradient-via-position:  ;--tw-gradient-to:rgb(22 58 97 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #163a61 var(--tw-gradient-via-position), var(--tw-gradient-to);--tw-gradient-to:#132f4f var(--tw-gradient-to-position);--tw-gradient-to-position:  ;padding-top:0.75rem;padding-bottom:0.75rem;padding-left:1.25rem;padding-right:1.25rem;--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms;box-shadow:0 10px 30px rgba(20, 46, 86, 0.35), inset 0 0 0 1px rgba(122, 175, 255, 0.2)}.cta-button.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d:hover{border-color:rgb(125 179 255 / 0.8);--tw-gradient-from:#225a96 var(--tw-gradient-from-position);--tw-gradient-from-position:  ;--tw-gradient-to:rgb(34 90 150 / 0)  var(--tw-gradient-from-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to);--tw-gradient-via-position:  ;--tw-gradient-to:rgb(29 76 123 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #1d4c7b var(--tw-gradient-via-position), var(--tw-gradient-to);--tw-gradient-to:#193f63 var(--tw-gradient-to-position);--tw-gradient-to-position:  ;box-shadow:0 14px 40px rgba(25, 60, 110, 0.45), inset 0 0 0 1px rgba(140, 190, 255, 0.35)}.cta-label.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{font-size:1rem;line-height:1.5rem;font-weight:600;color:rgb(18 18 23 / var(--tw-text-opacity));--tw-text-opacity:1;color:rgb(207 229 255 / var(--tw-text-opacity))}.cta-divider.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{height:1rem;width:1px;background-color:rgb(147 197 253 / 0.4)}.cta-url.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{font-size:0.875rem;line-height:1.25rem;color:rgb(191 219 254 / 0.8)}.cta-arrow.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{font-size:0.875rem;line-height:1.25rem;color:rgb(191 219 254 / 0.8)}.cta-row.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{display:flex;flex-wrap:wrap;align-items:center;gap:1rem}.cta-inline.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d{--tw-text-opacity:1;color:rgb(51 119 255 / var(--tw-text-opacity));transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.cta-inline.svelte-145oh4d.svelte-145oh4d.svelte-145oh4d:hover{--tw-text-opacity:1;color:rgb(51 255 124 / var(--tw-text-opacity))}",
+      code: ".custom-transition.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:1500ms}.featured-grid.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{display:grid;grid-template-columns:repeat(1, minmax(0, 1fr));align-items:stretch;gap:2rem}@media(min-width: 1024px){.featured-grid.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{grid-template-columns:repeat(2, minmax(0, 1fr))}}.featured-card.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{display:flex;flex-direction:column;overflow:hidden;border-radius:0.75rem;background-color:rgb(7 10 13 / var(--tw-bg-opacity));--tw-bg-opacity:0.6;--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.featured-body.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{display:flex;flex-direction:column;padding:1.5rem}.tag-row.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{display:flex;flex-wrap:wrap;gap:0.5rem}.tag.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{display:inline-flex;align-items:center;gap:0.25rem;border-radius:9999px;padding-left:0.5rem;padding-right:0.5rem;padding-top:0.25rem;padding-bottom:0.25rem;font-size:0.75rem;line-height:1rem;font-weight:600}.section-block.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{border-top-width:1px;--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity));padding-top:1rem}.section-title.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{font-size:0.875rem;line-height:1.25rem;text-transform:uppercase;letter-spacing:0.1em;--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity))}.stack-grid.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{margin-top:1rem;display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:1rem}@media(min-width: 640px){.stack-grid.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{grid-template-columns:repeat(3, minmax(0, 1fr))}}@media(min-width: 1024px){.stack-grid.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{grid-template-columns:repeat(5, minmax(0, 1fr))}}.stack-item.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{display:flex;flex-direction:column;align-items:center;gap:0.5rem}.stack-icon.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{display:flex;height:3rem;width:3rem;align-items:center;justify-content:center;border-radius:1rem;border-width:1px;--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity));--tw-bg-opacity:1;background-color:rgb(11 15 20 / var(--tw-bg-opacity));--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.stack-icon.svelte-lpofh5 img.svelte-lpofh5.svelte-lpofh5{height:1.75rem;width:1.75rem;-o-object-fit:contain;object-fit:contain;filter:brightness(0) invert(1)}.stack-label.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{font-size:0.75rem;line-height:1rem;--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity))}.stack-icon--svg.svelte-lpofh5 svg{height:1.75rem;width:1.75rem;color:#ffffff}.feature-list.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{margin-top:0.75rem;margin-left:1.25rem;list-style-type:disc}.feature-list.svelte-lpofh5>.svelte-lpofh5:not([hidden])~.svelte-lpofh5:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.feature-list.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity))}.stats-row.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:1rem}.stat-card.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{border-radius:0.5rem;border-width:1px;--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity));--tw-bg-opacity:1;background-color:rgb(11 15 20 / var(--tw-bg-opacity));padding-left:1rem;padding-right:1rem;padding-top:0.75rem;padding-bottom:0.75rem}.stat-num.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{font-size:1.5rem;line-height:2rem;font-weight:700;--tw-text-opacity:1;color:rgb(51 119 255 / var(--tw-text-opacity))}.stat-label.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{font-size:0.75rem;line-height:1rem;text-transform:uppercase;letter-spacing:0.1em;--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity))}.link-highlight.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{--tw-text-opacity:1;color:rgb(51 119 255 / var(--tw-text-opacity));text-decoration-line:underline;text-decoration-color:rgb(51 119 255 / 0.6);text-underline-offset:4px}.link-highlight.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5:hover{--tw-text-opacity:1;color:rgb(51 255 124 / var(--tw-text-opacity));text-decoration-color:rgb(51 255 124 / 0.7);transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.cta-button.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{margin-left:auto;margin-right:auto;display:inline-flex;width:100%;max-width:24rem;align-items:center;justify-content:center;gap:0.75rem;border-radius:9999px;border-width:1px;border-color:rgb(43 108 176 / 0.6);background-image:linear-gradient(to right, var(--tw-gradient-stops));--tw-gradient-from:#1b4a7a var(--tw-gradient-from-position);--tw-gradient-from-position:  ;--tw-gradient-to:rgb(27 74 122 / 0)  var(--tw-gradient-from-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to);--tw-gradient-via-position:  ;--tw-gradient-to:rgb(22 58 97 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #163a61 var(--tw-gradient-via-position), var(--tw-gradient-to);--tw-gradient-to:#132f4f var(--tw-gradient-to-position);--tw-gradient-to-position:  ;padding-top:0.75rem;padding-bottom:0.75rem;padding-left:1.25rem;padding-right:1.25rem;--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms;box-shadow:0 10px 30px rgba(20, 46, 86, 0.35), inset 0 0 0 1px rgba(122, 175, 255, 0.2)}.cta-button.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5:hover{border-color:rgb(125 179 255 / 0.8);--tw-gradient-from:#225a96 var(--tw-gradient-from-position);--tw-gradient-from-position:  ;--tw-gradient-to:rgb(34 90 150 / 0)  var(--tw-gradient-from-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to);--tw-gradient-via-position:  ;--tw-gradient-to:rgb(29 76 123 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #1d4c7b var(--tw-gradient-via-position), var(--tw-gradient-to);--tw-gradient-to:#193f63 var(--tw-gradient-to-position);--tw-gradient-to-position:  ;box-shadow:0 14px 40px rgba(25, 60, 110, 0.45), inset 0 0 0 1px rgba(140, 190, 255, 0.35)}.cta-label.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{font-size:1rem;line-height:1.5rem;font-weight:600;color:rgb(18 18 23 / var(--tw-text-opacity));--tw-text-opacity:1;color:rgb(207 229 255 / var(--tw-text-opacity))}.cta-divider.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{height:1rem;width:1px;background-color:rgb(147 197 253 / 0.4)}.cta-url.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{font-size:0.875rem;line-height:1.25rem;color:rgb(191 219 254 / 0.8)}.cta-arrow.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{font-size:0.875rem;line-height:1.25rem;color:rgb(191 219 254 / 0.8)}.cta-row.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{display:flex;flex-wrap:wrap;align-items:center;gap:1rem}.cta-inline.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5{--tw-text-opacity:1;color:rgb(51 119 255 / var(--tw-text-opacity));transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.cta-inline.svelte-lpofh5.svelte-lpofh5.svelte-lpofh5:hover{--tw-text-opacity:1;color:rgb(51 255 124 / var(--tw-text-opacity))}",
       map: null
     };
     FeaturedProjects = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -1287,57 +1287,57 @@ var init_page_svelte = __esm({
 <section class="${"section-band custom-transition " + escape(
           !hasObserverSupport || isVisible ? "opacity-100" : "opacity-0",
           true
-        ) + " svelte-145oh4d"}"><h1 class="font-serif font-bold sm:text-6xl text-4xl">Featured Projects
+        ) + " svelte-lpofh5"}"><h1 class="font-serif font-bold sm:text-6xl text-4xl">Featured Projects
   </h1>
 
-  <div class="featured-grid mt-10 svelte-145oh4d">${each(projects, (project) => {
-          return `<article class="featured-card svelte-145oh4d"><div class="featured-media"><img${add_attribute("src", project.image, 0)}${add_attribute("alt", project.title, 0)} class="aspect-video object-cover w-full rounded-t-xl" loading="lazy"></div>
-        <div class="featured-body svelte-145oh4d"><div class="featured-head"><div><h3 class="text-2xl font-semibold">${escape(project.title)}</h3>
+  <div class="featured-grid mt-10 svelte-lpofh5">${each(projects, (project) => {
+          return `<article class="featured-card svelte-lpofh5"><div class="featured-media"><img${add_attribute("src", project.image, 0)}${add_attribute("alt", project.title, 0)} class="aspect-video object-cover w-full rounded-t-xl" loading="lazy"></div>
+        <div class="featured-body svelte-lpofh5"><div class="featured-head"><div><h3 class="text-2xl font-semibold">${escape(project.title)}</h3>
               <p class="mt-2 text-gray-300">${escape(project.description)}</p></div>
-            <div class="tag-row mt-4 svelte-145oh4d">${each(project.tags, (tag) => {
-            return `<span class="${"tag " + escape(getClassesForTag(tag), true) + " svelte-145oh4d"}">${escape(tag)}</span>`;
+            <div class="tag-row mt-4 svelte-lpofh5">${each(project.tags, (tag) => {
+            return `<span class="${"tag " + escape(getClassesForTag(tag), true) + " svelte-lpofh5"}">${escape(tag)}</span>`;
           })}</div>
-            <div class="mt-4 flex justify-center">${project.demoLink && !project.repoLink ? `<a class="cta-button svelte-145oh4d"${add_attribute("href", project.demoLink, 0)} target="_blank" rel="noopener noreferer"><span class="cta-label svelte-145oh4d">Try it</span>
-                  <span class="cta-divider svelte-145oh4d" aria-hidden="true"></span>
-                  <span class="cta-url svelte-145oh4d">${escape(getDomain(project.demoLink))}</span>
-                  <span class="cta-arrow svelte-145oh4d" aria-hidden="true">\u2197</span>
-                </a>` : `<div class="cta-row svelte-145oh4d">${project.demoLink ? `<a class="cta-inline svelte-145oh4d"${add_attribute("href", project.demoLink, 0)} target="_blank" rel="noopener noreferer">Try it \u2192 ${escape(getDomain(project.demoLink))}
+            <div class="mt-4 flex justify-center">${project.demoLink && !project.repoLink ? `<a class="cta-button svelte-lpofh5"${add_attribute("href", project.demoLink, 0)} target="_blank" rel="noopener noreferer"><span class="cta-label svelte-lpofh5">Try it</span>
+                  <span class="cta-divider svelte-lpofh5" aria-hidden="true"></span>
+                  <span class="cta-url svelte-lpofh5">${escape(getDomain(project.demoLink))}</span>
+                  <span class="cta-arrow svelte-lpofh5" aria-hidden="true">\u2197</span>
+                </a>` : `<div class="cta-row svelte-lpofh5">${project.demoLink ? `<a class="cta-inline svelte-lpofh5"${add_attribute("href", project.demoLink, 0)} target="_blank" rel="noopener noreferer">Try it \u2192 ${escape(getDomain(project.demoLink))}
                     </a>` : ``}
-                  ${project.repoLink ? `<a class="cta-inline svelte-145oh4d"${add_attribute("href", project.repoLink, 0)} target="_blank" rel="noopener noreferer">View repo
+                  ${project.repoLink ? `<a class="cta-inline svelte-lpofh5"${add_attribute("href", project.repoLink, 0)} target="_blank" rel="noopener noreferer">View repo
                     </a>` : ``}
                 </div>`}
             </div></div>
 
-          ${project.stats ? `<div class="stats-row mt-6 svelte-145oh4d">${each(project.stats, (stat) => {
-            return `<div class="stat-card svelte-145oh4d"><div class="stat-num svelte-145oh4d">${escape(stat.value)}</div>
-                  <div class="stat-label svelte-145oh4d">${escape(stat.label)}</div>
+          ${project.stats ? `<div class="stats-row mt-6 svelte-lpofh5">${each(project.stats, (stat) => {
+            return `<div class="stat-card svelte-lpofh5"><div class="stat-num svelte-lpofh5">${escape(stat.value)}</div>
+                  <div class="stat-label svelte-lpofh5">${escape(stat.label)}</div>
                 </div>`;
           })}
             </div>` : ``}
 
-          <div class="section-block mt-6 svelte-145oh4d"><h4 class="section-title svelte-145oh4d">Tech Stack</h4>
-            <div class="stack-grid svelte-145oh4d">${each(project.stack, (item) => {
-            return `<div class="stack-item svelte-145oh4d"${add_attribute("aria-label", item.label, 0)}>${item.iconSvg ? `<div class="stack-icon stack-icon--svg svelte-145oh4d"${add_attribute("style", `background:${item.bg}`, 0)}><!-- HTML_TAG_START -->${item.iconSvg}<!-- HTML_TAG_END -->
-                    </div>` : `<div class="stack-icon svelte-145oh4d"${add_attribute("style", `background:${item.bg}`, 0)}><img${add_attribute("src", item.iconUrl ?? `https://cdn.simpleicons.org/${item.slug}/ffffff?viewbox=auto&size=48`, 0)}${add_attribute("alt", `${item.label} logo`, 0)} loading="lazy" class="svelte-145oh4d">
+          <div class="section-block mt-6 svelte-lpofh5"><h4 class="section-title svelte-lpofh5">Tech Stack</h4>
+            <div class="stack-grid svelte-lpofh5">${each(project.stack, (item) => {
+            return `<div class="stack-item svelte-lpofh5"${add_attribute("aria-label", item.label, 0)}>${item.iconSvg ? `<div class="stack-icon stack-icon--svg svelte-lpofh5"${add_attribute("style", `background:${item.bg}`, 0)}><!-- HTML_TAG_START -->${item.iconSvg}<!-- HTML_TAG_END -->
+                    </div>` : `<div class="stack-icon svelte-lpofh5"${add_attribute("style", `background:${item.bg}`, 0)}><img${add_attribute("src", item.iconUrl ?? `https://cdn.simpleicons.org/${item.slug}/ffffff?viewbox=auto&size=48`, 0)}${add_attribute("alt", `${item.label} logo`, 0)} loading="lazy" class="svelte-lpofh5">
                     </div>`}
-                  <span class="stack-label svelte-145oh4d">${escape(item.label)}</span>
+                  <span class="stack-label svelte-lpofh5">${escape(item.label)}</span>
                 </div>`;
           })}
             </div></div>
 
-          <div class="section-block mt-6 svelte-145oh4d"><h4 class="section-title svelte-145oh4d">Core Features</h4>
-            <ul class="feature-list svelte-145oh4d">${each(project.highlights, (item) => {
-            return `<li class="svelte-145oh4d">${escape(item)}</li>`;
+          <div class="section-block mt-6 svelte-lpofh5"><h4 class="section-title svelte-lpofh5">Core Features</h4>
+            <ul class="feature-list svelte-lpofh5">${each(project.highlights, (item) => {
+            return `<li class="svelte-lpofh5">${escape(item)}</li>`;
           })}
             </ul></div>
 
-          <div class="section-block mt-6 svelte-145oh4d"><h4 class="section-title svelte-145oh4d">Technical Achievements</h4>
-            <ul class="feature-list svelte-145oh4d">${each(project.achievements, (item) => {
-            return `<li class="svelte-145oh4d">${escape(item)}</li>`;
+          <div class="section-block mt-6 svelte-lpofh5"><h4 class="section-title svelte-lpofh5">Technical Achievements</h4>
+            <ul class="feature-list svelte-lpofh5">${each(project.achievements, (item) => {
+            return `<li class="svelte-lpofh5">${escape(item)}</li>`;
           })}
             </ul></div>
 
-          ${project.companion ? `<p class="mt-6 text-gray-300"><a class="link-highlight svelte-145oh4d"${add_attribute("href", project.companion.href, 0)} target="_blank" rel="noopener noreferer">${escape(project.companion.label)}</a>
+          ${project.companion ? `<p class="mt-6 text-gray-300"><a class="link-highlight svelte-lpofh5"${add_attribute("href", project.companion.href, 0)} target="_blank" rel="noopener noreferer">${escape(project.companion.label)}</a>
             </p>` : ``}</div>
       </article>`;
         })}</div>
@@ -1346,7 +1346,7 @@ var init_page_svelte = __esm({
       return $$rendered;
     });
     css$3 = {
-      code: "@media(max-width: 640px){#statsBig.svelte-126r8ho.svelte-126r8ho{display:none}}.custom-transition.svelte-126r8ho.svelte-126r8ho{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:1500ms}.card.svelte-126r8ho.svelte-126r8ho{display:flex;flex-direction:column;border-radius:0.9rem;overflow:hidden;box-shadow:0 2px 8px rgba(0, 0, 0, 0.1);text-decoration:none;max-width:100%;padding-top:2rem;margin:0 auto;color:inherit}.card.svelte-126r8ho img.svelte-126r8ho{max-height:300px;height:auto;width:100%}.card.svelte-126r8ho h2.svelte-126r8ho{margin:0;padding:1rem;background:rgba(100, 100, 100, 0.7);color:white;font-size:1.2rem}.card.svelte-126r8ho p.svelte-126r8ho{margin:0;padding:1rem;background:white;color:#333;font-size:1rem}",
+      code: "@media(max-width: 640px){#statsBig.svelte-3cq3yn.svelte-3cq3yn{display:none}}.custom-transition.svelte-3cq3yn.svelte-3cq3yn{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:1500ms}.card.svelte-3cq3yn.svelte-3cq3yn{display:flex;flex-direction:column;border-radius:0.9rem;overflow:hidden;box-shadow:0 2px 8px rgba(0, 0, 0, 0.1);text-decoration:none;max-width:100%;padding-top:2rem;margin:0 auto;color:inherit}.card.svelte-3cq3yn img.svelte-3cq3yn{max-height:300px;height:auto;width:100%}.card.svelte-3cq3yn h2.svelte-3cq3yn{margin:0;padding:1rem;background:rgba(100, 100, 100, 0.7);color:white;font-size:1.2rem}.card.svelte-3cq3yn p.svelte-3cq3yn{margin:0;padding:1rem;background:white;color:#333;font-size:1rem}",
       map: null
     };
     Blog = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -1386,23 +1386,23 @@ var init_page_svelte = __esm({
 <section class="${"section-band custom-transition " + escape(
           !hasObserverSupport || isVisible ? "opacity-100" : "opacity-0",
           true
-        ) + " svelte-126r8ho"}"><h1 class="font-serif font-bold sm:text-6xl text-4xl">The Gray Area</h1>
+        ) + " svelte-3cq3yn"}"><h1 class="font-serif font-bold sm:text-6xl text-4xl">The Gray Area</h1>
   <br>
   <h2 class="font-serif font-bold sm:text-3xl text-xl">I initially created The Gray Area to provide an educational resource for
     beginner programmers or cybersecurity enthusiasts, but it&#39;s since become so
     much more.
   </h2>
   <br>
-  <div class="block flex space-x-64 justify-center text-center p-4 ml-[1rem] svelte-126r8ho" id="statsBig"><div><div class="text-5xl font-bold">30+</div>
+  <div class="block flex space-x-64 justify-center text-center p-4 ml-[1rem] svelte-3cq3yn" id="statsBig"><div><div class="text-5xl font-bold">30+</div>
       <div class="text-2xl text-gray-500">Writers</div></div>
     <div><div class="text-5xl font-bold">2,000,000+</div>
       <div class="text-2xl text-gray-500">Readers</div></div>
     <div><div class="text-5xl font-bold">250+</div>
       <div class="text-2xl text-gray-500">Posts</div></div></div>
   <br>
-  <div class="card svelte-126r8ho" style="border-radius: 0.9rem;"><a href="https://thegrayarea.tech" target="_blank" rel="noopener noreferrer">${metadata.images ? `<img style="border-top-right-radius: 0.9rem; border-top-left-radius: 0.9rem;"${add_attribute("src", metadata.images[0], 0)}${add_attribute("alt", metadata.title, 0)} class="svelte-126r8ho">` : ``}
-      <h2 class="svelte-126r8ho">${escape(metadata.title)}</h2>
-      <p class="svelte-126r8ho">${escape(metadata.description)}</p></a></div>
+  <div class="card svelte-3cq3yn" style="border-radius: 0.9rem;"><a href="https://thegrayarea.tech" target="_blank" rel="noopener noreferrer">${metadata.images ? `<img style="border-top-right-radius: 0.9rem; border-top-left-radius: 0.9rem;"${add_attribute("src", metadata.images[0], 0)}${add_attribute("alt", metadata.title, 0)} class="svelte-3cq3yn">` : ``}
+      <h2 class="svelte-3cq3yn">${escape(metadata.title)}</h2>
+      <p class="svelte-3cq3yn">${escape(metadata.description)}</p></a></div>
   <br><br>
 
   <div id="blog" class="blog flex justify-center items-center lg:block md:block hidden"><ul class="blog__slider grid grid-cols-3 w-50% lg:w-33%">${`<p class="blog__intro">Please wait, obtaining posts from
@@ -1840,8 +1840,8 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ?? (component_cache4 = (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default);
-    imports4 = ["_app/immutable/nodes/3.64db7099.js", "_app/immutable/chunks/index.ba56c314.js"];
-    stylesheets4 = ["_app/immutable/assets/3.7a0b6780.css"];
+    imports4 = ["_app/immutable/nodes/3.b5fb8bd7.js", "_app/immutable/chunks/index.ba56c314.js"];
+    stylesheets4 = ["_app/immutable/assets/3.af1a366e.css"];
     fonts4 = [];
   }
 });
@@ -1885,7 +1885,7 @@ var init__5 = __esm({
   ".svelte-kit/output/server/nodes/4.js"() {
     index5 = 4;
     component5 = async () => component_cache5 ?? (component_cache5 = (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default);
-    imports5 = ["_app/immutable/nodes/4.a5a9ace0.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/api.1b4253c7.js"];
+    imports5 = ["_app/immutable/nodes/4.f91073c9.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/api.1b4253c7.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -1980,7 +1980,7 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ?? (component_cache6 = (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default);
-    imports6 = ["_app/immutable/nodes/5.4585a5ca.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/api.1b4253c7.js"];
+    imports6 = ["_app/immutable/nodes/5.f1e94838.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/api.1b4253c7.js"];
     stylesheets6 = [];
     fonts6 = [];
   }
@@ -2049,7 +2049,75 @@ var init_page_svelte5 = __esm({
     init_chunks();
     Page5 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let config = {};
+      const DEFAULT_NOTIFICATION_SETTINGS = {
+        enabled: true,
+        channels: { push: true },
+        autoSendTestOnSubscribe: true,
+        quietHours: {
+          enabled: false,
+          start: "22:00",
+          end: "08:00",
+          timezone: "America/Denver"
+        },
+        events: {
+          chargeSucceeded: true,
+          chargeMinimumAmount: 5,
+          chargeAccounts: { textcloaker: true, fratdoor: true },
+          payoutCreated: false,
+          payoutPaid: true,
+          payoutAccounts: { textcloaker: true, fratdoor: true },
+          subscriptionCanceled: true,
+          subscriptionCanceledAccounts: { textcloaker: true, fratdoor: true },
+          incomePaydayToday: true,
+          incomePaydayTomorrow: true,
+          incomeSourceTypes: {
+            hourly: true,
+            business: true,
+            other: true
+          },
+          fratdoorBalanceReady: true,
+          fratdoorBalanceMinimumAmount: 10,
+          fratdoorPayoutRecorded: true,
+          dailyDigest: false,
+          dailyDigestLookaheadDays: 7
+        }
+      };
+      function ensureNotificationSettings(raw = {}) {
+        return {
+          ...DEFAULT_NOTIFICATION_SETTINGS,
+          ...raw,
+          channels: {
+            ...DEFAULT_NOTIFICATION_SETTINGS.channels,
+            ...raw.channels || {}
+          },
+          quietHours: {
+            ...DEFAULT_NOTIFICATION_SETTINGS.quietHours,
+            ...raw.quietHours || {}
+          },
+          events: {
+            ...DEFAULT_NOTIFICATION_SETTINGS.events,
+            ...raw.events || {},
+            chargeAccounts: {
+              ...DEFAULT_NOTIFICATION_SETTINGS.events.chargeAccounts,
+              ...raw.events?.chargeAccounts || {}
+            },
+            payoutAccounts: {
+              ...DEFAULT_NOTIFICATION_SETTINGS.events.payoutAccounts,
+              ...raw.events?.payoutAccounts || {}
+            },
+            subscriptionCanceledAccounts: {
+              ...DEFAULT_NOTIFICATION_SETTINGS.events.subscriptionCanceledAccounts,
+              ...raw.events?.subscriptionCanceledAccounts || {}
+            },
+            incomeSourceTypes: {
+              ...DEFAULT_NOTIFICATION_SETTINGS.events.incomeSourceTypes,
+              ...raw.events?.incomeSourceTypes || {}
+            }
+          }
+        };
+      }
       Object.entries(config.payPeriodCalendars || {});
+      ensureNotificationSettings(config.notifications);
       return `${$$result.head += `<!-- HEAD_svelte-gzsk9t_START -->${$$result.title = `<title>Settings | Income Engine</title>`, ""}<!-- HEAD_svelte-gzsk9t_END -->`, ""}
 
 <div class="mb-8"><h1 class="text-2xl font-semibold text-gray-900">Settings</h1>
@@ -2074,7 +2142,7 @@ var init__8 = __esm({
   ".svelte-kit/output/server/nodes/7.js"() {
     index8 = 7;
     component8 = async () => component_cache8 ?? (component_cache8 = (await Promise.resolve().then(() => (init_page_svelte5(), page_svelte_exports5))).default);
-    imports8 = ["_app/immutable/nodes/7.eebe9385.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/api.1b4253c7.js"];
+    imports8 = ["_app/immutable/nodes/7.6463b162.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/api.1b4253c7.js"];
     stylesheets8 = [];
     fonts8 = [];
   }
@@ -2128,7 +2196,6 @@ var init_page_svelte6 = __esm({
       let analytics = { customers: [], subscriptions: [] };
       let oneTime = {};
       let paypal = null;
-      let ticketPurchases = null;
       const CHART = {
         width: 720,
         height: 220,
@@ -2186,7 +2253,6 @@ var init_page_svelte6 = __esm({
       stripePayoutSeries = aggregateByDate(pays.filter((entry) => entry.status === "paid"), "arrivalDate", "amount");
       buildLineChart(stripePayoutSeries, "amount");
       buildLineChart(otData?.oneTime?.daily, "amount");
-      buildLineChart(ticketPurchases?.dailyBuyerSpend, "amount");
       buildLineChart(paypal?.dailyNetRevenue, "amount");
       buildLineChart(paypal?.payoutTrend, "amount");
       return `${$$result.head += `<!-- HEAD_svelte-10qt5f2_START -->${$$result.title = `<title>Startups | Income Engine</title>`, ""}<!-- HEAD_svelte-10qt5f2_END -->`, ""}
@@ -2213,7 +2279,7 @@ var init__9 = __esm({
   ".svelte-kit/output/server/nodes/8.js"() {
     index9 = 8;
     component9 = async () => component_cache9 ?? (component_cache9 = (await Promise.resolve().then(() => (init_page_svelte6(), page_svelte_exports6))).default);
-    imports9 = ["_app/immutable/nodes/8.2485099d.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/api.1b4253c7.js"];
+    imports9 = ["_app/immutable/nodes/8.17d9bffe.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/api.1b4253c7.js"];
     stylesheets9 = [];
     fonts9 = [];
   }
@@ -2492,7 +2558,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "11o2bar"
+  version_hash: "zmyz7j"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -6000,10 +6066,10 @@ var manifest = (() => {
   return {
     appDir: "_app",
     appPath: "_app",
-    assets: /* @__PURE__ */ new Set(["aesculapiusss.png", "bashbunnyss.png", "cryptoss.png", "favicon.ico", "favicon.svg", "fractalsss.png", "fratdoor.png", "gamebank.png", "gpuprices.png", "grahamzemel.com.png", "grayarea.jpg", "heckerbotss.jpg", "icons/icon-192.svg", "icons/icon-512.svg", "idorss.png", "ifc-eventhub.png", "laptopprices.png", "macbookprices.png", "manifest.json", "og-img.png", "powerschoolss.png", "quantumss.png", "shader.frag", "shader.vert", "sketch.cjs", "slag.png", "sw.js", "templateprojss.png", "textcloakerss.png", "tgaonmediumss.png", "thegrayareass.png", "vaultcollection.png", "webheckscannerss.png"]),
-    mimeTypes: { ".png": "image/png", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".json": "application/json", ".cjs": "application/node", ".js": "application/javascript" },
+    assets: /* @__PURE__ */ new Set([".well-known/appspecific/com.chrome.devtools.json", "aesculapiusss.png", "bashbunnyss.png", "cryptoss.png", "favicon.ico", "favicon.svg", "fractalsss.png", "fratdoor.png", "gamebank.png", "gpuprices.png", "grahamzemel.com.png", "grayarea.jpg", "heckerbotss.jpg", "icons/icon-192.svg", "icons/icon-512.svg", "idorss.png", "ifc-eventhub.png", "laptopprices.png", "macbookprices.png", "manifest.json", "og-img.png", "powerschoolss.png", "quantumss.png", "shader.frag", "shader.vert", "sketch.cjs", "slag.png", "sw.js", "templateprojss.png", "textcloakerss.png", "tgaonmediumss.png", "thegrayareass.png", "vaultcollection.png", "webheckscannerss.png"]),
+    mimeTypes: { ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".cjs": "application/node", ".js": "application/javascript" },
     _: {
-      client: { "start": "_app/immutable/entry/start.3e9bc72b.js", "app": "_app/immutable/entry/app.13f4d927.js", "imports": ["_app/immutable/entry/start.3e9bc72b.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/singletons.ec1defe9.js", "_app/immutable/entry/app.13f4d927.js", "_app/immutable/chunks/index.ba56c314.js"], "stylesheets": [], "fonts": [] },
+      client: { "start": "_app/immutable/entry/start.c1c55ca1.js", "app": "_app/immutable/entry/app.2de28398.js", "imports": ["_app/immutable/entry/start.c1c55ca1.js", "_app/immutable/chunks/index.ba56c314.js", "_app/immutable/chunks/singletons.3dbea006.js", "_app/immutable/entry/app.2de28398.js", "_app/immutable/chunks/index.ba56c314.js"], "stylesheets": [], "fonts": [] },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),

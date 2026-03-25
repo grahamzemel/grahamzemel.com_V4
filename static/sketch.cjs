@@ -11,7 +11,7 @@ let rotation = 0;
 
 function preload() {
   // load the shader
-  theShader = loadShader("./shader.vert", "./shader.frag");
+  theShader = loadShader("/shader.vert", "/shader.frag");
 }
 
 function setup() {
@@ -25,6 +25,12 @@ let manualRotationOffset = 0; // Offset for manual rotation
 let manualTime; // Time at which manual rotation started
 let storedTime; // Variable to store the iTime value when the mouse is pressed
 
+function setDocumentCursor(value) {
+  if (typeof document !== "undefined" && document.body) {
+    document.body.style.cursor = value;
+  }
+}
+
 function mousePressed() {
   // check if screen is above 640px wide, if not, don't allow rotation
   if (windowWidth < 640) {
@@ -33,13 +39,13 @@ function mousePressed() {
   isMousePressed = true;
   prevMouseX = mouseX;
   prevMouseY = mouseY;
-  cursor("pointer");
+  setDocumentCursor("pointer");
   baseRotation = time_;
 }
 
 function mouseReleased() {
   isMousePressed = false;
-  cursor("default");
+  setDocumentCursor("default");
 }
 
 function draw() {

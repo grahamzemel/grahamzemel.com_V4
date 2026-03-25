@@ -12,7 +12,33 @@
   const SECRET = "Jetset14#";
   let buffer = "";
 
+  async function authenticateWithKey(key) {
+    const trimmed = String(key || "").trim();
+    if (!trimmed) return;
+    console.log("[admin] Authenticating...");
+    try {
+      const res = await fetch("/api/admin-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: trimmed }),
+      });
+      console.log("[admin] Auth response:", res.status);
+      if (res.ok) {
+        window.location.href = "/admin";
+        return;
+      }
+      alert("Incorrect password.");
+    } catch (err) {
+      console.error("[admin] Auth error:", err);
+      alert("Authentication failed.");
+    }
+  }
+
   onMount(() => {
+    let tapCount = 0;
+    let lastTapAt = 0;
+    const tapWindowMs = 900;
+
     const handler = (e) => {
       if (e.key.length !== 1) return; // ignore Shift, Control, Enter, etc.
       buffer += e.key;
@@ -21,22 +47,41 @@
       }
       if (buffer === SECRET) {
         buffer = "";
-        console.log("[admin] Secret matched, authenticating...");
-        fetch("/api/admin-auth", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ key: SECRET }),
-        })
-          .then((res) => {
-            console.log("[admin] Auth response:", res.status);
-            if (res.ok) window.location.href = "/admin";
-            else console.error("[admin] Auth failed:", res.status);
-          })
-          .catch((err) => console.error("[admin] Auth error:", err));
+        authenticateWithKey(SECRET);
       }
     };
+
+    const tapHandler = (e) => {
+      const trigger = e.target instanceof Element
+        ? e.target.closest("[data-admin-mobile-trigger='name']")
+        : null;
+      if (!trigger) return;
+
+      const isMobileLike =
+        window.matchMedia("(max-width: 767px)").matches ||
+        window.matchMedia("(pointer: coarse)").matches;
+      if (!isMobileLike) return;
+
+      const now = Date.now();
+      tapCount = now - lastTapAt <= tapWindowMs ? tapCount + 1 : 1;
+      lastTapAt = now;
+
+      if (tapCount >= 3) {
+        tapCount = 0;
+        lastTapAt = 0;
+        const entered = window.prompt("Enter admin password");
+        if (entered !== null) {
+          authenticateWithKey(entered);
+        }
+      }
+    };
+
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    window.addEventListener("pointerup", tapHandler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+      window.removeEventListener("pointerup", tapHandler);
+    };
   });
 </script>
 

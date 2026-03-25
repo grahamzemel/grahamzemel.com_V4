@@ -7,6 +7,15 @@
   let error = null;
   let saving = false;
   let message = "";
+  let pushStatus = null;
+  let savingNotifications = false;
+  let testingNotification = false;
+  let testNotification = {
+    title: "Income Engine test",
+    body: "Push notifications are working from the Settings page.",
+    url: "/admin/settings",
+    tag: "settings-test",
+  };
 
   let genSource = "";
   let genName = "";
@@ -19,9 +28,84 @@
 
   onMount(loadConfig);
 
+  const DEFAULT_NOTIFICATION_SETTINGS = {
+    enabled: true,
+    channels: { push: true },
+    autoSendTestOnSubscribe: true,
+    quietHours: {
+      enabled: false,
+      start: "22:00",
+      end: "08:00",
+      timezone: "America/Denver",
+    },
+    events: {
+      chargeSucceeded: true,
+      chargeMinimumAmount: 5,
+      chargeAccounts: { textcloaker: true, fratdoor: true },
+      payoutCreated: false,
+      payoutPaid: true,
+      payoutAccounts: { textcloaker: true, fratdoor: true },
+      subscriptionCanceled: true,
+      subscriptionCanceledAccounts: { textcloaker: true, fratdoor: true },
+      incomePaydayToday: true,
+      incomePaydayTomorrow: true,
+      incomeSourceTypes: { hourly: true, business: true, other: true },
+      fratdoorBalanceReady: true,
+      fratdoorBalanceMinimumAmount: 10,
+      fratdoorPayoutRecorded: true,
+      dailyDigest: false,
+      dailyDigestLookaheadDays: 7,
+    },
+  };
+
+  function ensureNotificationSettings(raw = {}) {
+    return {
+      ...DEFAULT_NOTIFICATION_SETTINGS,
+      ...raw,
+      channels: {
+        ...DEFAULT_NOTIFICATION_SETTINGS.channels,
+        ...(raw.channels || {}),
+      },
+      quietHours: {
+        ...DEFAULT_NOTIFICATION_SETTINGS.quietHours,
+        ...(raw.quietHours || {}),
+      },
+      events: {
+        ...DEFAULT_NOTIFICATION_SETTINGS.events,
+        ...(raw.events || {}),
+        chargeAccounts: {
+          ...DEFAULT_NOTIFICATION_SETTINGS.events.chargeAccounts,
+          ...(raw.events?.chargeAccounts || {}),
+        },
+        payoutAccounts: {
+          ...DEFAULT_NOTIFICATION_SETTINGS.events.payoutAccounts,
+          ...(raw.events?.payoutAccounts || {}),
+        },
+        subscriptionCanceledAccounts: {
+          ...DEFAULT_NOTIFICATION_SETTINGS.events.subscriptionCanceledAccounts,
+          ...(raw.events?.subscriptionCanceledAccounts || {}),
+        },
+        incomeSourceTypes: {
+          ...DEFAULT_NOTIFICATION_SETTINGS.events.incomeSourceTypes,
+          ...(raw.events?.incomeSourceTypes || {}),
+        },
+      },
+    };
+  }
+
   async function loadConfig() {
     loading = true;
-    try { config = await get("/api/config"); }
+    try {
+      const [configRes, pushRes] = await Promise.all([
+        get("/api/config"),
+        get("/api/push/status").catch(() => null),
+      ]);
+      config = {
+        ...configRes,
+        notifications: ensureNotificationSettings(configRes?.notifications),
+      };
+      pushStatus = pushRes;
+    }
     catch (e) { error = e.message; }
     finally { loading = false; }
   }
@@ -34,6 +118,42 @@
       setTimeout(() => message = "", 2000);
     } catch (e) { message = "Error: " + e.message; }
     finally { saving = false; }
+  }
+
+  async function saveNotificationSettings() {
+    savingNotifications = true;
+    message = "";
+    try {
+      const updated = await put("/api/config", {
+        notifications: ensureNotificationSettings(config.notifications),
+      });
+      config = {
+        ...updated,
+        notifications: ensureNotificationSettings(updated?.notifications),
+      };
+      pushStatus = await get("/api/push/status").catch(() => pushStatus);
+      message = "Notification settings saved";
+      setTimeout(() => message = "", 2500);
+    } catch (e) {
+      message = "Error: " + e.message;
+    } finally {
+      savingNotifications = false;
+    }
+  }
+
+  async function sendTestNotification() {
+    testingNotification = true;
+    message = "";
+    try {
+      const result = await post("/api/push/test", testNotification);
+      pushStatus = await get("/api/push/status").catch(() => pushStatus);
+      message = `Test sent to ${result.sent || 0} subscription${result.sent === 1 ? "" : "s"}`;
+      setTimeout(() => message = "", 3000);
+    } catch (e) {
+      message = "Error: " + e.message;
+    } finally {
+      testingNotification = false;
+    }
   }
 
   async function generatePeriods() {
@@ -75,6 +195,7 @@
   }
 
   $: calendars = Object.entries(config.payPeriodCalendars || {});
+  $: notifications = ensureNotificationSettings(config.notifications);
 </script>
 
 <svelte:head><title>Settings | Income Engine</title></svelte:head>
@@ -107,6 +228,328 @@
         class="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50">
         {saving ? "Saving..." : "Save"}
       </button>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 mb-8">
+    <div class="flex items-start justify-between gap-4 mb-5">
+      <div>
+        <h2 class="text-sm font-medium text-gray-900">Notifications</h2>
+        <p class="text-xs text-gray-400 mt-1">Control push delivery, event thresholds, quiet hours, and custom test notifications.</p>
+      </div>
+      <div class="text-right text-xs text-gray-500">
+        <p>Push configured: <span class={pushStatus?.configured ? "text-emerald-600 font-medium" : "text-red-500 font-medium"}>{pushStatus?.configured ? "Yes" : "No"}</span></p>
+        <p>Subscriptions: <span class="text-gray-900 font-medium">{pushStatus?.subscriptionCount || 0}</span></p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div class="border border-gray-100 rounded-lg p-3">
+        <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Push Channel</p>
+        <p class="text-sm font-medium text-gray-900">{notifications.channels.push ? "Enabled" : "Disabled"}</p>
+      </div>
+      <div class="border border-gray-100 rounded-lg p-3">
+        <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Charge Threshold</p>
+        <p class="text-sm font-medium text-gray-900">${Number(notifications.events.chargeMinimumAmount || 0).toFixed(2)}</p>
+      </div>
+      <div class="border border-gray-100 rounded-lg p-3">
+        <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Quiet Hours</p>
+        <p class="text-sm font-medium text-gray-900">
+          {#if notifications.quietHours.enabled}
+            {notifications.quietHours.start} - {notifications.quietHours.end}
+          {:else}
+            Off
+          {/if}
+        </p>
+      </div>
+      <div class="border border-gray-100 rounded-lg p-3">
+        <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Auto Test On Subscribe</p>
+        <p class="text-sm font-medium text-gray-900">{notifications.autoSendTestOnSubscribe ? "Enabled" : "Disabled"}</p>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Delivery</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.enabled} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Enable all automatic notifications</span>
+              <span class="block text-xs text-gray-400 mt-1">Master kill switch for event-driven push notifications.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.channels.push} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Send push notifications</span>
+              <span class="block text-xs text-gray-400 mt-1">Uses the browser subscription stored for this admin app.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.autoSendTestOnSubscribe} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Auto-send a test after enabling push</span>
+              <span class="block text-xs text-gray-400 mt-1">Fires one test notification when you subscribe a browser.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Quiet Hours</h3>
+        <div class="grid md:grid-cols-4 gap-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3 md:col-span-1">
+            <input type="checkbox" bind:checked={config.notifications.quietHours.enabled} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Mute automatic notifications</span>
+              <span class="block text-xs text-gray-400 mt-1">Test notifications still send immediately.</span>
+            </span>
+          </label>
+          <div>
+            <label for="quiet-start" class="text-[10px] text-gray-400 block mb-1">Start</label>
+            <input id="quiet-start" type="time" bind:value={config.notifications.quietHours.start}
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+          </div>
+          <div>
+            <label for="quiet-end" class="text-[10px] text-gray-400 block mb-1">End</label>
+            <input id="quiet-end" type="time" bind:value={config.notifications.quietHours.end}
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+          </div>
+          <div>
+            <label for="quiet-timezone" class="text-[10px] text-gray-400 block mb-1">Timezone</label>
+            <input id="quiet-timezone" bind:value={config.notifications.quietHours.timezone}
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Revenue Notifications</h3>
+        <div class="grid md:grid-cols-3 gap-3 mb-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3 md:col-span-1">
+            <input type="checkbox" bind:checked={config.notifications.events.chargeSucceeded} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Notify on charge success</span>
+              <span class="block text-xs text-gray-400 mt-1">Applies to Stripe charge.succeeded webhooks only.</span>
+            </span>
+          </label>
+          <div>
+            <label for="charge-threshold" class="text-[10px] text-gray-400 block mb-1">Minimum amount ($)</label>
+            <input id="charge-threshold" type="number" min="0" step="0.01" bind:value={config.notifications.events.chargeMinimumAmount}
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.chargeAccounts.textcloaker} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">TextCloaker charge alerts</span>
+              <span class="block text-xs text-gray-400 mt-1">Revenue notifications for TextCloaker Stripe charges.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.chargeAccounts.fratdoor} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">FratDoor charge alerts</span>
+              <span class="block text-xs text-gray-400 mt-1">Revenue notifications for FratDoor Stripe charges.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Payout Notifications</h3>
+        <div class="grid md:grid-cols-2 gap-3 mb-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.payoutCreated} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Notify when payout is created</span>
+              <span class="block text-xs text-gray-400 mt-1">A heads-up as soon as Stripe schedules a payout.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.payoutPaid} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Notify when payout is paid</span>
+              <span class="block text-xs text-gray-400 mt-1">Sent when Stripe marks a payout as deposited.</span>
+            </span>
+          </label>
+        </div>
+        <div class="grid md:grid-cols-2 gap-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.payoutAccounts.textcloaker} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">TextCloaker payout alerts</span>
+              <span class="block text-xs text-gray-400 mt-1">Applies to payout created and paid events.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.payoutAccounts.fratdoor} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">FratDoor payout alerts</span>
+              <span class="block text-xs text-gray-400 mt-1">Applies to payout created and paid events.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Subscription Notifications</h3>
+        <div class="grid md:grid-cols-3 gap-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3 md:col-span-1">
+            <input type="checkbox" bind:checked={config.notifications.events.subscriptionCanceled} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Notify on subscription cancellations</span>
+              <span class="block text-xs text-gray-400 mt-1">Uses Stripe customer.subscription.deleted events.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.subscriptionCanceledAccounts.textcloaker} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">TextCloaker churn alerts</span>
+              <span class="block text-xs text-gray-400 mt-1">Send cancellation alerts for TextCloaker subscriptions.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.subscriptionCanceledAccounts.fratdoor} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">FratDoor churn alerts</span>
+              <span class="block text-xs text-gray-400 mt-1">Send cancellation alerts for FratDoor subscriptions.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Scheduled Income Notifications</h3>
+        <div class="grid md:grid-cols-2 gap-3 mb-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.incomePaydayToday} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Notify on paydays due today</span>
+              <span class="block text-xs text-gray-400 mt-1">For hourly jobs and scheduled recurring income from the income tracker.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.incomePaydayTomorrow} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Notify one day before payday</span>
+              <span class="block text-xs text-gray-400 mt-1">Heads-up for tomorrow’s expected pay events.</span>
+            </span>
+          </label>
+        </div>
+        <div class="grid md:grid-cols-3 gap-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.incomeSourceTypes.hourly} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Hourly income alerts</span>
+              <span class="block text-xs text-gray-400 mt-1">Examples: jobs tied to a pay-period calendar.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.incomeSourceTypes.business} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Business schedule alerts</span>
+              <span class="block text-xs text-gray-400 mt-1">Scheduled business payments from your income sources list.</span>
+            </span>
+          </label>
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.incomeSourceTypes.other} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Other recurring income alerts</span>
+              <span class="block text-xs text-gray-400 mt-1">Catches non-hourly scheduled income entries.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">FratDoor Notifications</h3>
+        <div class="grid md:grid-cols-2 gap-3 mb-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.fratdoorBalanceReady} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Notify when FratDoor balance is withdrawable</span>
+              <span class="block text-xs text-gray-400 mt-1">Uses the same FratDoor payout summary you’re already showing in the admin.</span>
+            </span>
+          </label>
+          <div>
+            <label for="fratdoor-balance-threshold" class="text-[10px] text-gray-400 block mb-1">Minimum withdrawable amount ($)</label>
+            <input id="fratdoor-balance-threshold" type="number" min="0" step="0.01" bind:value={config.notifications.events.fratdoorBalanceMinimumAmount}
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.fratdoorPayoutRecorded} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Notify when a FratDoor platform payout is recorded</span>
+              <span class="block text-xs text-gray-400 mt-1">Polls your existing FratDoor payout feed and dedupes by payout id.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Digest Notifications</h3>
+        <div class="grid md:grid-cols-2 gap-3">
+          <label class="border border-gray-200 rounded-lg px-4 py-3 flex items-start gap-3">
+            <input type="checkbox" bind:checked={config.notifications.events.dailyDigest} class="mt-0.5" />
+            <span>
+              <span class="block text-sm font-medium text-gray-900">Send a daily income digest</span>
+              <span class="block text-xs text-gray-400 mt-1">Summarizes scheduled income coming in over the next few days.</span>
+            </span>
+          </label>
+          <div>
+            <label for="digest-lookahead" class="text-[10px] text-gray-400 block mb-1">Digest lookahead (days)</label>
+            <input id="digest-lookahead" type="number" min="1" max="30" step="1" bind:value={config.notifications.events.dailyDigestLookaheadDays}
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-gray-100">
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500">Send Test Notification</h3>
+            <p class="text-xs text-gray-400 mt-1">Useful for validating service worker, push subscription, and payload formatting.</p>
+          </div>
+          <button on:click={sendTestNotification} disabled={testingNotification}
+            class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition disabled:opacity-50">
+            {testingNotification ? "Sending..." : "Send Test"}
+          </button>
+        </div>
+        <div class="grid md:grid-cols-2 gap-3">
+          <div>
+            <label for="test-title" class="text-[10px] text-gray-400 block mb-1">Title</label>
+            <input id="test-title" bind:value={testNotification.title}
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+          </div>
+          <div>
+            <label for="test-tag" class="text-[10px] text-gray-400 block mb-1">Tag</label>
+            <input id="test-tag" bind:value={testNotification.tag}
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+          </div>
+          <div class="md:col-span-2">
+            <label for="test-body" class="text-[10px] text-gray-400 block mb-1">Body</label>
+            <textarea id="test-body" bind:value={testNotification.body} rows="3"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-emerald-500"></textarea>
+          </div>
+          <div class="md:col-span-2">
+            <label for="test-url" class="text-[10px] text-gray-400 block mb-1">Open URL</label>
+            <input id="test-url" bind:value={testNotification.url}
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button on:click={saveNotificationSettings} disabled={savingNotifications}
+          class="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50">
+          {savingNotifications ? "Saving..." : "Save Notification Settings"}
+        </button>
+      </div>
     </div>
   </div>
 

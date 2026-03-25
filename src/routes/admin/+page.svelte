@@ -140,6 +140,46 @@
     return `${s} – ${e}`;
   }
 
+  function getPaymentToneClass(payment) {
+    switch (payment?.type) {
+      case "hourly":
+        return "text-blue-600";
+      case "salary":
+        return "text-emerald-600";
+      case "freelance":
+        return "text-orange-600";
+      case "business":
+        return "text-violet-600";
+      case "stripe_subscription_renewal":
+        return "text-emerald-600";
+      case "stripe_payout":
+        return "text-sky-600";
+      case "stripe_pending":
+        return "text-amber-600";
+      default:
+        return payment?.isEstimate ? "text-amber-600" : "text-gray-900";
+    }
+  }
+
+  function getPaymentKindLabel(payment) {
+    switch (payment?.type) {
+      case "hourly":
+      case "salary":
+      case "freelance":
+        return "job pay";
+      case "business":
+        return "business payment";
+      case "stripe_subscription_renewal":
+        return "subscription renewal";
+      case "stripe_payout":
+        return payment?.status ? `stripe payout · ${payment.status}` : "stripe payout";
+      case "stripe_pending":
+        return "pending stripe balance";
+      default:
+        return payment?.status || (payment?.isEstimate ? "estimated" : "scheduled");
+    }
+  }
+
   function escapeHtml(text = "") {
     return text
       .replace(/&/g, "&amp;")
@@ -408,6 +448,7 @@
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm text-gray-700 truncate">{p.source}</p>
+              <p class="text-[10px] text-gray-400">{getPaymentKindLabel(p)}</p>
               {#if p.isModified}
                 {@const mod = findModifierForPayment(p)}
                 {#if mod}
@@ -426,9 +467,8 @@
               {/if}
             </div>
             <div class="shrink-0 text-right">
-              <p class="text-sm font-medium
-                {p.isModified ? 'text-amber-600' : p.isEstimate ? 'text-amber-600' : 'text-emerald-600'}">
-                +{fmtE(p.amount)}
+              <p class="text-sm font-medium {getPaymentToneClass(p)}">
+                {fmtE(p.amount)}
               </p>
               {#if p.isEstimate && !p.isModified}<p class="text-[10px] text-gray-400">estimated</p>{/if}
             </div>

@@ -10,7 +10,6 @@
   let tiers = {};
   let oneTime = {};
   let paypal = null;
-  let ticketPurchases = null;
   let loading = true;
   let error = null;
   let hover = { chart: null, point: null };
@@ -23,15 +22,17 @@
 
   onMount(async () => {
     try {
-      const [bRes, mRes, pRes, aRes, tRes, otRes, ppRes, tpRes] = await Promise.all([
+      const [bRes, mRes, pRes, aRes, tRes, otRes, ppRes] = await Promise.all([
         get("/api/stripe/balance"),
         get("/api/stripe/mrr"),
         get("/api/stripe/payouts?limit=20"),
         get("/api/stripe/analytics").catch(() => ({ customers: [], subscriptions: [] })),
         get("/api/stripe/tiers").catch(() => ({ tiers: [] })),
         get("/api/stripe/one-time?days=30").catch(() => ({ purchases: [] })),
-        get("/api/paypal/summary?days=30").catch(() => null),
-        get("/api/stripe/ticket-purchases?days=30").catch(() => null),
+        get("/api/paypal/summary?days=30").catch((err) => {
+          console.error("[Startups] PayPal summary request failed", err);
+          return null;
+        }),
       ]);
 
       for (const b of bRes.balances || []) balances[b.account] = b;
@@ -44,8 +45,38 @@
       for (const t of (tRes.tiers || [])) tiers[t.account] = t;
       for (const o of (otRes.purchases || [])) oneTime[o.account] = o;
       paypal = ppRes;
-      ticketPurchases = tpRes;
+      console.groupCollapsed("[Startups] FratDoor API payload");
+      console.info("[Startups] PayPal summary source", paypal?.source || "unknown");
+      console.info("[Startups] PayPal summary metrics", {
+        totalOrders: paypal?.totalOrders || 0,
+        recentOrders: paypal?.recentOrders || 0,
+        totalBuyerSpend: paypal?.totalBuyerSpend || 0,
+        totalNetToChapters: paypal?.totalNetToChapters || 0,
+        totalPlatformFeesCharged: paypal?.totalPlatformFeesCharged || 0,
+        totalProcessorFees: paypal?.totalProcessorFees || 0,
+        totalPlatformNetRevenue: paypal?.totalPlatformNetRevenue || 0,
+        totalPlatformPayouts: paypal?.totalPlatformPayouts || 0,
+        netUnpaidPlatformRevenue: paypal?.netUnpaidPlatformRevenue || 0,
+        outstandingChapterLiability: paypal?.outstandingChapterLiability || 0,
+        averageOrderValue: paypal?.averageOrderValue || 0,
+        medianOrderValue: paypal?.medianOrderValue || 0,
+      });
+      console.info("[Startups] PayPal summary dailyNetRevenue", paypal?.dailyNetRevenue || []);
+      console.info("[Startups] PayPal summary dailyBuyerSpend", paypal?.dailyBuyerSpend || []);
+      console.info("[Startups] PayPal summary paymentMethodMix", paypal?.paymentMethodMix || []);
+      console.info("[Startups] PayPal summary topChapters", paypal?.topChapters || []);
+      console.info("[Startups] PayPal summary recentOrdersPreview", paypal?.recentOrdersPreview || []);
+      console.info("[Startups] PayPal summary recentPayouts", paypal?.recentPayouts || []);
+      console.info("[Startups] PayPal summary sourceDebug", paypal?.sourceDebug || null);
+      console.groupEnd();
+
+      console.groupCollapsed("[Startups] Stripe raw metrics");
+      console.info("[Startups] One-time purchases payload", oneTime);
+      console.info("[Startups] MRR payload", mrrs);
+      console.info("[Startups] Subscription analytics payload", analytics);
+      console.groupEnd();
     } catch (e) {
+      console.error("[Startups] Load failed", e);
       error = e.message;
     } finally {
       loading = false;
@@ -76,7 +107,6 @@
   );
   $: stripePayoutChart = buildLineChart(stripePayoutSeries, "amount");
   $: oneTimeChart = buildLineChart(otData?.oneTime?.daily, "amount");
-  $: ticketBuyerSpendChart = buildLineChart(ticketPurchases?.dailyBuyerSpend, "amount");
   $: paypalRevenueChart = buildLineChart(paypal?.dailyNetRevenue, "amount");
   $: paypalPayoutChart = buildLineChart(paypal?.payoutTrend, "amount");
   $: paypalHasData = Boolean(
@@ -515,15 +545,10 @@
       </div>
 
       {#if isFratDoor}
-        <div class="bg-white border border-gray-200 rounded-xl p-4">
-          <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-1">Ticket Purchases (30d)</p>
-          <p class="text-lg font-semibold text-gray-900">{ticketPurchases?.totalOrders || 0}</p>
-          <p class="text-[10px] text-gray-400 mt-1">{ticketPurchases?.totalTickets || 0} tickets sold via Stripe</p>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-xl p-4">
-          <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-1">Buyer Spend (30d)</p>
-          <p class="text-lg font-semibold text-gray-900">{fmtE(ticketPurchases?.totalBuyerSpend)}</p>
-          <p class="text-[10px] text-gray-400 mt-1">Operational volume only, not FratDoor revenue</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-4 col-span-2">
+          <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-1">Ticketing Processor</p>
+          <p class="text-lg font-semibold text-gray-900">PayPal</p>
+          <p class="text-[10px] text-gray-400 mt-1">FratDoor ticketing revenue is shown on the PayPal tab. The FratDoor Stripe tab is subscriptions only.</p>
         </div>
       {:else if isTextCloaker}
         <div class="bg-white border border-gray-200 rounded-xl p-4">
@@ -613,55 +638,6 @@
 
           <div class="flex justify-between mt-2 text-[10px] text-gray-400">
             {#each oneTimeChart.xLabels as label}
-              <span>{label}</span>
-            {/each}
-          </div>
-        </div>
-      {/if}
-
-      {#if isFratDoor && ticketBuyerSpendChart}
-        {@const point = getHoveredPoint('ticket-purchases')}
-        <div class="bg-white border border-gray-200 rounded-xl p-5" on:mouseleave={() => clearHover('ticket-purchases')}>
-          <div class="flex items-start justify-between mb-4 gap-4">
-            <div>
-              <p class="text-[10px] text-gray-400 uppercase tracking-wider">Ticket Purchases (30d)</p>
-              <p class="text-xs text-gray-400 mt-1">Stripe-paid FratDoor ticket order volume. Buyer spend only.</p>
-            </div>
-            <div class="text-right">
-              <p class="text-xs text-gray-400">{point ? point.label : `${ticketPurchases?.totalOrders || 0} orders`}</p>
-              <p class="text-lg font-semibold text-gray-900">{point ? fmtE(point.value) : fmtE(ticketPurchases?.totalBuyerSpend)}</p>
-            </div>
-          </div>
-
-          <svg viewBox="0 0 {CHART.width} {CHART.height}" class="w-full" style="height: 200px;">
-            {#each ticketBuyerSpendChart.ticks as tick}
-              {@const y = CHART.pad.top + (CHART.height - CHART.pad.top - CHART.pad.bottom) - (tick / Math.max(ticketBuyerSpendChart.ticks[0], 1)) * (CHART.height - CHART.pad.top - CHART.pad.bottom)}
-              <line x1={CHART.pad.left} x2={CHART.width - CHART.pad.right} y1={y} y2={y} stroke="#eef2f7" stroke-width="1" />
-              <text x={CHART.pad.left - 8} y={y + 4} text-anchor="end" font-size="10" fill="#94a3b8">{fmtE(tick)}</text>
-            {/each}
-            <path d={ticketBuyerSpendChart.areaPath} fill="url(#ticketPurchaseGradient)" opacity="0.14" />
-            <path d={ticketBuyerSpendChart.linePath} fill="none" stroke="#d97706" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
-            {#each ticketBuyerSpendChart.points as p}
-              <circle cx={p.x} cy={p.y} r={point === p ? 4 : 3} fill="#d97706" stroke="white" stroke-width="2" />
-              <rect
-                x={p.x - (CHART.width / ticketBuyerSpendChart.points.length) / 2}
-                y={CHART.pad.top}
-                width={CHART.width / ticketBuyerSpendChart.points.length}
-                height={CHART.height - CHART.pad.top - CHART.pad.bottom}
-                fill="transparent"
-                on:mouseenter={() => setHover('ticket-purchases', p)}
-              />
-            {/each}
-            <defs>
-              <linearGradient id="ticketPurchaseGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#d97706" />
-                <stop offset="100%" stop-color="#d97706" stop-opacity="0" />
-              </linearGradient>
-            </defs>
-          </svg>
-
-          <div class="flex justify-between mt-2 text-[10px] text-gray-400">
-            {#each ticketBuyerSpendChart.xLabels as label}
               <span>{label}</span>
             {/each}
           </div>

@@ -14,6 +14,7 @@
 
   let pushSupported = false;
   let pushSubscribed = false;
+  let pushSettings = null;
 
   async function logout() {
     await fetch("/api/admin-auth", { method: "DELETE" });
@@ -37,6 +38,7 @@
           const sub = await reg.pushManager.getSubscription();
           pushSubscribed = !!sub;
         }
+        pushSettings = await get('/api/push/status').catch(() => null);
       } catch (err) {
         console.error('[SW] Registration failed:', err);
       }
@@ -64,8 +66,10 @@
       await post('/api/push/subscribe', { subscription: sub.toJSON() });
       pushSubscribed = true;
 
-      // Send test notification
-      await post('/api/push/test');
+      pushSettings = await get('/api/push/status').catch(() => pushSettings);
+      if (pushSettings?.settings?.autoSendTestOnSubscribe !== false) {
+        await post('/api/push/test');
+      }
     } catch (err) {
       console.error('[Push] Error:', err);
       alert('Could not enable notifications: ' + err.message);

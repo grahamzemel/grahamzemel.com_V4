@@ -112,6 +112,46 @@
     return modifiers.find(m => m.startDate <= p.periodEnd && m.endDate >= p.periodStart);
   }
 
+  function getPaymentToneClass(payment) {
+    switch (payment?.type) {
+      case "hourly":
+        return "text-blue-600";
+      case "salary":
+        return "text-emerald-600";
+      case "freelance":
+        return "text-orange-600";
+      case "business":
+        return "text-violet-600";
+      case "stripe_subscription_renewal":
+        return "text-emerald-600";
+      case "stripe_payout":
+        return "text-sky-600";
+      case "stripe_pending":
+        return "text-amber-600";
+      default:
+        return payment?.isEstimate ? "text-amber-600" : "text-gray-900";
+    }
+  }
+
+  function getPaymentKindLabel(payment) {
+    switch (payment?.type) {
+      case "hourly":
+      case "salary":
+      case "freelance":
+        return "job pay";
+      case "business":
+        return "business payment";
+      case "stripe_subscription_renewal":
+        return "subscription renewal";
+      case "stripe_payout":
+        return payment?.status ? `stripe payout · ${payment.status}` : "stripe payout";
+      case "stripe_pending":
+        return "pending stripe balance";
+      default:
+        return payment?.status || (payment?.isEstimate ? "estimated" : "scheduled");
+    }
+  }
+
   const dots = { hourly: "bg-blue-500", salary: "bg-emerald-500", business: "bg-violet-500", freelance: "bg-orange-500", stripe_payout: "bg-violet-500", stripe_pending: "bg-amber-500", stripe_subscription_renewal: "bg-indigo-400", other: "bg-gray-400" };
   const dotColors = { hourly: "#3b82f6", salary: "#10b981", business: "#8b5cf6", stripe_payout: "#8b5cf6", stripe_pending: "#f59e0b", stripe_subscription_renewal: "#6366f1" };
 </script>
@@ -279,9 +319,9 @@
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2">
                   <p class="text-sm text-gray-700 truncate">{p.source}</p>
-                  {#if p.isEstimate}<span class="text-[9px] px-1 py-0.5 rounded bg-amber-50 text-amber-500 font-medium shrink-0">est</span>{/if}
-                  {#if p.status && p.status !== 'paid'}
-                    <span class="text-[9px] px-1 py-0.5 rounded bg-blue-50 text-blue-500 font-medium shrink-0">{p.status}</span>
+                  <span class="text-[9px] px-1 py-0.5 rounded bg-gray-100 text-gray-500 font-medium shrink-0">{getPaymentKindLabel(p)}</span>
+                  {#if p.isEstimate && p.type !== 'stripe_pending'}
+                    <span class="text-[9px] px-1 py-0.5 rounded bg-amber-50 text-amber-500 font-medium shrink-0">est</span>
                   {/if}
                 </div>
                 {#if p.isModified && mod}
@@ -296,9 +336,8 @@
                 {/if}
               </div>
               <div class="text-right shrink-0">
-                <p class="text-sm font-medium
-                  {p.isModified ? 'text-amber-600' : p.isEstimate ? 'text-amber-600' : 'text-emerald-600'}">
-                  +{fmtE(p.amount)}
+                <p class="text-sm font-medium {getPaymentToneClass(p)}">
+                  {fmtE(p.amount)}
                 </p>
                 <p class="text-[10px] text-gray-300 opacity-0 group-hover:opacity-100 transition">{fmtE(p.runningTotal)}</p>
               </div>
