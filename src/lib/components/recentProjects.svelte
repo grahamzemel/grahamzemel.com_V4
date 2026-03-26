@@ -43,7 +43,7 @@
         image: "/macbookprices.png",
         tags: ["Web", "Internet", "Automation"],
         repoLink: null,
-        demoLink: "https://macbookprices.xyz",
+        demoLink: null,
       },
       {
         title: "Laptop Prices",

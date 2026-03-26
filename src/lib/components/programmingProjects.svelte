@@ -104,7 +104,7 @@
       tags: ["Internet", "Extension"],
       repoLink: "https://github.com/grahamzemel/PowerschoolGPACalculator",
       demoLink:
-        "https://chrome.google.com/webstore/detail/powerschool-gpa-calculato/dgfnbmfhjioifionnlcklnpfkkjjglbj?hl=en&authuser=0",
+        "https://chromewebstore.google.com/detail/powerschool-gpa-calculato/dgfnbmfhjioifionnlcklnpfkkjjglbj",
     },
     {
       title: "Medium Twitter Bot",

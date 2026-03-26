@@ -60,7 +60,7 @@
     and serve as Director of Technology for
     <a
       class="link-highlight"
-      href="https://ifconthehill.org"
+      href="https://coloradoifc.org"
       target="_blank"
       rel="noopener noreferer"
     >
@@ -76,7 +76,7 @@
         As Director of Technology, I built
         <a
           class="link-highlight"
-          href="https://ifceventhub.netlify.app/"
+          href="https://cueventhub.netlify.app/"
           target="_blank"
           rel="noopener noreferer"
         >

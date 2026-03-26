@@ -33,7 +33,7 @@
       image: "/aesculapiusss.png",
       tags: ["Web", "Hackathon"],
       repoLink: "https://github.com/grahamzemel/Aesculapius-FrontEnd",
-      demoLink: "https://aesculapius.tech",
+      demoLink: null,
     },
     {
       title: "Template Project",
