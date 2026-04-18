@@ -1,7 +1,6 @@
 /**
  * API utility — authenticated fetch wrapper for the income engine backend.
- * Uses Authorization header (works cross-origin on mobile Safari)
- * with cookie fallback (desktop same-origin).
+ * Uses Authorization: Bearer header from localStorage (cross-origin safe).
  */
 
 const DEV = typeof window !== 'undefined' && window.location.hostname === 'localhost';
@@ -17,7 +16,6 @@ export async function api(path, options = {}) {
   const token = getToken();
   const res = await fetch(url, {
     ...options,
-    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
