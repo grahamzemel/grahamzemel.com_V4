@@ -108,7 +108,6 @@
       highlights: [
         "Cloak, Un‑Cloak, and AI Check workflows",
         "Paraphrase + Synonym tools for quick rewrites",
-        "Unicode + zero‑width transformations for stealth",
         "Keeps output readable with minimal visible changes",
         "Chrome extension workflow for Google Docs",
       ],
