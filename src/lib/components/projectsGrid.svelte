@@ -21,13 +21,13 @@
       featured: true,
     },
     {
-      title: "IFC EventHub",
+      title: "CU EventHub",
       description:
         "Centralized event registration and safety workflow hub for IFC chapters.",
       image: "/ifc-eventhub.png",
       tags: ["Web", "Internet", "IFC"],
       repoLink: null,
-      demoLink: "https://ifceventhub.netlify.app/",
+      demoLink: "https://cueventhub.netlify.app/",
     },
     {
       title: "Student Living Advocacy Group",

@@ -80,7 +80,7 @@
           target="_blank"
           rel="noopener noreferer"
         >
-          IFC EventHub
+          CU EventHub
         </a>
         from the ground up to standardize event registration and safety
         workflows, and I also built the

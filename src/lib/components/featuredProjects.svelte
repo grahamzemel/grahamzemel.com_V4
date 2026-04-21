@@ -86,8 +86,8 @@
         { label: "Total Members", value: "2,500+" },
       ],
       companion: {
-        label: "Companion product: IFC EventHub (party registration + oversight)",
-        href: "https://ifceventhub.netlify.app/",
+        label: "Companion product: CU EventHub (party registration + oversight)",
+        href: "https://cueventhub.netlify.app/",
       },
     },
     {
