@@ -96,6 +96,26 @@
       />
     </svg>
   </a>
+  <a href="/graham-zemel-resume.pdf" download="Graham-Zemel-Resume.pdf">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="icon"
+    >
+      <title>Resume PDF</title>
+      <path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z" />
+      <path d="M14 2v5h5" />
+      <path d="M9 13h6" />
+      <path d="M9 17h6" />
+      <path d="M9 9h1" />
+    </svg>
+  </a>
   <a
     href="https://grahamzemel.com/pass"
     target="_blank"
