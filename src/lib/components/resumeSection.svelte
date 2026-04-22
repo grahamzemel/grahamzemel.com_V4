@@ -31,15 +31,24 @@
     <div class="resume-summary">
       <p class="resume-kicker">Builder at heart</p>
       <h2 class="resume-lead">
-        A driven college student focused on building useful tools, shipping real
-        products, and turning ideas into things people actually use.
+        I’m obsessed with building things that start as ideas and end up as real
+        products people depend on.
       </h2>
 
       <p class="resume-copy">
-        I like building across product categories instead of staying in one lane
-        forever. My work spans SaaS, student tools, event platforms, AI
-        products, automations, and data-driven web apps, with an emphasis on
-        solving practical problems and iterating fast.
+        I’m a driven college student, startup-minded builder, and full-stack
+        developer who genuinely loves creating. I don’t want to just study
+        technology or talk about it. I want to ship it, stress-test it, improve
+        it, and keep pushing it forward until it becomes something people reach
+        for because it actually makes their lives easier.
+      </p>
+
+      <p class="resume-copy">
+        That’s why my work spans SaaS, student tools, event platforms, AI
+        products, automations, and data-heavy web apps. I’m not interested in
+        staying boxed into one category forever. I like finding real problems,
+        building fast, iterating hard, and turning raw ideas into polished tools,
+        systems, and businesses with real traction.
       </p>
 
       <div class="resume-stat-grid">
@@ -62,17 +71,17 @@
       </div>
 
       <ul class="resume-points">
-        <li>Full-stack builder with a strong backend and product mindset.</li>
-        <li>Comfortable moving from idea to shipped website, tool, or workflow.</li>
-        <li>Always working on the next version, next product, or next system.</li>
+        <li>I build with energy, urgency, and a bias toward shipping.</li>
+        <li>I love taking ownership from rough concept to finished product.</li>
+        <li>I’m always working on the next tool, the next system, or the next big thing.</li>
       </ul>
 
       <div class="resume-links">
         <a href={resumeHref} target="_blank" rel="noopener noreferrer">
-          Open PDF
+          View full resume
         </a>
         <a href={resumeHref} download="Graham-Zemel-Resume.pdf">
-          Download
+          Download PDF
         </a>
       </div>
     </div>

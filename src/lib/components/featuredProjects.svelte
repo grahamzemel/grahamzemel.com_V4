@@ -82,9 +82,10 @@
         "Analytics dashboard for attendance and guest list trends",
       ],
       stats: [
-        { label: "Fraternities", value: "42" },
-        { label: "Check-ins", value: "300,000+" },
-        { label: "Events", value: "1,500+" },
+        { label: "Fraternities", value: "42+" },
+        { label: "Swipes", value: "150k+" },
+        { label: "Events", value: "300+" },
+        { label: "Tickets", value: "3000+" },
       ],
       companion: {
         label: "Companion product: CU EventHub (party registration + oversight)",
@@ -123,6 +124,7 @@
         { label: "Users", value: "7,000+" },
         { label: "Cloaks", value: "750+" },
         { label: "Characters", value: "3,334,000+" },
+        { label: "Countries", value: "40+" },
       ],
     },
   ];
