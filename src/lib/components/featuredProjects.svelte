@@ -83,9 +83,9 @@
       ],
       stats: [
         { label: "Fraternities", value: "42+" },
-        { label: "Swipes", value: "150k+" },
+        { label: "Swipes", value: "150,000+" },
         { label: "Events", value: "300+" },
-        { label: "Tickets", value: "3000+" },
+        { label: "Tickets", value: "3,000" },
       ],
       companion: {
         label: "Companion product: CU EventHub (party registration + oversight)",

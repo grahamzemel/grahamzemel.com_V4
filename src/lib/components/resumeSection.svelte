@@ -31,24 +31,22 @@
     <div class="resume-summary">
       <p class="resume-kicker">Builder at heart</p>
       <h2 class="resume-lead">
-        I’m obsessed with building things that start as ideas and end up as real
-        products people depend on.
+        I’m driven by turning rough ideas into real products people actually use.
       </h2>
 
       <p class="resume-copy">
-        I’m a driven college student, startup-minded builder, and full-stack
-        developer who genuinely loves creating. I don’t want to just study
-        technology or talk about it. I want to ship it, stress-test it, improve
-        it, and keep pushing it forward until it becomes something people reach
-        for because it actually makes their lives easier.
+        I’m a college student, full-stack developer, and startup-minded builder.
+        What I enjoy most is taking an idea out of the abstract and forcing it
+        into the real world: shipping it, testing it under pressure, fixing what
+        breaks, and improving it until it becomes genuinely useful.
       </p>
 
       <p class="resume-copy">
         That’s why my work spans SaaS, student tools, event platforms, AI
-        products, automations, and data-heavy web apps. I’m not interested in
-        staying boxed into one category forever. I like finding real problems,
-        building fast, iterating hard, and turning raw ideas into polished tools,
-        systems, and businesses with real traction.
+        products, automations, and data-heavy web apps. I care less about fitting
+        into one category and more about solving real problems well. I like
+        moving quickly, tightening the details, and building products that can
+        grow into real tools, systems, and businesses.
       </p>
 
       <div class="resume-stat-grid">
@@ -57,11 +55,11 @@
           <span class="resume-stat-label">Fraternities using FratDoor</span>
         </div>
         <div class="resume-stat">
-          <span class="resume-stat-value">300k+</span>
+          <span class="resume-stat-value">300,000+</span>
           <span class="resume-stat-label">Check-ins processed</span>
         </div>
         <div class="resume-stat">
-          <span class="resume-stat-value">7k+</span>
+          <span class="resume-stat-value">7,000+</span>
           <span class="resume-stat-label">TextCloaker users</span>
         </div>
         <div class="resume-stat">
@@ -71,9 +69,9 @@
       </div>
 
       <ul class="resume-points">
-        <li>I build with energy, urgency, and a bias toward shipping.</li>
-        <li>I love taking ownership from rough concept to finished product.</li>
-        <li>I’m always working on the next tool, the next system, or the next big thing.</li>
+        <li>I move fast, but I care about getting the details right.</li>
+        <li>I like owning the process from rough concept to finished product.</li>
+        <li>I’m usually building the next tool, system, or experiment.</li>
       </ul>
 
       <div class="resume-links">
