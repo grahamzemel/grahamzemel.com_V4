@@ -4,6 +4,7 @@
   import Socials from "$lib/components/socials.svelte";
   import AboutSection from "$lib/components/aboutSection.svelte";
   import FeaturedProjects from "$lib/components/featuredProjects.svelte";
+  import ResumeSection from "$lib/components/resumeSection.svelte";
   import Blog from "$lib/components/blog.svelte";
   import Work from "$lib/components/work.svelte";
   import Footer from "$lib/components/footer.svelte";
@@ -21,6 +22,7 @@
 
     <AboutSection />
     <FeaturedProjects />
+    <ResumeSection />
     <Blog />
     <Work />
     <GetInTouch />

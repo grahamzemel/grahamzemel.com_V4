@@ -38,7 +38,7 @@
     {
       title: "FratDoor",
       description:
-        "A comprehensive check-in and event management platform built and deployed as Director of Technology for IFC on the Hill at CU Boulder, serving 2,500+ users across 21 fraternities.",
+        "A comprehensive check-in and event management platform built and deployed as Director of Technology for IFC on the Hill at CU Boulder, adopted by 42 fraternities to replace manual door workflows with ID/QR check-in, blacklist enforcement, ticketing, and live analytics.",
       image: "/fratdoor.png",
       demoLink: "https://fratdoor.com",
       repoLink: null,
@@ -82,8 +82,9 @@
         "Analytics dashboard for attendance and guest list trends",
       ],
       stats: [
-        { label: "Fraternities", value: "21" },
-        { label: "Total Members", value: "2,500+" },
+        { label: "Fraternities", value: "42" },
+        { label: "Check-ins", value: "300,000+" },
+        { label: "Events", value: "1,500+" },
       ],
       companion: {
         label: "Companion product: CU EventHub (party registration + oversight)",
@@ -115,12 +116,13 @@
         "Chrome extension integrated with Google Docs",
         "Explored in The Gray Area (May 2023)",
         "Featured in AI tool directories and reviews",
-        "1,000,000+ words cloaked",
+        "750+ cloaks processed in production",
         "Active development with expanded obfuscation planned",
       ],
       stats: [
-        { label: "Active Users (90 days)", value: "3,000+" },
-        { label: "Words Cloaked", value: "1,000,000+" },
+        { label: "Users", value: "7,000+" },
+        { label: "Cloaks", value: "750+" },
+        { label: "Characters", value: "3,334,000+" },
       ],
     },
   ];

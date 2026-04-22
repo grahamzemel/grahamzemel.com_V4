@@ -114,8 +114,9 @@
         >
           FratDoor
         </a>
-        across 21 fraternities (2,500+ members) to replace paper lists with a
-        fast, structured door-check system.
+        across 42 fraternities, processing 300,000+ check-ins across 1,500+
+        events to replace paper lists with a fast, structured door-check
+        system.
       </p>
       <p class="mt-3 text-gray-300 leading-relaxed">
         FratDoor is my most promising startup so far, and I’m actively searching
