@@ -27,17 +27,49 @@
     : 'opacity-0'}"
 >
   <h1 class="font-serif font-bold sm:text-6xl text-4xl">Resume</h1>
-  <h2 class="mt-4 text-lg sm:text-xl text-gray-300">
-    A direct PDF embed with simple download access, styled like the rest of the
-    site instead of a separate landing page.
-  </h2>
+  <div class="resume-layout mt-8">
+    <div class="resume-summary">
+      <p class="resume-kicker">Builder at heart</p>
+      <h2 class="resume-lead">
+        A driven college student focused on building useful tools, shipping real
+        products, and turning ideas into things people actually use.
+      </h2>
 
-  <div class="resume-frame mt-8">
-    <div class="resume-frame-header">
-      <span class="resume-label">PDF</span>
+      <p class="resume-copy">
+        I like building across product categories instead of staying in one lane
+        forever. My work spans SaaS, student tools, event platforms, AI
+        products, automations, and data-driven web apps, with an emphasis on
+        solving practical problems and iterating fast.
+      </p>
+
+      <div class="resume-stat-grid">
+        <div class="resume-stat">
+          <span class="resume-stat-value">42</span>
+          <span class="resume-stat-label">Fraternities using FratDoor</span>
+        </div>
+        <div class="resume-stat">
+          <span class="resume-stat-value">300k+</span>
+          <span class="resume-stat-label">Check-ins processed</span>
+        </div>
+        <div class="resume-stat">
+          <span class="resume-stat-value">7k+</span>
+          <span class="resume-stat-label">TextCloaker users</span>
+        </div>
+        <div class="resume-stat">
+          <span class="resume-stat-value">3.7</span>
+          <span class="resume-stat-label">CU Boulder GPA</span>
+        </div>
+      </div>
+
+      <ul class="resume-points">
+        <li>Full-stack builder with a strong backend and product mindset.</li>
+        <li>Comfortable moving from idea to shipped website, tool, or workflow.</li>
+        <li>Always working on the next version, next product, or next system.</li>
+      </ul>
+
       <div class="resume-links">
         <a href={resumeHref} target="_blank" rel="noopener noreferrer">
-          Open
+          Open PDF
         </a>
         <a href={resumeHref} download="Graham-Zemel-Resume.pdf">
           Download
@@ -45,25 +77,39 @@
       </div>
     </div>
 
-    <object
-      class="resume-object"
-      data={`${resumeHref}#view=FitH`}
-      type="application/pdf"
-      aria-label="Graham Zemel resume PDF"
-    >
-      <div class="resume-fallback">
-        <p class="text-gray-300">
-          Your browser can’t preview the PDF inline here.
-        </p>
-        <p class="mt-4">
-          <a href={resumeHref} download="Graham-Zemel-Resume.pdf">Download the PDF</a>
-          or
+    <div class="resume-frame">
+      <div class="resume-frame-header">
+        <span class="resume-label">Resume PDF</span>
+        <div class="resume-frame-actions">
           <a href={resumeHref} target="_blank" rel="noopener noreferrer">
-            open it in a new tab
-          </a>.
-        </p>
+            Open
+          </a>
+          <a href={resumeHref} download="Graham-Zemel-Resume.pdf">
+            Download
+          </a>
+        </div>
       </div>
-    </object>
+
+      <object
+        class="resume-object"
+        data={`${resumeHref}#view=FitH`}
+        type="application/pdf"
+        aria-label="Graham Zemel resume PDF"
+      >
+        <div class="resume-fallback">
+          <p class="text-gray-300">
+            Your browser can’t preview the PDF inline here.
+          </p>
+          <p class="mt-4">
+            <a href={resumeHref} download="Graham-Zemel-Resume.pdf">Download the PDF</a>
+            or
+            <a href={resumeHref} target="_blank" rel="noopener noreferrer">
+              open it in a new tab
+            </a>.
+          </p>
+        </div>
+      </object>
+    </div>
   </div>
 </section>
 
@@ -74,9 +120,75 @@
     transition-duration: 1500ms;
   }
 
+  .resume-layout {
+    @apply grid gap-8 items-start;
+  }
+
+  .resume-summary {
+    @apply rounded-2xl border border-slate-800 p-6 md:p-8;
+    background: rgba(11, 15, 20, 0.72);
+  }
+
+  .resume-kicker {
+    @apply uppercase tracking-[0.22em] text-xs text-gray-500 font-semibold;
+  }
+
+  .resume-lead {
+    @apply mt-4 font-serif text-3xl leading-tight text-white;
+  }
+
+  .resume-copy {
+    @apply mt-5 text-lg leading-relaxed text-gray-300;
+  }
+
+  .resume-stat-grid {
+    @apply mt-8 grid grid-cols-2 gap-3;
+  }
+
+  .resume-stat {
+    @apply rounded-xl border border-slate-800 px-4 py-4;
+    background: rgba(15, 23, 42, 0.36);
+  }
+
+  .resume-stat-value {
+    @apply block text-2xl font-semibold text-white;
+  }
+
+  .resume-stat-label {
+    @apply mt-1 block text-sm leading-snug text-gray-400;
+  }
+
+  .resume-points {
+    @apply mt-8 space-y-3 text-gray-300;
+  }
+
+  .resume-points li {
+    @apply list-none pl-5 relative;
+  }
+
+  .resume-points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.7rem;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 9999px;
+    background: rgba(103, 232, 249, 0.7);
+  }
+
+  .resume-links {
+    @apply mt-8 flex flex-wrap gap-5 text-sm text-gray-400;
+  }
+
+  .resume-links a {
+    @apply transition-colors;
+  }
+
   .resume-frame {
-    @apply overflow-hidden rounded-2xl border border-slate-800;
+    @apply overflow-hidden rounded-2xl border border-slate-800 justify-self-center w-full;
     background: rgba(11, 15, 20, 0.94);
+    max-width: 42rem;
   }
 
   .resume-frame-header {
@@ -87,26 +199,47 @@
     @apply uppercase tracking-[0.22em] text-xs text-gray-500 font-semibold;
   }
 
-  .resume-links {
+  .resume-frame-actions {
     @apply flex items-center gap-4 text-gray-400;
   }
 
-  .resume-links a {
+  .resume-frame-actions a {
     @apply transition-colors;
   }
 
   .resume-links a:hover,
+  .resume-frame-actions a:hover,
   .resume-fallback a:hover {
     @apply text-accent-300;
   }
 
   .resume-object {
     @apply w-full bg-white;
-    height: min(88vh, 1100px);
+    height: min(70vh, 52rem);
   }
 
   .resume-fallback {
     @apply flex h-full min-h-[24rem] flex-col items-start justify-center p-8 md:p-10;
     background: rgba(11, 15, 20, 0.96);
+  }
+
+  @media (min-width: 1024px) {
+    .resume-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(22rem, 42rem);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .resume-stat-grid {
+      @apply grid-cols-1;
+    }
+
+    .resume-lead {
+      @apply text-2xl;
+    }
+
+    .resume-object {
+      height: 30rem;
+    }
   }
 </style>
