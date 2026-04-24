@@ -273,7 +273,7 @@
             {@const isHidden = hidden.has(site.slug)}
             {@const saving = savingSet.has(site.slug)}
             <div class="card" class:hidden-card={isHidden}>
-              <a href="/preview/{site.slug}" class="card-link" aria-label="Open {site.name}">
+              <a href="/preview/{site.slug}" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Open {site.name}">
                 <div class="thumb">
                   <iframe
                     src={site.url}
