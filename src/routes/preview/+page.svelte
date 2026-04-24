@@ -69,16 +69,6 @@
   // Reset to page 1 whenever the filter or search changes
   $: activeFilter, searchQuery, (page = 1);
 
-  // If the card blurb starts with the same category label, strip it so we
-  // don't read "Real Estate" in the chip AND again at the top of the blurb.
-  function cleanBlurb(site) {
-    const raw = site.blurb || '';
-    const cat = (site.category || '').trim();
-    if (!cat) return raw;
-    const re = new RegExp(`^\\s*${cat.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\s*·?\\s*`, 'i');
-    return raw.replace(re, '').trim();
-  }
-
   function goToPage(n) {
     page = Math.max(1, Math.min(totalPages, n));
     if (browser) window.scrollTo({ top: document.getElementById('work')?.offsetTop - 20 || 0, behavior: 'smooth' });
@@ -221,22 +211,19 @@
   <div class="grid-bg"></div>
   <div class="aura"></div>
 
-  <div class="wrap">
-    <!-- HERO — tight, minimal -->
-    <header class="hero">
-      <div class="hero-top">
-        <div class="eyebrow">
-          <span class="dot"></span>
-          Taking 2 projects this quarter
-        </div>
-        <a class="cta primary" href="mailto:{CONTACT_EMAIL}?subject=New%20website%20project">
-          Start a project
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M13 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
+  <!-- Top-right page nav — small, unobtrusive, always reachable -->
+  <nav class="page-nav">
+    <a class="cta primary" href="mailto:{CONTACT_EMAIL}?subject=New%20website%20project">
+      Start a project
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </nav>
 
+  <div class="wrap">
+    <!-- HERO -->
+    <header class="hero">
       <h1 class="mega">
         Hand-crafted <span class="h-accent">websites.</span>
       </h1>
@@ -312,9 +299,6 @@
                   {/if}
                 </div>
                 <h3>{site.name}</h3>
-                {#if cleanBlurb(site)}
-                  <p class="blurb">{cleanBlurb(site)}</p>
-                {/if}
                 <div class="info-row">
                   <span class="slug">/preview/<span class="slug-name">{site.slug}</span></span>
                   {#if isAdmin}
@@ -487,44 +471,22 @@
   .wrap {
     position: relative;
     z-index: 1;
-    max-width: 1280px;
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 80px 28px 100px;
+    padding: 80px 32px 100px;
   }
 
   /* ---------- HERO ---------- */
-  .hero { margin-bottom: 56px; max-width: 1100px; }
-  .hero-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
+  .hero { margin-bottom: 56px; max-width: 1100px; padding-top: 16px; }
+
+  /* Floating top-right CTA */
+  .page-nav {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    z-index: 2;
   }
 
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: #33FFC1;
-    background: linear-gradient(180deg, rgba(51,255,193,0.1), rgba(51,255,193,0.03));
-    border: 1px solid rgba(51,255,193,0.25);
-    padding: 7px 14px;
-    border-radius: 999px;
-    backdrop-filter: blur(8px);
-  }
-  .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #33FFC1;
-    box-shadow: 0 0 12px #33FFC1;
-    animation: pulse 2.4s infinite;
-  }
   @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.55; transform: scale(1.35); }
@@ -803,17 +765,6 @@
     color: #fafafa;
     line-height: 1.25;
   }
-  .blurb {
-    font-size: 12.5px;
-    color: #8a8a93;
-    line-height: 1.5;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
   .info-row {
     margin-top: auto;
     display: flex;
@@ -824,12 +775,14 @@
     border-top: 1px solid rgba(255,255,255,0.04);
   }
   .slug {
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--muted-2);
     font-family: 'SF Mono', ui-monospace, monospace;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.4;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    flex: 1;
+    min-width: 0;
   }
   .slug-name { color: #34F8FF; }
 
@@ -1030,12 +983,15 @@
     .work-head { flex-direction: column; align-items: stretch; }
     .search-wrap { max-width: none; }
   }
+  @media (max-width: 620px) {
+    .page-nav { top: 16px; right: 16px; }
+    .page-nav .cta.primary { padding: 9px 14px; font-size: 13px; }
+  }
   @media (max-width: 520px) {
-    .wrap { padding: 36px 16px 20px; }
-    .hero { margin-bottom: 40px; }
+    .wrap { padding: 72px 16px 20px; }
+    .hero { margin-bottom: 40px; padding-top: 0; }
     .work { margin-bottom: 60px; }
     .grid { grid-template-columns: 1fr; gap: 16px; }
     h1.mega { font-size: clamp(40px, 12vw, 64px); }
-    .hero-top .cta.primary { width: 100%; justify-content: center; }
   }
 </style>
