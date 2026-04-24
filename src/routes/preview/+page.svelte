@@ -41,12 +41,48 @@
   let savingSet = new Set();
   let activeFilter = 'All';
   let authToken = '';
+  let searchQuery = '';
+  let page = 1;
+  const PAGE_SIZE = 8;
 
   $: categories = ['All', ...Array.from(new Set(sites.map((s) => s.category)))];
-  $: visibleSites = sites
+
+  $: filteredSites = sites
     .filter((s) => isAdmin || !hidden.has(s.slug))
-    .filter((s) => activeFilter === 'All' || s.category === activeFilter);
+    .filter((s) => activeFilter === 'All' || s.category === activeFilter)
+    .filter((s) => {
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase();
+      return (
+        s.name.toLowerCase().includes(q) ||
+        s.category.toLowerCase().includes(q) ||
+        (s.blurb || '').toLowerCase().includes(q)
+      );
+    });
+
+  $: totalPages = Math.max(1, Math.ceil(filteredSites.length / PAGE_SIZE));
+  // Re-clamp page whenever filters/search shrink the result set
+  $: if (page > totalPages) page = 1;
+  $: pagedSites = filteredSites.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   $: visibleCount = sites.filter((s) => !hidden.has(s.slug)).length;
+
+  // Reset to page 1 whenever the filter or search changes
+  $: activeFilter, searchQuery, (page = 1);
+
+  // If the card blurb starts with the same category label, strip it so we
+  // don't read "Real Estate" in the chip AND again at the top of the blurb.
+  function cleanBlurb(site) {
+    const raw = site.blurb || '';
+    const cat = (site.category || '').trim();
+    if (!cat) return raw;
+    const re = new RegExp(`^\\s*${cat.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\s*·?\\s*`, 'i');
+    return raw.replace(re, '').trim();
+  }
+
+  function goToPage(n) {
+    page = Math.max(1, Math.min(totalPages, n));
+    if (browser) window.scrollTo({ top: document.getElementById('work')?.offsetTop - 20 || 0, behavior: 'smooth' });
+  }
 
   onMount(async () => {
     if (!browser) return;
@@ -209,16 +245,19 @@
     <!-- WORK -->
     <section id="work" class="work">
       <div class="work-head">
-        <div class="filters">
-          {#each categories as cat}
-            <button
-              class="chip"
-              class:active={activeFilter === cat}
-              on:click={() => (activeFilter = cat)}
-            >
-              {cat}
-            </button>
-          {/each}
+        <div class="search-wrap">
+          <svg class="search-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+          </svg>
+          <input
+            class="search-input"
+            type="text"
+            bind:value={searchQuery}
+            placeholder="Search by name, industry, or keyword"
+          />
+          {#if searchQuery}
+            <button class="search-clear" on:click={() => (searchQuery = '')} aria-label="Clear search">×</button>
+          {/if}
         </div>
         {#if isAdmin}
           <div class="admin-badge">
@@ -229,9 +268,21 @@
         {/if}
       </div>
 
+      <div class="filters">
+        {#each categories as cat}
+          <button
+            class="chip"
+            class:active={activeFilter === cat}
+            on:click={() => (activeFilter = cat)}
+          >
+            {cat}
+          </button>
+        {/each}
+      </div>
+
       {#if loadedVisibility}
         <div class="grid">
-          {#each visibleSites as site (site.slug)}
+          {#each pagedSites as site (site.slug)}
             {@const isHidden = hidden.has(site.slug)}
             {@const saving = savingSet.has(site.slug)}
             <div class="card" class:hidden-card={isHidden}>
@@ -261,9 +312,11 @@
                   {/if}
                 </div>
                 <h3>{site.name}</h3>
-                <p class="blurb">{site.blurb}</p>
+                {#if cleanBlurb(site)}
+                  <p class="blurb">{cleanBlurb(site)}</p>
+                {/if}
                 <div class="info-row">
-                  <span class="slug">grahamzemel.com/preview/<span class="slug-name">{site.slug}</span></span>
+                  <span class="slug">/preview/<span class="slug-name">{site.slug}</span></span>
                   {#if isAdmin}
                     <label class="toggle" title={isHidden ? 'Show to visitors' : 'Hide from visitors'}>
                       <input
@@ -281,12 +334,39 @@
           {/each}
         </div>
 
-        {#if visibleSites.length === 0}
-          <div class="empty"><p>No sites match this filter yet.</p></div>
+        {#if filteredSites.length === 0}
+          <div class="empty">
+            <p>No sites match.</p>
+            <button class="linklike" on:click={() => { searchQuery = ''; activeFilter = 'All'; }}>clear filters</button>
+          </div>
+        {:else if totalPages > 1}
+          <nav class="pagination" aria-label="Pagination">
+            <button class="pg-btn" disabled={page === 1} on:click={() => goToPage(page - 1)} aria-label="Previous page">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+            </button>
+            {#each Array(totalPages) as _, i}
+              <button
+                class="pg-num"
+                class:active={page === i + 1}
+                on:click={() => goToPage(i + 1)}
+                aria-label="Page {i + 1}"
+                aria-current={page === i + 1 ? 'page' : undefined}
+              >
+                {i + 1}
+              </button>
+            {/each}
+            <button class="pg-btn" disabled={page === totalPages} on:click={() => goToPage(page + 1)} aria-label="Next page">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
+          </nav>
         {/if}
       {:else}
         <div class="grid">
-          {#each Array(6) as _}
+          {#each Array(8) as _}
             <div class="card skeleton">
               <div class="thumb"></div>
               <div class="info">
@@ -299,12 +379,21 @@
       {/if}
     </section>
 
-    <!-- CTA FOOTER — quiet -->
+    <!-- CTA LINE -->
     <section class="foot">
       <p class="foot-line">
         Want one? <a href="mailto:{CONTACT_EMAIL}?subject=New%20website%20project">{CONTACT_EMAIL}</a>
       </p>
     </section>
+
+    <!-- SITE FOOTER (mirrors main homepage) -->
+    <footer class="site-footer">
+      <p>
+        Built with Svelte &amp; Tailwind —
+        <a href="https://github.com/grahamzemel/grahamzemel.com" target="_blank" rel="noopener noreferrer">see inside</a>
+      </p>
+      <p class="copyright">&copy; Graham Zemel {new Date().getFullYear()}. All rights reserved.</p>
+    </footer>
   </div>
 
   {#if !isAdmin}
@@ -351,10 +440,10 @@
   .shell {
     --accent-1: #33FFC1;   /* mint */
     --accent-2: #34F8FF;   /* cyan */
-    --accent-3: #3377FF;   /* blue */
-    --accent-4: #0C55FF;   /* deep blue */
-    --accent-grad: linear-gradient(135deg, #33FFC1 0%, #34F8FF 35%, #3377FF 80%, #0C55FF 100%);
-    --accent-grad-text: linear-gradient(120deg, #33FFC1 0%, #34F8FF 35%, #3377FF 75%, #0C55FF 100%);
+    --accent-3: #3377FF;   /* blue — used sparingly */
+    /* softer mint→cyan gradient; drops the deep blue that was clashing */
+    --accent-grad: linear-gradient(135deg, #33FFC1 0%, #34F8FF 60%, #3377FF 100%);
+    --accent-grad-text: linear-gradient(120deg, #33FFC1 0%, #34F8FF 55%, #3377FF 100%);
     --bg: #121217;
     --surface: rgba(255,255,255,0.025);
     --border: rgba(255,255,255,0.07);
@@ -443,12 +532,12 @@
 
   h1.mega {
     font-family: 'Source Serif Pro', Georgia, serif;
-    font-size: clamp(56px, 10vw, 148px);
+    font-size: clamp(44px, 6.2vw, 96px);
     font-weight: 700;
-    line-height: 0.95;
-    letter-spacing: -0.035em;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
     margin: 0;
-    background: linear-gradient(180deg, #ffffff 0%, rgba(200,200,215,0.55) 110%);
+    background: linear-gradient(180deg, #ffffff 0%, rgba(200,200,215,0.62) 110%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -494,16 +583,70 @@
   .cta.ghost:hover { border-color: rgba(52,248,255,0.4); background: rgba(52,248,255,0.04); color: #34F8FF; }
 
   /* ---------- WORK ---------- */
-  .work { margin-bottom: 120px; scroll-margin-top: 40px; }
+  .work { margin-bottom: 80px; scroll-margin-top: 40px; }
   .work-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 280px;
+    max-width: 420px;
+    display: flex;
+    align-items: center;
+  }
+  .search-ico {
+    position: absolute;
+    left: 14px;
+    color: var(--muted-2);
+    pointer-events: none;
+  }
+  .search-input {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 38px 10px 38px;
+    font-family: inherit;
+    font-size: 13.5px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .search-input::placeholder { color: var(--muted-2); }
+  .search-input:focus { border-color: rgba(52,248,255,0.4); background: rgba(52,248,255,0.03); }
+  .search-clear {
+    position: absolute;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    border-radius: 50%;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+  .search-clear:hover { background: rgba(255,255,255,0.16); color: var(--ink); }
+
+  .filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
     margin-bottom: 28px;
   }
-  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
   .chip {
     font-family: inherit;
     font-size: 12px;
@@ -557,8 +700,14 @@
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 26px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 1100px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 840px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
   }
 
   .card {
@@ -620,23 +769,23 @@
     box-shadow: 0 4px 12px rgba(51,119,255,0.3);
   }
 
-  .info { padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .info { padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
   .info-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .cat-chip {
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: #34F8FF;
     background: rgba(52,248,255,0.08);
-    padding: 4px 10px;
+    padding: 3px 9px;
     border-radius: 999px;
     border: 1px solid rgba(52,248,255,0.18);
   }
   .status-chip {
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 600;
-    padding: 4px 9px;
+    padding: 3px 8px;
     border-radius: 999px;
     letter-spacing: 0.04em;
   }
@@ -647,13 +796,24 @@
   }
   .card h3 {
     font-family: 'Source Serif Pro', Georgia, serif;
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: -0.01em;
     margin: 2px 0 0;
     color: #fafafa;
+    line-height: 1.25;
   }
-  .blurb { font-size: 13.5px; color: #8a8a93; line-height: 1.55; margin: 0; }
+  .blurb {
+    font-size: 12.5px;
+    color: #8a8a93;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .info-row {
     margin-top: auto;
     display: flex;
@@ -704,7 +864,49 @@
   .toggle input:checked + .slider::before { transform: translateX(16px); }
   .toggle input:disabled + .slider { opacity: 0.5; }
 
-  .empty { text-align: center; padding: 60px 20px; color: var(--muted-2); }
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted-2);
+    font-size: 14px;
+  }
+  .empty p { margin: 0 0 8px; }
+
+  /* Pagination */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 36px;
+  }
+  .pg-btn, .pg-num {
+    min-width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    transition: all 0.15s;
+  }
+  .pg-btn:hover:not(:disabled),
+  .pg-num:hover { color: var(--ink); border-color: rgba(52,248,255,0.4); background: rgba(52,248,255,0.04); }
+  .pg-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .pg-num.active {
+    background: var(--accent-grad);
+    color: #081029;
+    border-color: transparent;
+    font-weight: 700;
+  }
+  .pg-num.active:hover { color: #081029; }
 
   .skeleton .thumb {
     background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 100%);
@@ -737,6 +939,25 @@
     margin-left: 4px;
   }
   .foot-line a:hover { border-bottom-color: #34F8FF; }
+
+  /* Site footer — mirrors the main homepage */
+  .site-footer {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted-2);
+    padding: 28px 20px 40px;
+    border-top: 1px solid var(--border);
+    margin-top: 32px;
+  }
+  .site-footer p { margin: 0 0 4px; }
+  .site-footer a {
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(255,255,255,0.25);
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .site-footer a:hover { color: #34F8FF; border-bottom-color: #34F8FF; }
+  .site-footer .copyright { color: #555; }
 
   .admin-trigger {
     position: fixed;
@@ -806,13 +1027,15 @@
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
 
   @media (max-width: 900px) {
-    .work-head { flex-direction: column; align-items: flex-start; }
+    .work-head { flex-direction: column; align-items: stretch; }
+    .search-wrap { max-width: none; }
   }
   @media (max-width: 520px) {
-    .wrap { padding: 40px 18px 40px; }
+    .wrap { padding: 36px 16px 20px; }
     .hero { margin-bottom: 40px; }
-    .work { margin-bottom: 80px; }
-    .grid { grid-template-columns: 1fr; }
-    h1.mega { font-size: clamp(52px, 15vw, 80px); }
+    .work { margin-bottom: 60px; }
+    .grid { grid-template-columns: 1fr; gap: 16px; }
+    h1.mega { font-size: clamp(40px, 12vw, 64px); }
+    .hero-top .cta.primary { width: 100%; justify-content: center; }
   }
 </style>
