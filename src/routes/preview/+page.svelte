@@ -6,9 +6,18 @@
   const BASE_URL = DEV ? 'http://localhost:3000' : 'https://grahamzemelcom-596da5a7c96e.herokuapp.com';
   const CONTACT_EMAIL = 'me@grahamzemel.com';
 
-  // Each card routes the client through grahamzemel.com/preview/{slug}.
-  // The thumbnail iframe pulls from the live Netlify deploy so animations play live.
-  const sites = [
+  // Live source of truth — the outreach-engine Heroku backend. Every
+  // business whose generate.sh run succeeded + deploy-site.sh pushed to
+  // Netlify ends up in /api/preview-sites, sorted newest-first. This is
+  // how a just-deployed site appears in the gallery seconds after the
+  // dashboard's build finishes; no manual edit to this file needed.
+  const PREVIEW_API = 'https://outreach-engine-f3a2aebc6ec0.herokuapp.com/api/preview-sites';
+
+  // Hardcoded seed — identical shape to what /api/preview-sites returns.
+  // Used only as an offline/SSR fallback so the page still renders when
+  // Heroku is down or the edge runtime boots before the fetch resolves.
+  // Once onMount() lands real data, this list is replaced in place.
+  const FALLBACK_SITES = [
     { slug: 'the-bernardi-group', name: 'The Bernardi Group', category: 'Real Estate', url: 'https://the-bernardi-group-site.netlify.app', blurb: 'Boutique Boulder realty team — lead-gen focused with neighborhood guides.' },
     { slug: 'burgess-group-compass', name: 'Burgess Group Compass', category: 'Real Estate', url: 'https://burgess-group-compass-site.netlify.app', blurb: 'Compass-affiliated team site with listing showcase and agent storytelling.' },
     { slug: 'darcy-kiefel-photography', name: 'Darcy Kiefel Photography', category: 'Wedding Photographer', url: 'https://darcy-kiefel-photography-site.netlify.app', blurb: 'Editorial wedding photography portfolio with cinematic galleries.' },
@@ -19,6 +28,8 @@
     { slug: 'north-boulder-physical-therapy-foothills', name: 'North Boulder PT — Foothills', category: 'Physical Therapy', url: 'https://north-boulder-physical-therapy-foothills-site.netlify.app', blurb: 'North Boulder PT clinic location — clean service-area landing page.' },
     { slug: 'the-joint-chiropractic', name: 'The Joint Chiropractic', category: 'Chiropractor', url: 'https://the-joint-chiropractic-site.netlify.app', blurb: 'Membership-based chiropractic — pricing transparency front and center.' },
   ];
+  let sites = FALLBACK_SITES;
+  let sitesLoading = true;
 
   let hidden = new Set();
   let loadedVisibility = false;
@@ -39,9 +50,28 @@
 
   onMount(async () => {
     if (!browser) return;
-    await verifyStoredToken();
-    await loadVisibility();
+    // Fire the three network calls in parallel — none of them depend on
+    // each other, and the gallery feels instant when they resolve together.
+    await Promise.all([verifyStoredToken(), loadVisibility(), loadSites()]);
   });
+
+  // Fetch the canonical site list from outreach-engine. Failure falls back
+  // to FALLBACK_SITES so the page still renders — e.g. if Heroku is
+  // cold-starting or the user is offline.
+  async function loadSites() {
+    try {
+      const res = await fetch(PREVIEW_API, { mode: 'cors' });
+      if (!res.ok) throw new Error(`preview-sites ${res.status}`);
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        sites = data;
+      }
+    } catch (e) {
+      console.error('preview-sites load failed — using offline fallback', e);
+    } finally {
+      sitesLoading = false;
+    }
+  }
 
   async function verifyStoredToken() {
     const t = localStorage.getItem('gz_admin_token') || '';
@@ -141,31 +171,6 @@
     if (e.key === 'Escape' && showLogin) showLogin = false;
   }
 
-  const services = [
-    {
-      title: 'Pixel-perfect, hand-written code',
-      body: 'No templates, no drag-and-drop builders. Every layout, animation, and interaction is custom HTML/CSS/JS written for your brand.',
-    },
-    {
-      title: 'Built to convert, not decorate',
-      body: 'Clear CTAs, fast load, mobile-first, SEO-ready. The goal is phone calls and form fills — design is the vehicle, not the point.',
-    },
-    {
-      title: 'Ships in 2–4 weeks',
-      body: 'Small scopes, tight loops, weekly check-ins. You see real progress on a staging URL from week one, not a black box for two months.',
-    },
-    {
-      title: 'Own your site, forever',
-      body: 'Static hosting on Netlify, free SSL, deploys from git. No CMS subscription, no platform lock-in — your yearly bill stays under $30.',
-    },
-  ];
-
-  const process = [
-    { num: '01', title: 'Call', text: 'Free 30 min. We talk goals, brand, and what your customers are actually searching for.' },
-    { num: '02', title: 'Design', text: 'I send a first mockup within a week. You give notes. We iterate until it feels right.' },
-    { num: '03', title: 'Build', text: 'I hand-code it. You get a staging URL to poke at in real time.' },
-    { num: '04', title: 'Launch', text: 'Domain, SSL, analytics, SEO basics. Handoff doc included. You\'re live.' },
-  ];
 </script>
 
 <svelte:head>
@@ -181,157 +186,70 @@
   <div class="aura"></div>
 
   <div class="wrap">
-    <!-- HERO -->
+    <!-- HERO — tight, minimal -->
     <header class="hero">
-      <div class="eyebrow">
-        <span class="dot"></span>
-        Taking 2 projects this quarter
-      </div>
-
-      <h1>
-        <span class="h-line">Hand-crafted</span>
-        <span class="h-line h-accent">websites</span>
-        <span class="h-line">for businesses</span>
-        <span class="h-line">that hustle.</span>
-      </h1>
-
-      <p class="lede">
-        Every site below was designed and hand-coded by me from scratch — no themes, no page
-        builders, no drag-and-drop. Real HTML, CSS, and JavaScript, written line by line for
-        the way each business actually earns.
-      </p>
-
-      <!-- Disclaimer / reassurance -->
-      <div class="disclaimer">
-        <div class="dis-ico">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-          </svg>
+      <div class="hero-top">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          Taking 2 projects this quarter
         </div>
-        <p>
-          <strong>Don't see your industry here?</strong> Doesn't matter. These are just the
-          ones that went live recently — I build for any brand that needs a site that actually
-          works. <a href="mailto:{CONTACT_EMAIL}?subject=Project%20inquiry">Tell me what you do</a>
-          and we'll figure it out.
-        </p>
-      </div>
-
-      <div class="cta-row">
         <a class="cta primary" href="mailto:{CONTACT_EMAIL}?subject=New%20website%20project">
           Start a project
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 12h14M13 5l7 7-7 7"/>
           </svg>
         </a>
-        <a class="cta ghost" href="#work">See the work</a>
       </div>
 
-      <div class="stats">
-        <div class="stat">
-          <span class="stat-num">{visibleCount}</span>
-          <span class="stat-label">live sites</span>
-        </div>
-        <div class="stat-div"></div>
-        <div class="stat">
-          <span class="stat-num">{categories.length - 1}</span>
-          <span class="stat-label">industries</span>
-        </div>
-        <div class="stat-div"></div>
-        <div class="stat">
-          <span class="stat-num">2–4<span class="stat-unit">wks</span></span>
-          <span class="stat-label">typical turnaround</span>
-        </div>
-        <div class="stat-div"></div>
-        <div class="stat">
-          <span class="stat-num">0</span>
-          <span class="stat-label">page builders used</span>
-        </div>
-      </div>
+      <h1 class="mega">
+        Hand-crafted <span class="h-accent">websites.</span>
+      </h1>
     </header>
-
-    <!-- SERVICES -->
-    <section class="services">
-      <div class="section-head">
-        <span class="kicker">What you get</span>
-        <h2>Not a template. Not a drag-and-drop. An <em>actual</em> website.</h2>
-      </div>
-
-      <div class="services-grid">
-        {#each services as s, i}
-          <div class="svc-card">
-            <span class="svc-num">0{i + 1}</span>
-            <h3>{s.title}</h3>
-            <p>{s.body}</p>
-          </div>
-        {/each}
-      </div>
-    </section>
 
     <!-- WORK -->
     <section id="work" class="work">
-      {#if loadedVisibility}
-        <div class="section-head work-head">
-          <div>
-            <span class="kicker">The work</span>
-            <h2>{visibleCount} sites, {categories.length - 1} industries, <em>zero</em> templates.</h2>
-          </div>
-
-          <div class="filter-row">
-            <div class="filters">
-              {#each categories as cat}
-                <button
-                  class="chip"
-                  class:active={activeFilter === cat}
-                  on:click={() => (activeFilter = cat)}
-                >
-                  {cat}
-                </button>
-              {/each}
-            </div>
-            {#if isAdmin}
-              <div class="admin-badge">
-                <span class="pulse"></span>
-                Admin · {hidden.size} hidden
-                <button class="linklike" on:click={logout}>sign out</button>
-              </div>
-            {/if}
-          </div>
+      <div class="work-head">
+        <div class="filters">
+          {#each categories as cat}
+            <button
+              class="chip"
+              class:active={activeFilter === cat}
+              on:click={() => (activeFilter = cat)}
+            >
+              {cat}
+            </button>
+          {/each}
         </div>
+        {#if isAdmin}
+          <div class="admin-badge">
+            <span class="pulse"></span>
+            Admin · {hidden.size} hidden
+            <button class="linklike" on:click={logout}>sign out</button>
+          </div>
+        {/if}
+      </div>
 
+      {#if loadedVisibility}
         <div class="grid">
           {#each visibleSites as site (site.slug)}
             {@const isHidden = hidden.has(site.slug)}
             {@const saving = savingSet.has(site.slug)}
             <div class="card" class:hidden-card={isHidden}>
               <a href="/preview/{site.slug}" class="card-link" aria-label="Open {site.name}">
-                <!-- Browser-chrome framed live iframe -->
-                <div class="browser">
-                  <div class="browser-bar">
-                    <span class="dot-r"></span>
-                    <span class="dot-y"></span>
-                    <span class="dot-g"></span>
-                    <div class="url-pill">
-                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                <div class="thumb">
+                  <iframe
+                    src={site.url}
+                    title={site.name}
+                    loading="lazy"
+                    sandbox="allow-scripts allow-same-origin"
+                  ></iframe>
+                  <div class="thumb-overlay">
+                    <span class="view-btn">
+                      Open preview
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17L17 7M7 7h10v10"/>
                       </svg>
-                      grahamzemel.com/preview/<span class="url-slug">{site.slug}</span>
-                    </div>
-                  </div>
-                  <div class="thumb">
-                    <iframe
-                      src={site.url}
-                      title={site.name}
-                      loading="lazy"
-                      sandbox="allow-scripts allow-same-origin"
-                    ></iframe>
-                    <div class="thumb-overlay">
-                      <span class="view-btn">
-                        Open preview
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M7 17L17 7M7 7h10v10"/>
-                        </svg>
-                      </span>
-                    </div>
+                    </span>
                   </div>
                 </div>
               </a>
@@ -345,7 +263,7 @@
                 <h3>{site.name}</h3>
                 <p class="blurb">{site.blurb}</p>
                 <div class="info-row">
-                  <span class="host">{site.url.replace(/^https?:\/\//, '')}</span>
+                  <span class="slug">grahamzemel.com/preview/<span class="slug-name">{site.slug}</span></span>
                   {#if isAdmin}
                     <label class="toggle" title={isHidden ? 'Show to visitors' : 'Hide from visitors'}>
                       <input
@@ -370,7 +288,7 @@
         <div class="grid">
           {#each Array(6) as _}
             <div class="card skeleton">
-              <div class="browser"><div class="browser-bar"></div><div class="thumb"></div></div>
+              <div class="thumb"></div>
               <div class="info">
                 <div class="sk-line sk-sm"></div>
                 <div class="sk-line sk-lg"></div>
@@ -381,70 +299,11 @@
       {/if}
     </section>
 
-    <!-- PROCESS -->
-    <section class="process">
-      <div class="section-head">
-        <span class="kicker">How it works</span>
-        <h2>Four steps. No mystery. No scope creep.</h2>
-      </div>
-
-      <div class="process-grid">
-        {#each process as step, i}
-          <div class="step">
-            <div class="step-head">
-              <span class="step-num">{step.num}</span>
-              {#if i < process.length - 1}<span class="step-line"></span>{/if}
-            </div>
-            <h3>{step.title}</h3>
-            <p>{step.text}</p>
-          </div>
-        {/each}
-      </div>
-    </section>
-
-    <!-- PROOF -->
-    <section class="proof">
-      <div class="proof-grid">
-        <div class="proof-lead">
-          <span class="kicker">Why hand-coded</span>
-          <h2>Squarespace makes a website. I make <em>your</em> website.</h2>
-          <p>
-            Template sites look like templates because they are. The fonts, the layouts, the
-            animations, the SEO — all shared with ten thousand other businesses. When I build
-            something for you, it's yours. Every detail is intentional, every line of code is
-            written to match your brand, your customers, and how they actually buy.
-          </p>
-        </div>
-        <ul class="proof-list">
-          <li><span class="check">✓</span> Custom design system per project</li>
-          <li><span class="check">✓</span> Mobile-first, 95+ Lighthouse scores</li>
-          <li><span class="check">✓</span> On-page SEO, schema, sitemap built in</li>
-          <li><span class="check">✓</span> Analytics + contact-form notifications wired on day one</li>
-          <li><span class="check">✓</span> You own the code, the domain, and the traffic</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- CTA FOOTER -->
+    <!-- CTA FOOTER — quiet -->
     <section class="foot">
-      <div class="foot-glow"></div>
-      <div class="foot-inner">
-        <span class="kicker">Let's build</span>
-        <h2>Got a business that deserves a better website?</h2>
-        <p>
-          Send me a note with what you do and where you're stuck. I'll reply within 24 hours
-          with honest thoughts — whether or not we end up working together.
-        </p>
-        <div class="foot-ctas">
-          <a class="cta primary big" href="mailto:{CONTACT_EMAIL}?subject=New%20website%20project">
-            {CONTACT_EMAIL}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </a>
-          <a class="cta ghost big" href="/">About Graham</a>
-        </div>
-      </div>
+      <p class="foot-line">
+        Want one? <a href="mailto:{CONTACT_EMAIL}?subject=New%20website%20project">{CONTACT_EMAIL}</a>
+      </p>
     </section>
   </div>
 
@@ -545,7 +404,15 @@
   }
 
   /* ---------- HERO ---------- */
-  .hero { margin-bottom: 160px; max-width: 960px; }
+  .hero { margin-bottom: 56px; max-width: 1100px; }
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
 
   .eyebrow {
     display: inline-flex;
@@ -559,7 +426,6 @@
     border: 1px solid rgba(51,255,193,0.25);
     padding: 7px 14px;
     border-radius: 999px;
-    margin-bottom: 32px;
     backdrop-filter: blur(8px);
   }
   .dot {
@@ -575,16 +441,13 @@
     50% { opacity: 0.55; transform: scale(1.35); }
   }
 
-  h1 {
+  h1.mega {
     font-family: 'Source Serif Pro', Georgia, serif;
-    font-size: clamp(42px, 7.5vw, 92px);
+    font-size: clamp(56px, 10vw, 148px);
     font-weight: 700;
-    line-height: 0.98;
-    letter-spacing: -0.03em;
-    margin: 0 0 32px;
-  }
-  .h-line {
-    display: block;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    margin: 0;
     background: linear-gradient(180deg, #ffffff 0%, rgba(200,200,215,0.55) 110%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -598,59 +461,11 @@
     font-style: italic;
   }
 
-  .lede {
-    font-size: 18px;
-    line-height: 1.65;
-    color: var(--muted);
-    margin: 0 0 28px;
-    max-width: 640px;
-  }
-
-  .disclaimer {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    padding: 16px 20px;
-    background: linear-gradient(90deg, rgba(51,255,193,0.06), rgba(51,119,255,0.05));
-    border: 1px solid rgba(51,255,193,0.18);
-    border-radius: 14px;
-    margin-bottom: 36px;
-    max-width: 680px;
-  }
-  .dis-ico {
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    background: rgba(51,255,193,0.14);
-    color: #33FFC1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2px;
-  }
-  .disclaimer p {
-    font-size: 14px;
-    line-height: 1.55;
-    color: #c4c4cc;
-    margin: 0;
-  }
-  .disclaimer strong { color: #fff; font-weight: 600; }
-  .disclaimer a {
-    color: #34F8FF;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(52,248,255,0.4);
-    transition: border-color 0.15s;
-  }
-  .disclaimer a:hover { border-bottom-color: #34F8FF; }
-
-  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 60px; }
-
   .cta {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 22px;
+    padding: 11px 20px;
     border-radius: 999px;
     font-size: 14px;
     font-weight: 500;
@@ -660,7 +475,6 @@
     transition: transform 0.15s, background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
     font-family: inherit;
   }
-  .cta.big { padding: 14px 26px; font-size: 15px; }
   .cta.primary {
     background: var(--accent-grad);
     color: #081029;
@@ -679,139 +493,15 @@
   }
   .cta.ghost:hover { border-color: rgba(52,248,255,0.4); background: rgba(52,248,255,0.04); color: #34F8FF; }
 
-  .stats {
-    display: flex;
-    align-items: center;
-    gap: 28px;
-    flex-wrap: wrap;
-    padding: 22px 26px;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-  }
-  .stat { display: flex; flex-direction: column; gap: 2px; }
-  .stat-num {
-    font-family: 'Source Serif Pro', Georgia, serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.02em;
-    font-variant-numeric: tabular-nums;
-  }
-  .stat-unit { font-size: 14px; color: var(--muted); font-weight: 500; margin-left: 2px; font-family: 'Source Sans Pro', sans-serif; }
-  .stat-label {
-    font-size: 11px;
-    color: var(--muted-2);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  .stat-div { width: 1px; height: 28px; background: rgba(255,255,255,0.08); }
-
-  /* ---------- SECTION COMMON ---------- */
-  .section-head { margin-bottom: 48px; }
-  .kicker {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #34F8FF;
-    margin-bottom: 16px;
-  }
-  section h2 {
-    font-family: 'Source Serif Pro', Georgia, serif;
-    font-size: clamp(28px, 4.2vw, 44px);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    color: #fff;
-    margin: 0;
-    max-width: 820px;
-  }
-  section h2 em {
-    font-style: italic;
-    background: var(--accent-grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  /* ---------- SERVICES ---------- */
-  .services { margin-bottom: 160px; }
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 18px;
-  }
-  .svc-card {
-    position: relative;
-    background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01));
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px 24px;
-    transition: border-color 0.2s, transform 0.2s, background 0.2s;
-    overflow: hidden;
-  }
-  .svc-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(400px circle at 0% 0%, rgba(51,119,255,0.08), transparent 50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-  }
-  .svc-card:hover::before { opacity: 1; }
-  .svc-card:hover {
-    border-color: rgba(51,119,255,0.3);
-    transform: translateY(-3px);
-  }
-  .svc-num {
-    display: inline-block;
-    font-family: 'Source Serif Pro', Georgia, serif;
-    font-size: 13px;
-    font-weight: 700;
-    font-style: italic;
-    background: var(--accent-grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: 0.04em;
-    margin-bottom: 18px;
-  }
-  .svc-card h3 {
-    font-family: 'Source Serif Pro', Georgia, serif;
-    font-size: 19px;
-    font-weight: 700;
-    color: #fff;
-    margin: 0 0 10px;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
-  }
-  .svc-card p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--muted);
-    margin: 0;
-  }
-
   /* ---------- WORK ---------- */
-  .work { margin-bottom: 160px; scroll-margin-top: 40px; }
+  .work { margin-bottom: 120px; scroll-margin-top: 40px; }
   .work-head {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    gap: 28px;
-    flex-wrap: wrap;
-    margin-bottom: 40px;
-  }
-  .filter-row {
-    display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    margin-bottom: 28px;
   }
   .filters { display: flex; gap: 6px; flex-wrap: wrap; }
   .chip {
@@ -888,48 +578,6 @@
   .card.hidden-card { opacity: 0.55; border-style: dashed; }
   .card.hidden-card:hover { opacity: 0.9; }
   .card-link { display: block; text-decoration: none; color: inherit; }
-
-  /* Browser chrome wrapping the iframe */
-  .browser {
-    position: relative;
-    background: #0a0a0d;
-    border-bottom: 1px solid var(--border);
-  }
-  .browser-bar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 12px;
-    background: linear-gradient(180deg, #1a1a22, #121218);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-  .dot-r, .dot-y, .dot-g {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .dot-r { background: #ff5f57; }
-  .dot-y { background: #febc2e; }
-  .dot-g { background: #28c840; }
-  .url-pill {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-left: 10px;
-    padding: 4px 10px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 999px;
-    font-size: 10.5px;
-    color: var(--muted-2);
-    font-family: 'SF Mono', ui-monospace, monospace;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .url-slug { color: #34F8FF; }
 
   .thumb {
     position: relative;
@@ -1015,7 +663,7 @@
     padding-top: 12px;
     border-top: 1px solid rgba(255,255,255,0.04);
   }
-  .host {
+  .slug {
     font-size: 11px;
     color: var(--muted-2);
     font-family: 'SF Mono', ui-monospace, monospace;
@@ -1023,6 +671,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  .slug-name { color: #34F8FF; }
 
   .toggle {
     position: relative;
@@ -1070,140 +719,24 @@
     100% { background-position: -200% 0; }
   }
 
-  /* ---------- PROCESS ---------- */
-  .process { margin-bottom: 160px; }
-  .process-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 24px;
-  }
-  .step {
-    padding: 28px 24px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    position: relative;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .step:hover { border-color: rgba(52,248,255,0.25); transform: translateY(-2px); }
-  .step-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 18px;
-  }
-  .step-num {
-    font-family: 'SF Mono', ui-monospace, monospace;
-    font-size: 12px;
-    color: #34F8FF;
-    background: rgba(52,248,255,0.1);
-    padding: 4px 9px;
-    border-radius: 6px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    border: 1px solid rgba(52,248,255,0.2);
-  }
-  .step-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(52,248,255,0.35), transparent); }
-  .step h3 {
-    font-family: 'Source Serif Pro', Georgia, serif;
-    font-size: 19px;
-    font-weight: 700;
-    margin: 0 0 10px;
-    color: #fff;
-    letter-spacing: -0.01em;
-  }
-  .step p { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 0; }
-
-  /* ---------- PROOF ---------- */
-  .proof { margin-bottom: 160px; }
-  .proof-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 56px;
-    align-items: start;
-    padding: 56px;
-    background:
-      linear-gradient(135deg, rgba(51,255,193,0.05), rgba(51,119,255,0.05) 60%, rgba(12,85,255,0.04));
-    border: 1px solid rgba(51,119,255,0.18);
-    border-radius: 22px;
-    position: relative;
-    overflow: hidden;
-  }
-  .proof-grid::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(51,119,255,0.12), transparent 60%);
-    pointer-events: none;
-  }
-  .proof-lead { position: relative; }
-  .proof-lead p {
-    font-size: 15px;
-    line-height: 1.75;
-    color: var(--muted);
-    margin: 20px 0 0;
-  }
-  .proof-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    position: relative;
-  }
-  .proof-list li {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    font-size: 14.5px;
-    color: #d4d4da;
-    line-height: 1.5;
-  }
-  .check {
-    color: #33FFC1;
-    font-weight: 700;
-    flex-shrink: 0;
-    font-size: 14px;
-    margin-top: 2px;
-  }
-
-  /* ---------- FOOTER CTA ---------- */
+  /* ---------- FOOTER ---------- */
   .foot {
-    position: relative;
-    padding: 72px 56px;
-    border-radius: 24px;
-    border: 1px solid rgba(51,119,255,0.2);
-    background: rgba(255,255,255,0.015);
-    overflow: hidden;
     text-align: center;
+    padding: 48px 24px 16px;
   }
-  .foot-glow {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(700px 220px at 50% 0%, rgba(51,119,255,0.22), transparent 70%),
-      radial-gradient(500px 200px at 20% 100%, rgba(51,255,193,0.12), transparent 70%),
-      radial-gradient(500px 200px at 80% 100%, rgba(52,248,255,0.14), transparent 70%);
-    pointer-events: none;
-  }
-  .foot-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
-  .foot h2 { margin: 0 auto 16px; max-width: 540px; }
-  .foot-inner p {
+  .foot-line {
     font-size: 15px;
-    line-height: 1.65;
     color: var(--muted);
-    margin: 0 0 32px;
+    margin: 0;
   }
-  .foot-ctas {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
+  .foot-line a {
+    color: #34F8FF;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(52,248,255,0.4);
+    transition: border-color 0.15s;
+    margin-left: 4px;
   }
+  .foot-line a:hover { border-bottom-color: #34F8FF; }
 
   .admin-trigger {
     position: fixed;
@@ -1273,19 +806,13 @@
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
 
   @media (max-width: 900px) {
-    .proof-grid { grid-template-columns: 1fr; gap: 32px; padding: 36px; }
     .work-head { flex-direction: column; align-items: flex-start; }
-    .filter-row { justify-content: flex-start; }
-    .url-pill { font-size: 9.5px; }
   }
   @media (max-width: 520px) {
-    .wrap { padding: 52px 18px 72px; }
-    .hero { margin-bottom: 100px; }
-    .services, .work, .process, .proof { margin-bottom: 100px; }
+    .wrap { padding: 40px 18px 40px; }
+    .hero { margin-bottom: 40px; }
+    .work { margin-bottom: 80px; }
     .grid { grid-template-columns: 1fr; }
-    .foot { padding: 48px 28px; }
-    .stats { gap: 18px; padding: 18px 20px; }
-    .stat-div { display: none; }
-    .url-slug { display: none; }
+    h1.mega { font-size: clamp(52px, 15vw, 80px); }
   }
 </style>
