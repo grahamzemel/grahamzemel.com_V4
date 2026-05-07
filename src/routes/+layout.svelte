@@ -132,10 +132,11 @@
 
 <style global lang="postcss">
   html {
-    @apply scroll-smooth antialiased;
+    @apply scroll-smooth antialiased bg-base;
   }
 
   body {
-    @apply bg-base text-white selection:bg-accent-200 selection:text-base-800;
+    @apply text-white selection:bg-accent-200 selection:text-base-800;
+    background: transparent;
   }
 </style>

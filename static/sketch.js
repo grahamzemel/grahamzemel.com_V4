@@ -50,8 +50,11 @@ function setup() {
 }
 
 function draw() {
+  // Always clear with the base hue so the canvas surface is never blank,
+  // even before the shader/graphics buffer is ready.
+  clear();
+
   if (!shaderBg || !theShader) return;
-  background(28, 40, 54);
   shaderBg.style("display", "block");
   shaderBg.shader(theShader);
 

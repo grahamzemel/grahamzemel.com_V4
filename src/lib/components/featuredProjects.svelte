@@ -175,7 +175,7 @@
   };
 </script>
 
-<div class="sm:mt-[16vh] mt-[10vh]" aria-hidden="true">
+<div class="sm:mt-[16vh] mt-10" aria-hidden="true">
   <Visibility
     bind:hasObserverSupport
     visibilityUpdate={(state) => {
@@ -344,6 +344,11 @@
 
   .featured-card {
     @apply rounded-xl bg-[#070a0d] bg-opacity-60 shadow flex flex-col overflow-hidden;
+    border: 1px solid oklch(0.30 0.012 250);
+    transition: border-color 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .featured-card:hover {
+    border-color: oklch(0.42 0.012 250);
   }
 
   .featured-body {
@@ -421,13 +426,16 @@
   }
 
   .cta-button {
-    @apply w-full max-w-sm mx-auto rounded-full border border-[#2b6cb0]/60 bg-gradient-to-r from-[#1b4a7a] via-[#163a61] to-[#132f4f] py-3 px-5 shadow-xl transition-colors inline-flex items-center justify-center gap-3;
-    box-shadow: 0 10px 30px rgba(20, 46, 86, 0.35), inset 0 0 0 1px rgba(122, 175, 255, 0.2);
+    @apply w-full max-w-sm mx-auto rounded-full border py-3 px-5 transition-all duration-200 ease-out inline-flex items-center justify-center gap-3;
+    background: oklch(0.20 0.06 245);
+    border-color: oklch(0.42 0.10 245);
+    box-shadow: 0 10px 30px oklch(0 0 0 / 0.35);
   }
 
   .cta-button:hover {
-    @apply border-[#7db3ff]/80 from-[#225a96] via-[#1d4c7b] to-[#193f63];
-    box-shadow: 0 14px 40px rgba(25, 60, 110, 0.45), inset 0 0 0 1px rgba(140, 190, 255, 0.35);
+    background: oklch(0.26 0.08 245);
+    border-color: oklch(0.55 0.13 245);
+    box-shadow: 0 14px 40px oklch(0 0 0 / 0.45);
   }
 
   .cta-label {

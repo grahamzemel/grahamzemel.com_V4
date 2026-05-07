@@ -73,7 +73,7 @@
 </script>
 
 <article
-  class="flex my-10 rounded-lg bg-[#070a0d] bg-opacity-60 shadow {wide
+  class="project-card flex my-10 rounded-lg bg-[#070a0d] bg-opacity-60 shadow {wide
     ? 'w-full mx-0'
     : 'mx-2 md:mx-0'}"
 >
@@ -109,6 +109,13 @@
 </article>
 
 <style lang="postcss">
+  .project-card {
+    border: 1px solid oklch(0.30 0.012 250);
+    transition: border-color 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .project-card:hover {
+    border-color: oklch(0.42 0.012 250);
+  }
   .tag {
     @apply inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold;
   }

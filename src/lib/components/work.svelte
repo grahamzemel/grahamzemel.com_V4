@@ -7,7 +7,7 @@
   let hasObserverSupport = true;
 </script>
 
-<div class="sm:mt-[12vh] mt-[8vh]" aria-hidden="true">
+<div class="sm:mt-[12vh] mt-10" aria-hidden="true">
   <Visibility
     bind:hasObserverSupport
     visibilityUpdate={(state) => {

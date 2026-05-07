@@ -50,3 +50,24 @@
   pointer-events: none;
   z-index: -1;
 }
+
+/* ---------- Default hover treatment for content links ----------
+   Anchors inside section content get a brightening color shift +
+   underline emphasis. Excludes navbar / nav / button-styled links so
+   their custom hover states remain in charge. */
+section a:not(.nav-link):not(.cta):not(.mobile-link):not(.mobile-cta):not([class*="-btn"]):not([class*="-cta"]):not([class*="modal-"]):not([class*="resume-card"]):not([class*="resume-page"]):not([class*="resume-doc"]):not(.brand):not(.icon):not(.email):not(.linkedin-card):not(.LI-simple-link):not(.no-border) {
+  transition: color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    text-decoration-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+section a:not(.nav-link):not(.cta):not(.mobile-link):not(.mobile-cta):not([class*="-btn"]):not([class*="-cta"]):not([class*="modal-"]):not([class*="resume-card"]):not([class*="resume-page"]):not([class*="resume-doc"]):not(.brand):not(.icon):not(.email):not(.linkedin-card):not(.LI-simple-link):not(.no-border):hover {
+  color: oklch(0.86 0.13 165);
+  text-decoration-color: oklch(0.66 0.13 165);
+}
+
+/* mailto links anywhere lift on hover */
+a[href^="mailto:"]:not([class*="modal-"]):not([class*="li-"]) {
+  transition: color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+a[href^="mailto:"]:not([class*="modal-"]):not([class*="li-"]):hover {
+  color: oklch(0.92 0.005 250);
+}

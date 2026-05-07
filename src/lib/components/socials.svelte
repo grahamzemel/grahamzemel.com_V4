@@ -1,12 +1,10 @@
 <script>
-  import BookMeetingButton from "./buttons/bookMeetingButton.svelte";
 </script>
 
 <!-- Icon credit: https://brittanychiang.com/ -->
 
 <div class="socials-row custom-fade-in-socials">
-  <p class="font-light lg:block md:block hidden">Socials:</p>
-  
+
   <a
     href="https://www.linkedin.com/in/grahamzemel/"
     target="_blank"
@@ -140,52 +138,90 @@
 </div>
 
 <div class="custom-fade-in-socials">
-  <p class="md:hidden md:mt-0 mt-12 font-light">
-    <BookMeetingButton noMargin={true} />
-    <br />
-    Or shoot me an email:
-  </p>
-  <a
-    href="mailto:me@grahamzemel.com?subject=Hello!"
-    target="_blank"
-    rel="noopener noreferer"
-    class="email no-border"
-  >
-    me@grahamzemel.com
-  </a>
+  <!-- Mobile-only compact CTA + email lockup -->
+  <div class="md:hidden mt-5 flex flex-col items-start gap-3">
+    <a href="#get-in-touch" class="cta-pill no-border">
+      <span>Let's connect</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="cta-arrow"
+        aria-hidden="true"
+      >
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
+    </a>
+    <a
+      href="mailto:me@grahamzemel.com?subject=Hello!"
+      class="mobile-email no-border"
+    >
+      me@grahamzemel.com
+    </a>
+  </div>
+
+  <!-- Desktop fixed-sidebar email (wrapper hides on mobile) -->
+  <div class="hidden md:block">
+    <a
+      href="mailto:me@grahamzemel.com?subject=Hello!"
+      target="_blank"
+      rel="noopener noreferer"
+      class="email no-border"
+    >
+      me@grahamzemel.com
+    </a>
+  </div>
 </div>
 
-<div class="scroll-msg">
-  scroll to see more
-  <br />
-
-  <svg
-    class="animate-bounce h-5 w-5 mx-auto mt-2"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-  >
-    <path
-      fill="currentColor"
-      d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062Z"
-    />
-  </svg>
-</div>
 
 <style lang="postcss">
   .socials-row {
-    @apply select-none flex md:fixed 
-      /* Vertical (left) sidebar: */
-      md:bottom-32 md:left-0 md:-ml-8 md:z-30 md:-rotate-90 md:flex-row md:gap-5 md:items-end
+    @apply select-none flex
       /* Inline (on mobile): */
-      mt-10 gap-4 items-center;
+      mt-6 md:mt-0 gap-4 items-center md:gap-5;
   }
 
-  .email {
-    /* Vertical (right) on desktop, inline on mobile: */
-    @apply flex md:fixed md:bottom-32 md:right-0 md:-mr-8 md:z-30 md:rotate-90
-    md:flex-row md:gap-5 md:items-end transition-colors
-    text-xl md:text-lg font-normal md:font-light;
+  /* Desktop: rotated sidebar on left. transform-origin top-left + top:calc()
+     anchors visual bottom at exactly (100vh - 8rem). */
+  @media (min-width: 768px) {
+    .socials-row {
+      position: fixed;
+      top: calc(100vh - 8rem);
+      left: 3.5rem;
+      z-index: 30;
+      transform: rotate(-90deg);
+      transform-origin: 0% 0%;
+      flex-direction: row;
+      align-items: center;
+    }
   }
+  @media (min-width: 1280px) { .socials-row { left: 4.5rem; } }
+  @media (min-width: 1536px) { .socials-row { left: 6rem; } }
+
+  .email {
+    @apply flex transition-colors
+      text-xl md:text-lg font-normal md:font-light;
+  }
+
+  /* Desktop: rotated email on right. Same anchor strategy as socials so
+     both visual bottoms land at exactly (100vh - 8rem). */
+  @media (min-width: 768px) {
+    .email {
+      position: fixed;
+      top: calc(100vh - 8rem);
+      right: 3.5rem;
+      z-index: 30;
+      transform: rotate(90deg);
+      transform-origin: 100% 0%;
+    }
+  }
+  @media (min-width: 1280px) { .email { right: 4.5rem; } }
+  @media (min-width: 1536px) { .email { right: 6rem; } }
 
   .icon {
     @apply md:rotate-90 h-5 w-5 transition-colors;
@@ -198,6 +234,40 @@
 
   .no-border {
     @apply border-none p-0;
+  }
+
+  .cta-pill {
+    @apply inline-flex items-center gap-2
+      px-4 py-2 rounded-full
+      text-sm font-medium no-underline
+      transition-all duration-200 ease-out;
+    color: oklch(0.98 0.005 250);
+    background: oklch(0.42 0.13 245);
+    border: 1px solid oklch(0.55 0.15 245);
+    box-shadow: 0 4px 14px oklch(0 0 0 / 0.35);
+  }
+
+  .cta-pill:hover,
+  .cta-pill:active {
+    background: oklch(0.48 0.14 245);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px oklch(0 0 0 / 0.4);
+  }
+
+  .cta-arrow {
+    @apply h-4 w-4 transition-transform duration-200;
+  }
+
+  .cta-pill:hover .cta-arrow {
+    transform: translateX(2px);
+  }
+
+  .mobile-email {
+    @apply text-base text-gray-300 no-underline transition-colors;
+  }
+
+  .mobile-email:hover {
+    @apply text-accent-300;
   }
 
   .icon:hover {
@@ -221,7 +291,7 @@
     animation-fill-mode: both;
     animation-delay: 1000ms;
 
-    @apply mt-24 md:mt-[55vh] text-center text-gray-400 font-light select-none;
+    @apply hidden md:block md:mt-[18vh] text-center text-gray-400 font-light select-none;
   }
 
   @keyframes fade-in-animation {

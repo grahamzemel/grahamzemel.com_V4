@@ -27,7 +27,7 @@
   ];
 </script>
 
-<div class="sm:mt-[30vh] mt-[20vh]" aria-hidden="true">
+<div class="sm:mt-[30vh] mt-12" aria-hidden="true">
   <Visibility
     bind:hasObserverSupport
     visibilityUpdate={(state) => {
