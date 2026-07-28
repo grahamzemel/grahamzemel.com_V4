@@ -6,16 +6,17 @@
   const BASE_URL = DEV ? 'http://localhost:3000' : 'https://gz-api.grahamzemel.com';
   const CONTACT_EMAIL = 'me@grahamzemel.com';
 
-  // Live source of truth — the outreach-engine Heroku backend. Every
-  // business whose generate.sh run succeeded + deploy-site.sh pushed to
-  // Netlify ends up in /api/preview-sites, sorted newest-first. This is
-  // how a just-deployed site appears in the gallery seconds after the
-  // dashboard's build finishes; no manual edit to this file needed.
-  const PREVIEW_API = 'https://outreach-engine-f3a2aebc6ec0.herokuapp.com/api/preview-sites';
+  // Live source of truth — the outreach-engine backend (self-hosted on the
+  // mac mini as of the Heroku migration). Every business whose generate.sh
+  // run succeeded + deploy-site.sh pushed to Netlify ends up in
+  // /api/preview-sites, sorted newest-first. This is how a just-deployed
+  // site appears in the gallery seconds after the dashboard's build
+  // finishes; no manual edit to this file needed.
+  const PREVIEW_API = 'https://outreach.grahamzemel.com/api/preview-sites';
 
   // Hardcoded seed — identical shape to what /api/preview-sites returns.
   // Used only as an offline/SSR fallback so the page still renders when
-  // Heroku is down or the edge runtime boots before the fetch resolves.
+  // the backend is down or the edge runtime boots before the fetch resolves.
   // Once onMount() lands real data, this list is replaced in place.
   const FALLBACK_SITES = [
     { slug: 'the-bernardi-group', name: 'The Bernardi Group', category: 'Real Estate', url: 'https://the-bernardi-group-site.netlify.app', blurb: 'Boutique Boulder realty team — lead-gen focused with neighborhood guides.' },
