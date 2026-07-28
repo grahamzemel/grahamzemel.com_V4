@@ -4,7 +4,7 @@
  */
 
 const DEV = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-const BASE_URL = DEV ? 'http://localhost:3000' : 'https://grahamzemelcom-596da5a7c96e.herokuapp.com';
+const BASE_URL = DEV ? 'http://localhost:3000' : 'https://gz-api.grahamzemel.com';
 
 function getToken() {
   if (typeof window === 'undefined') return '';

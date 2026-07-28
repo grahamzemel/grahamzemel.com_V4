@@ -3,7 +3,7 @@
   import { browser } from '$app/environment';
 
   const DEV = browser && window.location.hostname === 'localhost';
-  const BASE_URL = DEV ? 'http://localhost:3000' : 'https://grahamzemelcom-596da5a7c96e.herokuapp.com';
+  const BASE_URL = DEV ? 'http://localhost:3000' : 'https://gz-api.grahamzemel.com';
   const CONTACT_EMAIL = 'me@grahamzemel.com';
 
   // Live source of truth — the outreach-engine Heroku backend. Every
