@@ -4,6 +4,13 @@
 
   export let showModal = false;
 
+  // Web3Forms access key — intentionally public-safe (it's a routing token
+  // bound to me@grahamzemel.com server-side, not a secret credential; Web3Forms'
+  // own client-side widget model expects this to be embedded in page code).
+  // Their free tier blocks server-to-server submission, so this submits
+  // direct from the browser. Keep in sync with getInTouch.svelte.
+  const ACCESS_KEY = "d7dc69dc-b646-4218-80f5-c1482e3c383b";
+
   let name = "";
   let email = "";
   let projectType = "";
@@ -50,22 +57,25 @@
     errorMessage = "";
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
+          access_key: ACCESS_KEY,
           name,
           email,
-          projectType,
+          subject: `[grahamzemel.com] ${projectType || "Contact"} — ${name}`,
+          project_type: projectType,
           message,
-          honey,
+          replyto: email,
+          from_name: "grahamzemel.com contact form",
         }),
       });
       const data = await response.json().catch(() => ({}));
-      if (response.ok && data.ok) {
+      if (response.ok && data.success) {
         status = "success";
         name = "";
         email = "";
@@ -74,7 +84,7 @@
       } else {
         status = "error";
         errorMessage =
-          data?.error ||
+          data?.message ||
           "Something went wrong. Try emailing me directly at me@grahamzemel.com.";
       }
     } catch {

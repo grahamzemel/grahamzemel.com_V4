@@ -24,6 +24,7 @@ const config = {
           "https://api.rss2json.com",
           "https://*.herokuapp.com",
           "https://vitals.vercel-insights.com",
+          "https://api.web3forms.com",
         ],
         "font-src": ["self", "data:", "https://fonts.gstatic.com"],
         "form-action": ["self"],
