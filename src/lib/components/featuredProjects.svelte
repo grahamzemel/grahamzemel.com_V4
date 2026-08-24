@@ -150,8 +150,8 @@
       ],
       stats: [
         { label: "Users", value: "7,000+" },
-        { label: "Cloaks", value: "750+" },
-        { label: "Characters", value: "3,334,000+" },
+        { label: "Cloaks", value: "13,000+" },
+        { label: "Characters", value: "51,000,000+" },
         { label: "Countries", value: "40+" },
       ],
     },

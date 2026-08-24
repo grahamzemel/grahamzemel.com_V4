@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin
+Disallow: /api
+Disallow: /preview
+Disallow: /pass
+Allow: /
+
+Sitemap: https://grahamzemel.com/sitemap.xml
