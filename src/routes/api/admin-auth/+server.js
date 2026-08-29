@@ -1,9 +1,9 @@
 import {
   ADMIN_COOKIE,
   ADMIN_SESSION_MAX_AGE,
+  adminConfigIssues,
   createAdminSession,
   hasValidAdminSession,
-  isAdminConfigured,
   passwordMatches,
 } from "$lib/server/admin-session.js";
 
@@ -41,7 +41,9 @@ export async function GET({ cookies }) {
 
 /** @type {import("./$types").RequestHandler} */
 export async function POST({ request, cookies }) {
-  if (!isAdminConfigured()) {
+  const configIssues = adminConfigIssues();
+  if (configIssues.length > 0) {
+    console.error(`[admin-auth] misconfigured: ${configIssues.join("; ")}`);
     return json({ error: "Admin authentication is not configured." }, 503);
   }
 

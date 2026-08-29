@@ -42,12 +42,36 @@ function secureEqual(left, right) {
   return mismatch === 0;
 }
 
+export const ADMIN_PASSWORD_MIN_LENGTH = 12;
+export const ADMIN_SESSION_SECRET_MIN_LENGTH = 32;
+
+/** @returns {string[]} */
+export function adminConfigIssues() {
+  const issues = [];
+  const passwordLength = env.ADMIN_PASSWORD?.length ?? 0;
+  const secretLength = env.ADMIN_SESSION_SECRET?.length ?? 0;
+
+  if (passwordLength === 0) issues.push("ADMIN_PASSWORD is not set");
+  else if (passwordLength < ADMIN_PASSWORD_MIN_LENGTH) {
+    issues.push(
+      `ADMIN_PASSWORD is shorter than ${ADMIN_PASSWORD_MIN_LENGTH} characters`,
+    );
+  }
+
+  if (secretLength === 0) issues.push("ADMIN_SESSION_SECRET is not set");
+  else if (secretLength < ADMIN_SESSION_SECRET_MIN_LENGTH) {
+    issues.push(
+      `ADMIN_SESSION_SECRET is shorter than ${ADMIN_SESSION_SECRET_MIN_LENGTH} characters`,
+    );
+  }
+
+  if (!env.ADMIN_API_TOKEN) issues.push("ADMIN_API_TOKEN is not set");
+
+  return issues;
+}
+
 export function isAdminConfigured() {
-  return Boolean(
-    (env.ADMIN_PASSWORD?.length ?? 0) >= 12 &&
-      (env.ADMIN_SESSION_SECRET?.length ?? 0) >= 32 &&
-      env.ADMIN_API_TOKEN,
-  );
+  return adminConfigIssues().length === 0;
 }
 
 export async function createAdminSession() {
