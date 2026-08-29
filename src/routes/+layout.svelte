@@ -35,7 +35,12 @@
         window.location.href = "/admin";
         return;
       }
-      alert("Incorrect password.");
+      if (res.status === 401) {
+        alert("Incorrect password.");
+        return;
+      }
+      const body = await res.json().catch(() => null);
+      alert(body?.error || `Login failed (${res.status}).`);
     } catch (err) {
       console.error("[admin] Auth error:", err);
       alert("Authentication failed.");
